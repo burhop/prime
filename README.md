@@ -20,3 +20,7 @@ While C++ is efficient, Python is more fun for trying out clever ideas. Some nex
 
  1. Python code to read the output files.  
  2. Python image creation based off prime numbers 3.) Maybe a "primes as a service" implementation :-)
+
+
+**Motivation:**
+This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school and I have continued to play with them over the years. 
