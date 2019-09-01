@@ -1,5 +1,5 @@
 # prime
-This project is for calculating and storing prime numbers. It uses the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) to mark bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve to an ever increasing list of blocks. Block size is set to 4294967295 (0xFFFFFFFF) by default but can be recompiled by defining **PRIMEMAX**
+This project is for calculating and storing prime numbers. It uses the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) to mark bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve to an ever increasing list of blocks. Block size is set to 4294967280 (0xFFFFFFF0) by default but can be recompiled by defining **PRIMEMAX**.  Note that PRIMEMAX should be devisiable by 30 (2*3*5) due to the need for block allignment in compression (see below).
 
 For version 0.1, it is limited to size_t (64 bits). The plan is to extend this out to "__int128" (128 bits) or use one of the "infinite" bit classes for integers in some future version.
 
