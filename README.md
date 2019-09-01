@@ -7,6 +7,11 @@ Storage of the prime numbers, at least the initial numbers, is inefficient as a 
 
 P.S. The most efficient way to store these numbers is to just store the algorithm. However, we want to be able to look up the numbers in roughly constant time.
 
+Some useful links:
+
+[The Nth Prime Page](https://primes.utm.edu/nthprime/index.php#piofx)
+[How Many Primes Are There?](https://primes.utm.edu/howmany.html)
+
 **Some next steps are:**
 
  1.  Some Test cases to keep the code stable.
