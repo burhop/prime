@@ -233,7 +233,3 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
-
-# doxygen folders
-html/
-latex/
