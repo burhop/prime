@@ -7,6 +7,12 @@ Storage of the prime numbers, at least the initial numbers, is inefficient as a 
 
 P.S. The most efficient way to store these numbers is to just store the algorithm. However, we want to be able to look up the numbers in roughly constant time.
 
+Some useful links:
+
+[The Nth Prime Page](https://primes.utm.edu/nthprime/index.php#piofx)
+
+[How Many Primes Are There?](https://primes.utm.edu/howmany.html)
+
 **Some next steps are:**
 
  1.  Some Test cases to keep the code stable.
@@ -23,4 +29,4 @@ While C++ is efficient, Python is more fun for trying out clever ideas. Some nex
 
 
 **Motivation:**
-This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school and I have continued to play with them over the years. 
+This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school. It took me days to calculate a set of prime numbers that today can be calculated in a few minutes.
