@@ -29,4 +29,4 @@ While C++ is efficient, Python is more fun for trying out clever ideas. Some nex
 
 
 **Motivation:**
-This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school and I have continued to play with them over the years. 
+This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school. It took me days to calculate a set of prime numbers that today can be calculated in a few minutes.
