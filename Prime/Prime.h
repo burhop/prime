@@ -28,7 +28,7 @@
 #include <bitset>
 // The maximum size of a block of memory. Default is max for VS C++ default x64 compiler. 
 #ifndef PRIMEMAX
-#define PRIMEMAX 1000 /*0xFFFFFFFF */
+#define PRIMEMAX  0xFFFFFFFF
 #endif
 
 class __declspec(dllexport) Prime
