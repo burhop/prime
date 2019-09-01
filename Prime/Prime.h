@@ -2,11 +2,11 @@
 /**
 	This class is for calculating and storing prime numbers. It uses the Sieve of Eratosthenes to mark 
 	bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve
-	to an ever increasing list of blocks. BLock size is set to 4294967295 (0xFFFFFFFF) by default but can be recompiled
-	by defining PRIMEMAX
+	to an ever increasing list of blocks. BLock size is set to 4294967280 (0xFFFFFFF0) by default but can be recompiled
+	by defining PRIMEMAX.  Note that PRIMEMAX must be devisible by 2,3, and 5 to keep blocks alligned.
 	
 	For version 0.1, it is limited to size_t (64 bits).  The plan is to extend thsi out to __int128 (128 bits) or use
-	one of the "infinite" bit classes for integers in some futer version.
+	one of the "infinite" bit classes for integers in some futer versio0.
 
 	Storage of the prime numbers, at least the initial numbers, is inefficient as a list.  Storage of a bit for each
 	number (true for prime) is initially more efficient.  This list of bits can be cut in 1/2 by only storing odd numbers.
@@ -28,9 +28,12 @@
 #include <bitset>
 // The maximum size of a block of memory. Default is max for VS C++ default x64 compiler. 
 #ifndef PRIMEMAX
-#define PRIMEMAX  0xFFFFFFFF
+#define PRIMEMAX  3000000 // 0xFFFFFFF0 //highest number divisiable by 30
 #endif
 
+#if( PRIMEMAX % 120 != 0 )
+#error "Bitset block size PRIMEMAX must be divisible by 30 (2*3*5) "
+#endif
 class __declspec(dllexport) Prime
 {
 
