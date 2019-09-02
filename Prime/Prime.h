@@ -5,7 +5,7 @@
 	to an ever increasing list of blocks. BLock size is set to 4294967295 (0xFFFFFFFF) by default but can be recompiled
 	by defining PRIMEMAX
 	
-	For version 0.1, it is limited to size_t (64 bits).  The plan is to extend thsi out to __int128 (128 bits) or use
+	For version 0.2, it is limited to size_t (64 bits).  The plan is to extend thsi out to __int128 (128 bits) or use
 	one of the "infinite" bit classes for integers in some futer version.
 
 	Storage of the prime numbers, at least the initial numbers, is inefficient as a list.  Storage of a bit for each
