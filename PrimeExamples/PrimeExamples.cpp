@@ -11,14 +11,14 @@
 #include <bitset>
 int main(int argc, char*argv[])
 {
-	//Create our Class
-	Prime prime = Prime();
+	//Create our Class with a block size of 3000 bits
+	Prime prime(3000);
 	//Lets time it.
 	//auto start = std::chrono::system_clock::now();
 	
 	// see how many primes under 10 billion
 	size_t maxValueToSearch = 3000; // 10000000000;
-	//if you have no data, lets find some primes 
+	//if you have no data, lets find some primes.  Do 40 blocks
 	prime.FindPrimes(40);
 	// Lets see how mnay we found
 	size_t count = prime.CountPrimes(0,maxValueToSearch);
@@ -50,8 +50,8 @@ int main(int argc, char*argv[])
 	//Lets Save our primes
 	prime.SaveToFile("myPrimes");
 
-	//Lets create a new Prime class instance and load it up with the data we just saved
-	Prime prime2 = Prime();
+	//Lets create a new Prime class instance and load it up with the data we just saved. Data block sizes must be the same.
+	Prime prime2 = Prime(3000);
 	prime2.LoadFromFile("myPrimes");
 
 	size_t count2 =prime2.CountPrimes(0, 3000);
@@ -73,28 +73,28 @@ int main(int argc, char*argv[])
 	std::cout << "0-10000000000000 : " << prime2.CountPrimes(0, 10000000000000) << std::endl;
 
 //	std::bitset<Prime::BitBlockSize> primeAsBitset = 
-//	std::bitset<max> *bStart = primeSieve();
+//	boost::dynamic_bitset<> *bStart = primeSieve();
 //vectorOfBitSets.push_back(bStart);
-//std::bitset<max> *bSecond = primeSieve2(vectorOfBitSets);
+//boost::dynamic_bitset<> *bSecond = primeSieve2(vectorOfBitSets);
 //vectorOfBitSets.push_back(bSecond);
-//std::bitset<max> *bThird = primeSieve2(vectorOfBitSets);
+//boost::dynamic_bitset<> *bThird = primeSieve2(vectorOfBitSets);
 //vectorOfBitSets.push_back(bThird);
-//std::bitset<max> *bForth = primeSieve2(vectorOfBitSets);
+//boost::dynamic_bitset<> *bForth = primeSieve2(vectorOfBitSets);
 //size_t count1 = countPrimes(bStart);
 //size_t count2 = countPrimes(bSecond);
 //size_t count3 = countPrimes(bThird);
 //size_t count4 = countPrimes(bForth);
 //size_t sum = count1 + count2 + count3 + count4;
 //std::cout << "Prime count : " << sum << "\n";
-//std::bitset<max5> *bComp = new std::bitset<max5>();
+//boost::dynamic_bitset<> *bComp = new boost::dynamic_bitset<>();
 //compressBitSet(bStart, bComp);
 //writeBitSetToStream("d:\\binary.bin", bComp);
-////std::bitset<max>* bNext=primeSieve2(bStart);
-//std::bitset<max5> *bCompIn = new std::bitset<max5>();
+////boost::dynamic_bitset<>* bNext=primeSieve2(bStart);
+//boost::dynamic_bitset<> *bCompIn = new boost::dynamic_bitset<>();
 //readBitSetFromStream("d:\\binary.bin", bCompIn);
-//std::bitset<max> *bFromFile = new std::bitset<max>();
+//boost::dynamic_bitset<> *bFromFile = new boost::dynamic_bitset<>();
 //uncompressBitSet(bCompIn, bFromFile);
-////std::bitset<max> *bNext2 = new std::bitset<max>();
+////boost::dynamic_bitset<> *bNext2 = new boost::dynamic_bitset<>();
 ////size_t count2 = countPrimes(bFromFile);
 ////std::cout << "Prime count : " << count2 << "\n";
 //
