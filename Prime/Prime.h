@@ -56,7 +56,10 @@ public:
 	/** Efficient integer based square root fuction for size_t integers. It will be <= the floating point square root
 	@return An size_t integer that is less than or equal to the floating point square root function */
 	size_t Sqrt(size_t x);
-	/** Calculates all the prime numbers for one or more data blocks. 
+	/** Calculates all the prime numbers for one or more data blocks. Throws an exception if int is negative.
+		@param numberOfBlocks the number of blocks of memory to search though*/
+	void FindPrimes(int numberOfBLocks);
+	/** Calculates all the prime numbers for one or more data blocks.
 		@param numberOfBlocks the number of blocks of memory to search though */
 	void FindPrimes(size_t numberOfBlocks=1);
 	/** Load previously stored prime numbers in a set of .prm files. 
