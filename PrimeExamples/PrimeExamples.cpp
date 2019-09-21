@@ -12,14 +12,14 @@
 int main(int argc, char*argv[])
 {
 	//Create our Class with a block size of 3000 bits
-	Prime prime(3000);
+	Prime prime(600000);
 	//Lets time it.
 	//auto start = std::chrono::system_clock::now();
 	
 	// see how many primes under 10 billion
-	size_t maxValueToSearch = 3000; // 10000000000;
-	//if you have no data, lets find some primes.  Do 40 blocks
-	prime.FindPrimes(40);
+	size_t maxValueToSearch = 1000000; // 10000000000;
+	//if you have no data, lets find some primes.  Do 4 blocks
+	prime.FindPrimes(4);
 	// Lets see how mnay we found
 	size_t count = prime.CountPrimes(0,maxValueToSearch);
 	std::cout << "Found " << count << " prime numbers between 0 and " << maxValueToSearch << std::endl;
