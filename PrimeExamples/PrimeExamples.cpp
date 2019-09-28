@@ -12,14 +12,14 @@
 int main(int argc, char*argv[])
 {
 	//Create our Class with a block size of 3000 bits
-	Prime prime(600000);
+	Prime prime(300);
 	//Lets time it.
 	//auto start = std::chrono::system_clock::now();
 	
 	// see how many primes under 10 billion
 	size_t maxValueToSearch = 1000000; // 10000000000;
 	//if you have no data, lets find some primes.  Do 4 blocks
-	prime.FindPrimes(4);
+	prime.FindPrimes(3);
 	// Lets see how mnay we found
 	size_t count = prime.CountPrimes(0,maxValueToSearch);
 	std::cout << "Found " << count << " prime numbers between 0 and " << maxValueToSearch << std::endl;
@@ -29,6 +29,7 @@ int main(int argc, char*argv[])
 	std::cout << "101-200 : " << prime.CountPrimes(101, 200) << std::endl;
 	std::cout << "201-300 : " << prime.CountPrimes(201, 300) << std::endl;
 	std::cout << "301-400 : " << prime.CountPrimes(301, 400) << std::endl;
+	std::cout << "0-900 : " << prime.CountPrimes(0, 900) << std::endl;
 	std::cout << "0-10000 : " << prime.CountPrimes(0, 10000) << std::endl;
 	std::cout << "0-100000 : " << prime.CountPrimes(0, 100000) << std::endl;
 	std::cout << "0-1000000 : " << prime.CountPrimes(0, 1000000) << std::endl;
@@ -40,11 +41,11 @@ int main(int argc, char*argv[])
 	std::cout << "0-1000000000000 : " << prime.CountPrimes(0, 1000000000000) << std::endl;
 	std::cout << "0-10000000000000 : " << prime.CountPrimes(0, 10000000000000) << std::endl;
 
-	//Lets see the primes under 100.
-	std::vector<size_t> primes = prime.GetPrimesAsVector(0, 100);
+	//Lets see the primes under 900.
+	std::vector<size_t> primes = prime.GetPrimesAsVector(0, 900);
 	count = 1;
-	//for (size_t i : primes)
-	//	std::cout << count++<<" : "<< i << std::endl;
+	for (size_t i : primes)
+		std::cout << count++<<" : "<< i << std::endl;
 
 
 	//Lets Save our primes
