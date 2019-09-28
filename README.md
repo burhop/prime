@@ -15,12 +15,11 @@ Some useful links:
 
 **Some next steps are:**
 
- 1.  Some Test cases to keep the code stable.
- 2. Expanding to larger ints.
- 3. Support for unlimited size ints
- 4. Adding boost and getting rid of compile time specified data structures (e.g. bitset)
- 5. More efficient use of memory to support unlimited prime calculations (right now, all the bitsets are kept in memory)
- 6. More efficient storage of the numbers (ping me if you have ideas)
+ 1. Expanding to larger ints.
+ 2. Support for unlimited size ints
+ 3. Adding boost and getting rid of compile time specified data structures (e.g. bitset)
+ 4. More efficient use of memory to support unlimited prime calculations (right now, all the bitsets are kept in memory)
+ 5. More efficient storage of the numbers (ping me if you have ideas)
 
 While C++ is efficient, Python is more fun for trying out clever ideas. Some next "fun" steps are:
 
