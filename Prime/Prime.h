@@ -65,7 +65,8 @@ public:
 	/** Load previously stored prime numbers in a set of .prm files. 
 		@param baseName This is the baseName of the file. Each base name gets appended with 1,2,3, ... n and 
 		the extenion '.prm'  (e.g. basename1.prm, basename2.prm) */
-	void LoadFromFile(std::string baseName);
+		void DeleteExistingPrimeFiles(std::string baseName);
+		void LoadFromFile(std::string baseName);
 	/** Saves all calculated primes to one or more files.  */
 	int SaveToFile(std::string baseName);
 	/** returns a list of primes between two numbers. Note that there may be a maximum size of the 
