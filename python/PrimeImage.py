@@ -33,13 +33,13 @@ class Prime:
         self.maxValue= bitsInFile*5*3*2/8
         
         #Start counting until we get to maxValue
-        count = 1
+        count = 6
         #start with no bitcount so that we will read a byte first time through
         bitCount=8
 
         #Loop until we know all the primes less than maxValue
         while 1:
-            if count%2==0 or count%3==0 or count%5==0:
+            if count>6 and ( count%2==0 or count%3==0 or count%5==0 ):
                     count = count +1
                     self.bits.append(False)
             else:
