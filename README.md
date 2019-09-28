@@ -31,7 +31,7 @@ While C++ is efficient, Python is more fun for trying out clever ideas. Some nex
 **Motivation:**
 This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school. It took me days to calculate a set of prime numbers that today can be calculated in a few minutes.
 
-**Changes since Last Version **
+**Changes since Last Version: **
 For version 0.2, the following changes were made:
 
 1. Use of Boost bitset so that the size of the bitset does not require recompile of the DLL/so
