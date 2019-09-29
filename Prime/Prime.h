@@ -37,7 +37,7 @@
 	@author Mark Burhop
 	@version 0.1 8/20/2019
 */
-class __declspec(dllexport) Prime
+class __declspec(dllexport)  Prime
 {
 
 public:
@@ -45,6 +45,8 @@ public:
 	//Prime();
 	/** Constuctor.  Set the block size explicitly.  This can not be changed later. */
 	Prime(size_t bitsetSize=0xFFFFFFF0);
+	/** Continously calculates primes.  For version 0.2, we are limited by size_t */
+	int ContinousRun(std::string baseName);
 	/** Destructor */
 	~Prime();
 	/** returns the size of the bit blocks.  That is, how many bit each block of data stores */
@@ -66,6 +68,7 @@ public:
 		@param baseName This is the baseName of the file. Each base name gets appended with 1,2,3, ... n and 
 		the extenion '.prm'  (e.g. basename1.prm, basename2.prm) */
 	void LoadFromFile(std::string baseName);
+	int saveToFile(std::string baseName, size_t count);
 	/** Deletes existing prime files. Since the goal of this class is to find prime numbers, this is really only
 	    useful for testing the code.
 		@param basename  The basename of the set of files to delete.*/
@@ -92,7 +95,7 @@ private:
 	size_t max3 = 0; // 2 * max2 / 3 + max2 % 3;   // don't need to save numbers divisible by 3
 	size_t max5 = 0; // 4 * max3 / 5 + max3 % 5;   // don't need to save numbers divisible by 5
 	size_t searchDisttance = 0;							  // Fartherest this class instance has search so far.
-	//std::string baseFileName="primes";
+	std::string baseFileName="primes";
 	bool saveIcrementalFiles = false;
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   
@@ -103,13 +106,13 @@ private:
 	//Private Functions
 	void findFirstBlockOFPrimes();
 	size_t NextPrime(boost::dynamic_bitset<>* bSet, size_t index);
-	void writeSparseBitSetToStream(const std::string fileName, boost::dynamic_bitset<> *bitss);
+	//void writeSparseBitSetToStream(const std::string fileName, boost::dynamic_bitset<> *bitss);
 	void writeBitSetToStream(const std::string fileName, boost::dynamic_bitset<>* bitss);
 	void readSparseBitSetFromStream(const char * my_file, boost::dynamic_bitset<>* b);
 	void readBitSetFromStream(const std::string my_file, boost::dynamic_bitset<>* b);
 	void clearBitsetVector();
 	//boost::dynamic_bitset<>* primeSieve();
-	size_t countPrimes(boost::dynamic_bitset<>* b);
+	//size_t countPrimes(boost::dynamic_bitset<>* b);
 	boost::dynamic_bitset<>* primeSieve(std::vector<boost::dynamic_bitset<>*> vec);
 	void compressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
 	void uncompressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);

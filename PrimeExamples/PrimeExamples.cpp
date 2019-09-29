@@ -15,7 +15,7 @@ int main(int argc, char*argv[])
 	Prime prime(300);
 	//Lets time it.
 	//auto start = std::chrono::system_clock::now();
-	
+	prime.ContinousRun(std::string("tada"));
 	// see how many primes under 10 billion
 	size_t maxValueToSearch = 1000000; // 10000000000;
 	//if you have no data, lets find some primes.  Do 4 blocks
