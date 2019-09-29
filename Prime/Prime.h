@@ -109,9 +109,9 @@ private:
 	void readSparseBitSetFromStream(const char * my_file, boost::dynamic_bitset<>* b);
 	void readBitSetFromStream(const std::string my_file, boost::dynamic_bitset<>* b);
 	void clearBitsetVector();
-	boost::dynamic_bitset<>* primeSieve();
+	//boost::dynamic_bitset<>* primeSieve();
 	size_t countPrimes(boost::dynamic_bitset<>* b);
-	boost::dynamic_bitset<>* primeSieve2(std::vector<boost::dynamic_bitset<>*> vec);
+	boost::dynamic_bitset<>* primeSieve(std::vector<boost::dynamic_bitset<>*> vec);
 	void compressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
 	void uncompressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
 };
