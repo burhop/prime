@@ -65,8 +65,11 @@ public:
 	/** Load previously stored prime numbers in a set of .prm files. 
 		@param baseName This is the baseName of the file. Each base name gets appended with 1,2,3, ... n and 
 		the extenion '.prm'  (e.g. basename1.prm, basename2.prm) */
-		void DeleteExistingPrimeFiles(std::string baseName);
-		void LoadFromFile(std::string baseName);
+	void LoadFromFile(std::string baseName);
+	/** Deletes existing prime files. Since the goal of this class is to find prime numbers, this is really only
+	    useful for testing the code.
+		@param basename  The basename of the set of files to delete.*/
+	void DeleteExistingPrimeFiles(std::string baseName);
 	/** Saves all calculated primes to one or more files.  */
 	int SaveToFile(std::string baseName);
 	/** returns a list of primes between two numbers. Note that there may be a maximum size of the 
@@ -74,10 +77,6 @@ public:
 		@param lowVal The lower value of the range
 		@param highVal The upper value of the range*/
 	std::vector<size_t> GetPrimesAsVector(size_t lowVal, size_t highVal);
-	/* returns a bitset of PRIMEMAX(0xFFFFFFFF by default) size where prime numbers are true.
-	    if there are more than PRIMEMAX primes, you will need to call this function with 0,1,2,3 
-	    to get each following set of primes */
-	//std::bitset<PRIMEMAX> GetPrimesAsBitset(size_t index);
 	/** returns the number of primes between lowVal and highVal. 
 		@param lowVal The lower boundary of the range of numbers
 		@param highVal The upper boundary of the range of numbers
