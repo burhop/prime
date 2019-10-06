@@ -23,7 +23,8 @@ Some useful links:
 While C++ is efficient, Python is more fun for trying out clever ideas. Some next "fun" steps are:
 
  1. Python code to read the output files.  THere is a rough version of this now.
- 2. Python image creation based off prime numbers.  See below for an example of an [Ulam Spirmal](https://en.wikipedia.org/wiki/Ulam_spiral)
+ 2. Python image creation based off prime numbers.  See below for an example of an [Ulam Spiral](https://en.wikipedia.org/wiki/Ulam_spiral)
+ 
  3.) Maybe a "primes as a service" implementation :-)
 
 
