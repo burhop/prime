@@ -35,7 +35,7 @@
 	https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 
 	@author Mark Burhop
-	@version 0.1 8/20/2019
+	@version 0.2 10/06/2019
 */
 class __declspec(dllexport)  Prime
 {
@@ -68,6 +68,12 @@ public:
 		@param baseName This is the baseName of the file. Each base name gets appended with 1,2,3, ... n and 
 		the extenion '.prm'  (e.g. basename1.prm, basename2.prm) */
 	void LoadFromFile(std::string baseName);
+	/** Get the maximum value this instance has searched */
+	size_t GetMaxValue();
+	/** Get the maximum prime value (largest prime) this instance has found */
+	size_t GetMaxPrime();
+	/** Get the total number of primes that have been found */
+	size_t GetMaxCount();
 	int saveToFile(std::string baseName, size_t count);
 	/** Deletes existing prime files. Since the goal of this class is to find prime numbers, this is really only
 	    useful for testing the code.
