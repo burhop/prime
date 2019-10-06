@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{DCB7C7AD-D59F-4013-880C-4C721CF79044}</ProjectGuid>
+    <ProjectGuid>{8AEEF55A-7F8B-4186-BB94-7E47CCFF342D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>PrimeExamples</RootNamespace>
+    <RootNamespace>Tests</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -96,6 +96,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -153,7 +154,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="PrimeExamples.cpp" />
+    <ClCompile Include="Tests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="catch.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Prime\Prime.vcxproj">
