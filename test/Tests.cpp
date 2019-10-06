@@ -22,17 +22,106 @@ size_t TestFindPrimes2(int blocks, size_t blocksize, size_t mmaxValueToSearch)
 	prime.DeleteExistingPrimeFiles("test");
 	//if you have no data, lets find some primes
 	prime.FindPrimes(blocks);
-	// Lets see how mnay we found
+	// Save them and reload them
 	prime.SaveToFile("test");
 	Prime newPrime(blocksize);
 	newPrime.LoadFromFile("test");
 	size_t count = newPrime.CountPrimes(0, mmaxValueToSearch);
+	prime.DeleteExistingPrimeFiles("test");
 	return count;
 }
-int Factorial(int number) {
-	return number <= 1 ? number : Factorial(number - 1) * number;  // fail
-    //return number <= 1 ? 1      : Factorial( number - 1 ) * number;  // pass
+size_t TestFileErrors1()
+{
+
+	Prime prime(300);
+	prime.DeleteExistingPrimeFiles("test");
+	//if you have no data, lets find some primes
+	prime.FindPrimes(2);
+	// Save them and reload them
+	prime.SaveToFile("test");
+	Prime newPrime(600);
+	//should throw an exception
+	try
+	{
+		newPrime.LoadFromFile("test");
+	}
+	catch (...)
+	{
+		//first clean up
+		prime.DeleteExistingPrimeFiles("test");
+		throw;
+	}
+	return 0;
 }
+size_t TestMaxCount(int blocks, size_t blocksize)
+{
+	Prime prime(blocksize);
+	prime.FindPrimes(blocks);
+	return prime.GetMaxCount();
+}
+size_t TestMaxPrime(int blocks, size_t blocksize)
+{
+	Prime prime(blocksize);
+	prime.FindPrimes(blocks);
+	return prime.GetMaxPrime();
+}
+size_t TestMaxValue(int blocks, size_t blocksize)
+{
+	Prime prime(blocksize);
+	prime.FindPrimes(blocks);
+	return prime.GetMaxValue();
+}
+
+
+TEST_CASE("Test counting of primes is correct (pass)", "[single-file]") {
+
+	REQUIRE(TestMaxCount(1,    30) == 10);
+	REQUIRE(TestMaxCount(10,   60) == 109);
+	REQUIRE(TestMaxCount(1000, 90) == 8713);
+	REQUIRE(TestMaxCount(1,    3000000) == 216816);
+	REQUIRE(TestMaxCount(321,   3000) == 75845);
+	REQUIRE(TestMaxCount(999, 900) == 71217);
+}
+TEST_CASE("Test Max Prime is correct (pass)", "[single-file]") {
+
+	REQUIRE(TestMaxPrime(1, 30) == 29);
+	REQUIRE(TestMaxPrime(10, 60) == 599);
+	REQUIRE(TestMaxPrime(1000, 90) == 89989);
+	REQUIRE(TestMaxPrime(1, 3000000) == 2999999);
+	REQUIRE(TestMaxPrime(321, 3000) == 962993);
+	REQUIRE(TestMaxPrime(999, 900) == 899069);
+}
+
+TEST_CASE("Test Max Value is correct (pass)", "[single-file]") {
+
+	REQUIRE(TestMaxValue(1, 30) == 30);
+	REQUIRE(TestMaxValue(10, 60) == 600);
+	REQUIRE(TestMaxValue(1000, 90) == 90000);
+	REQUIRE(TestMaxValue(1, 3000000) == 3000000);
+	REQUIRE(TestMaxValue(321, 3000) == 963000);
+	REQUIRE(TestMaxValue(999, 900) == 899100);
+}
+TEST_CASE("Test Max Count is correct with no calculation (pass)", "[single-file]") {
+
+	Prime prime(30);
+	REQUIRE(prime.GetMaxCount() == 0);
+}
+TEST_CASE("Test Max Prime is correct with no calculation (pass)", "[single-file]") {
+
+	Prime prime(30);
+	REQUIRE(prime.GetMaxPrime() == 0);
+}
+
+TEST_CASE("Test Max Value is correct with no calculation (pass)", "[single-file]") {
+
+	Prime prime(30);
+	REQUIRE(prime.GetMaxValue() == 0);
+}
+TEST_CASE("Test for class instance trying to load wrong size file (fail)", "[single-file]") {
+
+	REQUIRE_THROWS(TestFileErrors1() == 0);
+}
+
 
 TEST_CASE("Find Primes using different block sizes (pass)", "[single-file]") {
 	REQUIRE(TestFindPrimes1(1, 300, 100) == 25);
@@ -78,14 +167,4 @@ TEST_CASE("Verify saving and loading of prime files works)", "[single-file]") {
 	REQUIRE(TestFindPrimes2(100, 300, 30000) == 3245);
 	REQUIRE(TestFindPrimes2(1000, 300, 30000) == 3245);
 	REQUIRE(TestFindPrimes2(1000, 300, 300000) == 25997);
-
-
-
 }
-
-//TEST_CASE("Factorials of 1 and higher are computed (pass)", "[single-file]") {
-//	REQUIRE(Factorial(1) == 1);
-//	REQUIRE(Factorial(2) == 2);
-//	REQUIRE(Factorial(3) == 6);
-//	REQUIRE(Factorial(10) == 3628800);
-//}
