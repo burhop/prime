@@ -22,8 +22,9 @@ Some useful links:
 
 While C++ is efficient, Python is more fun for trying out clever ideas. Some next "fun" steps are:
 
- 1. Python code to read the output files.  
- 2. Python image creation based off prime numbers 3.) Maybe a "primes as a service" implementation :-)
+ 1. Python code to read the output files.  THere is a rough version of this now.
+ 2. Python image creation based off prime numbers.  See below for an example of an [Ulam Spirmal](https://en.wikipedia.org/wiki/Ulam_spiral)
+ 3.) Maybe a "primes as a service" implementation :-)
 
 
 **Motivation:**
@@ -33,8 +34,9 @@ This is just a fun project.  I got a scholarship to the University of Florida fo
 
 For version 0.2, the following changes were made:
 
-1. Use of Boost bitset so that the size of the bitset does not require recompile of the DLL/so
-2. Addition of C++ Catch.  Creation of new test case project and a number of test cases.
+1. Use of [Boost bitset](https://www.boost.org/doc/libs/1_36_0/libs/dynamic_bitset/dynamic_bitset.html) so that the size of the bitset does not require recompile of the DLL/so
+2. Addition of [C++ Catch](https://github.com/catchorg/Catch2).  Creation of new test case project and a number of test cases.
+3. A new project called "go" that just keeps running and running looking for new primes. You can stop it and restarted it and it will remember any blocks of primes it already completed.
 3. Python files for reading in the prime files and creating some prime bases images.  THis is still rough and in development but I inlcude it here in case anyone wants a parcer for the files.
 
-[[https://github.com/burhop/prime/blob/master/python/primeSpiral.png|alt=PrimeSpiral]]
+![Spiral](https://github.com/burhop/prime/blob/master/python/primeSpiral.png)
