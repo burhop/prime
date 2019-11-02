@@ -12,11 +12,10 @@
 int main(int argc, char*argv[])
 {
 	//Create our Instance
-	Prime prime(0xFFFFFFF0);
+	//Prime prime(0xFFFFFFF0);
+	Prime prime(3000);
 	//Lets time it.
 	//auto start = std::chrono::system_clock::now();
-	// see how many primes under 10 billion
-	size_t maxValueToSearch = 1000000; // 10000000000;
 	//if you have no data, lets find some primes.  Do 4 blocks
 	std::cout << " Selection Option: \n";
 	std::cout << "     1 - count primes \n";
@@ -29,9 +28,10 @@ int main(int argc, char*argv[])
 	{
 
 		prime.FindPrimes(3);
-		// Lets see how mnay we found
-		size_t count = prime.CountPrimes(0, maxValueToSearch);
-		std::cout << "Found " << count << " prime numbers between 0 and " << maxValueToSearch << std::endl;
+		// Lets see how many we found
+		size_t count = prime.GetMaxCount(); // prime.CountPrimes(0, maxValueToSearch);
+		size_t maxValue= prime.GetMaxValue();
+		std::cout << "Found " << count << " prime numbers between 0 and " << maxValue << std::endl;
 
 		// Lets see how many primes in groups of 100
 		std::cout << "0-100   : " << prime.CountPrimes(0, 100) << std::endl;
@@ -62,14 +62,22 @@ int main(int argc, char*argv[])
 
 		//Lets create a new Prime class instance and load it up with the data we just saved. Data block sizes must be the same.
 		Prime prime2 = Prime(3000);
-		prime2.LoadFromFile("myPrimes");
 
-		std::cout << "total integers: " << prime2.GetMaxCount();
-		std::cout << "Largest Prime : " << prime2.GetMaxPrime();
-		std::cout << "Primes Found  : " << prime2.GetMaxCount();
+		try {
+			prime2.LoadFromFile("myPrimes");
+		}
+		catch (std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+		}
 
-		size_t count2 = prime2.CountPrimes(0, 3000);
-		std::cout << "Found " << count2 << " prime numbers between 0 and " << 3000 << std::endl;
+		std::cout << "total integers: " << prime2.GetMaxValue() << std::endl;
+		std::cout << "Largest Prime : " << prime2.GetMaxPrime() << std::endl;
+		std::cout << "Primes Found  : " << prime2.GetMaxCount() << std::endl;
+
+		count = prime2.GetMaxCount(); // prime.CountPrimes(0, maxValueToSearch);
+		maxValue = prime2.GetMaxValue();
+		std::cout << "Found " << count << " prime numbers between 0 and " << maxValue << std::endl;
 		// Lets see how many primes in groups of 100
 		std::cout << "0-100   : " << prime2.CountPrimes(0, 100) << std::endl;
 		std::cout << "101-200 : " << prime2.CountPrimes(101, 200) << std::endl;
@@ -89,9 +97,9 @@ int main(int argc, char*argv[])
 	else if (opt == 2)
 	{
 		prime.LoadFromFile("RunRunRun");
-		std::cout << "total integers: " << prime.GetMaxCount();
-		std::cout << "Largest Prime : " << prime.GetMaxPrime();
-		std::cout << "Primes Found  : " << prime.GetMaxCount();
+		std::cout << "total integers: " << prime.GetMaxCount() << std::endl;
+		std::cout << "Largest Prime : " << prime.GetMaxPrime() << std::endl;
+		std::cout << "Primes Found  : " << prime.GetMaxCount() << std::endl;
 
 		std::cout << "0-10000000000000 : " << prime.CountPrimes(0, 10000000000000) << std::endl;
 	}
