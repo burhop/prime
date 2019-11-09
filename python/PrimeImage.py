@@ -1,4 +1,5 @@
 from PIL import Image
+import svgwrite
 import sys
 import struct
 class Prime:
@@ -11,7 +12,6 @@ class Prime:
         #maximum value we can search (e.g. we know all primes up to 6)
         self.maxValue=6
         self.bits=[False,True,True,False,True]
-
     #useful for debuging
     def __printbits(self,byte):
         for i in range(0,8):
@@ -31,8 +31,6 @@ class Prime:
         #we need to know this as there may be some buffer bits in the last byte that should be ignored. 
         #We can't just read until the end of the file
         self.maxValue= bitsInFile*5*3*2//8
-        
-        self.maxValue = int(2E07)
 
         #Start counting until we get to maxValue
         count = 6
@@ -41,6 +39,7 @@ class Prime:
 
         #Loop until we know all the primes less than maxValue
         while 1:
+            EOF=False
             if count>6 and ( count%2==0 or count%3==0 or count%5==0 ):
                     count = count +1
                     self.bits.append(False)
@@ -48,6 +47,9 @@ class Prime:
                 if bitCount==8:  # no more bits, get the next byte in the file
                     byte=f.read(1)
                     bitCount=0
+                    if byte=="":
+                        EOF=True 
+                        break  
                     #printbits(byte[0])
                 bit = (byte[0]>> bitCount) & 1
                 bitCount=bitCount+1
@@ -59,7 +61,7 @@ class Prime:
 
                 count = count + 1
             # check if any more useful data. Could be last byte where all the bits weren't used
-            if count > self.maxValue:                
+            if count > self.maxValue or EOF:                
                 break    
         return
     def iSqrt(self,num):
@@ -89,6 +91,7 @@ class Prime:
             pixels[i,j]= (255,0,0)
         return img
         #img.save("prime500000.png")
+
     def GetSpiralPath(self):
         #SPIRAL  - First create a pattern to follow
         
@@ -110,6 +113,27 @@ class Prime:
             if idex==4:
                 idex=0
         return path
+    def GetSpiralPathAsPoints(self,path,x,y,step):
+        
+        #SPIRAL  - First create a pattern to follow
+        i=x
+        j=y
+        points=[(i,j)]
+
+        #for k in range(0,self.maxValue):
+        for k in range(0,29928):
+            d=path[k]
+            if d=='l':
+                i=i-1*step
+            if d=='r':
+                i=i+1*step
+            if d== 'u':
+                j=j-1*step
+            if d== 'd':
+                j=j+1*step
+            points.append((i,j))
+        return points
+
     def GetSpiralImage(self):
         #path now contains a list of command to go right, up, left, or down
         path=self.GetSpiralPath()
@@ -134,6 +158,59 @@ class Prime:
             if d== 'd':
                 j=j+1
         return img
+
+#dwg = svgwrite.Drawing('test.svg', profile='tiny')
+#dwg.add(dwg.line((0, 0), (10, 0), stroke=svgwrite.rgb(10, 10, 16, '%')))
+#dwg.add(dwg.text('Test', insert=(0, 0.2)))
+#dwg.save()
+
+    def SaveSpiralSVG(self,filename,start,step):
+        #path now contains a list of command to go right, up, left, or down
+        path=self.GetSpiralPath()
+        i=(self.iSqrt(self.maxValue)+1)//2*step # set it to the center of the grid
+        j=i
+        count=0
+        
+        dwg = svgwrite.Drawing(filename, 
+            size=(str(i*2), str(i*2)),
+            profile='full',
+            style='font-size:9px;stroke:red;text-anchor:middle;text-align:center')
+        style =dwg.style()
+        dwg.add(style)
+        points =self.GetSpiralPathAsPoints(path,i,j,step)
+        polyline=dwg.polyline(points,stroke='blue',stroke_width=5)
+        dwg.add(polyline)
+        #dwg.add(dwg. ((0, 0), (10, 0), stroke=svgwrite.rgb(10, 10, 16, '%')))
+        #dwg.add(dwg.text('Test', insert=(0, 0.2), fill='red'))
+        #dwg.save()
+        #img = Image.new( 'RGB', (i*2+1,j*2+1), "blue") # create a new black image
+        #pixels = img.load() # create the pixel map
+        #for k in range(0,self.maxValue):
+        for k in range(0,29928):
+            val=self.bits[k]
+            d=path[k]
+
+            if val :
+                circle = dwg.circle(center=(i, j), r=13, fill="white",stroke='blue', stroke_width=1)
+                #text=dwg.text(text=str(k+1),insert=(i,j+3))
+                #,stroke='red')
+                #,style='font-size: 3px')
+                #, 'text-align: center'})
+                #,dx=3,stroke='white',stroke_width=1)
+                dwg.add(circle)
+                text=dwg.text(text=str(k+1),insert=(i,j+3))                
+                dwg.add(text)
+
+            if d=='l':
+                i=i-1*step
+            if d=='r':
+                i=i+1*step
+            if d== 'u':
+                j=j-1*step
+            if d== 'd':
+                j=j+1*step
+        dwg.save()
+        return
 
 #for prime in listOfPrimes:
 #    j = prime // 1000 
@@ -186,10 +263,11 @@ def main():
     #bits(open('myPrimes1.prm', 'rb'))
     prime = Prime()
     prime.LoadPrimes('myPrimes1.prm')
-    img = prime.GetSlabBitmap(500,10000)
-    img.save("prime5000000.png")
-    img2=prime.GetSpiralImage()
-    img2.save("primeSpiral.png")
+    prime.SaveSpiralSVG('primes.svg',0,20)
+    #img = prime.GetSlabBitmap(500,10000)
+    #img.save("prime5000000.png")
+    #img2=prime.GetSpiralImage()
+    #img2.save("primeSpiral.png")
     #listOfPrimes =prime.primeList
 
 if __name__ == "__main__":

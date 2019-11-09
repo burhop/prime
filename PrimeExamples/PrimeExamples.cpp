@@ -13,7 +13,7 @@ int main(int argc, char*argv[])
 {
 	//Create our Instance
 	//Prime prime(0xFFFFFFF0);
-	Prime prime(3000);
+	Prime prime(30000);
 	//Lets time it.
 	//auto start = std::chrono::system_clock::now();
 	//if you have no data, lets find some primes.  Do 4 blocks
@@ -61,7 +61,7 @@ int main(int argc, char*argv[])
 		prime.SaveToFile("myPrimes");
 
 		//Lets create a new Prime class instance and load it up with the data we just saved. Data block sizes must be the same.
-		Prime prime2 = Prime(3000);
+		Prime prime2 = Prime(30000);
 
 		try {
 			prime2.LoadFromFile("myPrimes");
