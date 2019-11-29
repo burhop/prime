@@ -120,8 +120,8 @@ class Prime:
         j=y
         points=[(i,j)]
 
-        #for k in range(0,self.maxValue):
-        for k in range(0,29928):
+        for k in range(0,self.maxValue):
+        #for k in range(0,29928):
             d=path[k]
             if d=='l':
                 i=i-1*step
@@ -134,17 +134,114 @@ class Prime:
             points.append((i,j))
         return points
 
-    def GetSpiralImage(self):
+    def FindLongLine(self,img,step):
+        height,width=img.size
+        xmax=0
+        ymax=0
+        lengthmax=0
+        xstepmax=1
+        for i in range(0,width):
+            (x,y,stepx,stepy,length)=self.FindLongInLine(img,i,0,step,step)
+            if length>lengthmax:
+                xmax=x
+                ymax=y
+                lengthmax=length
+        for j in range(0,height):
+            (x,y,stepx,stepy,length)=self.FindLongInLine(img,0,j,step,step)
+            if length>lengthmax:
+                xmax=x
+                ymax=y
+                lengthmax=length
+        for i in range(0,width):
+            (x,y,stepx,stepy,length)=self.FindLongInLine(img,i,0,-step,step)
+            if length>lengthmax:
+                xmax=x
+                ymax=y
+                lengthmax=length
+                xstepmax=-1
+        for j in range(0,height):
+            (x,y,stepx,stepy,length)=self.FindLongInLine(img,height-1,j,-step,step)
+            if length>lengthmax:
+                xmax=x
+                ymax=y
+                lengthmax=length
+                xstepmax=-1
+    
+        return (xmax,ymax,lengthmax,xstepmax,step)
+    
+    def SetPixelLine(self,img,x,y,length,xstep,ystep):
+        i=x
+        j=y
+        count=0
+        while True:
+            img.putpixel((i,j),(255,90,255))
+            i=i+xstep
+            j=j+ystep
+            count=count +1
+            if count==length:
+                break
+        return
+
+    def isPixelPrime(self,img,i,j):
+        loc=(i,j)
+        pixel= img.getpixel(loc)
+        (r,g,b)=pixel
+        if r==255:
+            return True
+        else:
+            return False        
+    
+    def FindLongInLine(self,img,startX,startY,stepX,stepY):
+        (width,height)=img.size
+        max=0
+        maxX=startX
+        maxY=startY
+        saveX=startX
+        saveY=startY
+        count=0      
+        x=startX
+        y=startY
+        if self.isPixelPrime(img,x,y):
+            count=count+1
+            max=count   
+        while True :
+            x=x+stepX
+            y=y+stepY
+            if x>=width or x<=-1:
+                return (maxX,maxY,stepX,stepY,max)
+            if y>=height or y<=-1:
+                return (maxX,maxY,stepX,stepY,max)
+            if self.isPixelPrime(img,x,y):
+                count=count +1
+                #check for new longest line
+                if max< count:
+                    max=count
+                    maxX=saveX
+                    maxY=saveY
+                #Starting a new chain
+                if count==1:
+                    saveX=x
+                    saveY=y
+            else:
+                count=0
+ 
+    def GetSpiralImage(self,start,step):
         #path now contains a list of command to go right, up, left, or down
         path=self.GetSpiralPath()
+        pathIndex=0
         i=(self.iSqrt(self.maxValue)+1)//2  # set it to the center of the grid
         j=i
         count=0
-        img = Image.new( 'RGB', (i*2+1,j*2+1), "blue") # create a new black image
+        img = Image.new( 'RGB', (i*2+4,j*2+4), "blue") # create a new black image
         pixels = img.load() # create the pixel map
-        for k in range(0,self.maxValue):
-            val=self.bits[k]
-            d=path[k]
+        #for k in range(start-1,self.maxValue,step):
+        for k in range(start-1,29928,step):
+            if k<0:
+                val=False
+            else:
+                val=self.bits[k]
+            d=path[pathIndex]
+            pathIndex=pathIndex+1
             if val :
                 pixels[i,j]=(255,0,0)
             else:
@@ -164,10 +261,11 @@ class Prime:
 #dwg.add(dwg.text('Test', insert=(0, 0.2)))
 #dwg.save()
 
-    def SaveSpiralSVG(self,filename,start,step):
+    def SaveSpiralSVG(self,filename,start,step,scale):
         #path now contains a list of command to go right, up, left, or down
         path=self.GetSpiralPath()
-        i=(self.iSqrt(self.maxValue)+1)//2*step # set it to the center of the grid
+        pathIndex=0
+        i=(self.iSqrt(self.maxValue)+1)//2*scale # set it to the center of the grid
         j=i
         count=0
         
@@ -177,19 +275,23 @@ class Prime:
             style='font-size:9px;stroke:red;text-anchor:middle;text-align:center')
         style =dwg.style()
         dwg.add(style)
-        points =self.GetSpiralPathAsPoints(path,i,j,step)
+        points =self.GetSpiralPathAsPoints(path,i,j,scale)
         polyline=dwg.polyline(points,stroke='blue',stroke_width=5)
         dwg.add(polyline)
+    
         #dwg.add(dwg. ((0, 0), (10, 0), stroke=svgwrite.rgb(10, 10, 16, '%')))
         #dwg.add(dwg.text('Test', insert=(0, 0.2), fill='red'))
         #dwg.save()
         #img = Image.new( 'RGB', (i*2+1,j*2+1), "blue") # create a new black image
         #pixels = img.load() # create the pixel map
-        #for k in range(0,self.maxValue):
-        for k in range(0,29928):
-            val=self.bits[k]
-            d=path[k]
-
+        #for k in range(start-1,self.maxValue,step):
+        for k in range(start-1,29928,step):
+            if start<0:
+                val=False
+            else:
+                val=self.bits[k]
+            d=path[pathIndex]
+            pathIndex=pathIndex+1
             if val :
                 circle = dwg.circle(center=(i, j), r=13, fill="white",stroke='blue', stroke_width=1)
                 #text=dwg.text(text=str(k+1),insert=(i,j+3))
@@ -202,13 +304,13 @@ class Prime:
                 dwg.add(text)
 
             if d=='l':
-                i=i-1*step
+                i=i-1*scale
             if d=='r':
-                i=i+1*step
+                i=i+1*scale
             if d== 'u':
-                j=j-1*step
+                j=j-1*scale
             if d== 'd':
-                j=j+1*step
+                j=j+1*scale
         dwg.save()
         return
 
@@ -263,10 +365,13 @@ def main():
     #bits(open('myPrimes1.prm', 'rb'))
     prime = Prime()
     prime.LoadPrimes('myPrimes1.prm')
-    prime.SaveSpiralSVG('primes.svg',0,20)
+    img=prime.GetSpiralImage(1601,1)
+    #prime.SaveSpiralSVG('primesSkip.svg',41,1,20)
+    (x,y,length,stepx,stepy)=prime.FindLongLine(img,1)
+    prime.SetPixelLine(img,x,y,length,stepx,stepy)
     #img = prime.GetSlabBitmap(500,10000)
-    #img.save("prime5000000.png")
-    #img2=prime.GetSpiralImage()
+    img.save("primeSkip.png")
+    #img2=prme.GetSpiralImage()
     #img2.save("primeSpiral.png")
     #listOfPrimes =prime.primeList
 
