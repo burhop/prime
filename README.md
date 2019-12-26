@@ -1,6 +1,7 @@
 # prime
 This project is for calculating and storing prime numbers. It uses the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) to mark bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the sieve to an ever increasing list of blocks. I'm [maintaining a wiki with more information.](https://github.com/burhop/prime/wiki)
 
+
 For version 0.3, it is limited to size_t (64 bits). The plan is to extend this out to "__int128" (128 bits) or use one of the "infinite" bit classes for integers.
 
 Storage of the prime numbers, at least the initial numbers, is inefficient as a list. Storage of a bit for each number (true for prime) is initially more efficient. This list of bits can be cut in 1/2 by only storing odd numbers. It can be further cut by 1/3 by eliminating numbers divisible by 3, 1/5 by eliminating numbers divisible by 5 and so on. Since future cuts beyond 5 give diminishing returns, version 0.3 stops here.  I invite anyone with a more efficient method to let me know of your solution so I can further compress the data.
@@ -21,6 +22,7 @@ Some useful links:
  3 Support for unlimited size ints
  4.More efficient use of memory to support unlimited prime calculations (right now, all the bitsets are kept in memory)
  5.More efficient storage of the numbers (ping me if you have ideas)
+
 
 While C++ is efficient, Python is more fun for trying out clever ideas. Some next "fun" steps are:
 
