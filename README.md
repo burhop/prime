@@ -36,6 +36,7 @@ While C++ is efficient, Python is more fun for trying out clever ideas. Some nex
 This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school. It took me days to calculate a set of prime numbers that today can be calculated in a few seconds.
 
 **Changes since Last Version:**
+
 For verison 0.3 the following changes were made:
 
 1. Require environment variable BOOST_ROOT to be set so that hard coded paths can be removed.
