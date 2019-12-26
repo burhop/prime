@@ -234,8 +234,8 @@ class Prime:
         count=0
         img = Image.new( 'RGB', (i*2+4,j*2+4), "blue") # create a new black image
         pixels = img.load() # create the pixel map
-        #for k in range(start-1,self.maxValue,step):
-        for k in range(start-1,29928,step):
+        for k in range(start-1,self.maxValue,step):
+        #for k in range(start-1,29928,step):
             if k<0:
                 val=False
             else:
@@ -365,12 +365,17 @@ def main():
     #bits(open('myPrimes1.prm', 'rb'))
     prime = Prime()
     prime.LoadPrimes('myPrimes1.prm')
-    img=prime.GetSpiralImage(1601,1)
     #prime.SaveSpiralSVG('primesSkip.svg',41,1,20)
-    (x,y,length,stepx,stepy)=prime.FindLongLine(img,1)
-    prime.SetPixelLine(img,x,y,length,stepx,stepy)
+    for i in range(49):
+        img=prime.GetSpiralImage(i,1)
+        (x,y,length,stepx,stepy)=prime.FindLongLine(img,1)
+        prime.SetPixelLine(img,x,y,length,stepx,stepy)
+        filename= "prime-"+str(i)+"-"+str(length)
+        #img.save(filename+".png")
+        #prime.SaveSpiralSVG(filename+".svg",i,1,20)
+ 
     #img = prime.GetSlabBitmap(500,10000)
-    img.save("primeSkip.png")
+    #img.save("primeSkip.png")
     #img2=prme.GetSpiralImage()
     #img2.save("primeSpiral.png")
     #listOfPrimes =prime.primeList
