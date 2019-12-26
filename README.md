@@ -1,9 +1,9 @@
 # prime
 This project is for calculating and storing prime numbers. It uses the [Sieve of Eratosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes) to mark bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the sieve to an ever increasing list of blocks. I'm [maintaining a wiki with more information.](https://github.com/burhop/prime/wiki)
 
-For version 0.2, it is limited to size_t (64 bits). The plan is to extend this out to "__int128" (128 bits) or use one of the "infinite" bit classes for integers.
+For version 0.3, it is limited to size_t (64 bits). The plan is to extend this out to "__int128" (128 bits) or use one of the "infinite" bit classes for integers.
 
-Storage of the prime numbers, at least the initial numbers, is inefficient as a list. Storage of a bit for each number (true for prime) is initially more efficient. This list of bits can be cut in 1/2 by only storing odd numbers. It can be further cut by 1/3 by eliminating numbers divisible by 3, 1/5 by eliminating numbers divisible by 5 and so on. Since future cuts beyond 5 give diminishing returns, version 0.2 stops here.  I invite anyone with a more efficient method to let me know of your solution so I can further compress the data.
+Storage of the prime numbers, at least the initial numbers, is inefficient as a list. Storage of a bit for each number (true for prime) is initially more efficient. This list of bits can be cut in 1/2 by only storing odd numbers. It can be further cut by 1/3 by eliminating numbers divisible by 3, 1/5 by eliminating numbers divisible by 5 and so on. Since future cuts beyond 5 give diminishing returns, version 0.3 stops here.  I invite anyone with a more efficient method to let me know of your solution so I can further compress the data.
 
 P.S. The most efficient way to store these numbers is to just store the algorithm. However, we want to be able to look up the numbers in roughly constant time.
 
@@ -13,12 +13,14 @@ Some useful links:
 
 [How Many Primes Are There?](https://primes.utm.edu/howmany.html)
 
-**Some next steps are:**
 
- 1. Expanding to larger ints.
- 2. Support for unlimited size ints
- 5. More efficient use of memory to support unlimited prime calculations (right now, all the bitsets are kept in memory)
- 6. More efficient storage of the numbers (ping me if you have ideas)
+
+**Some next steps are:**
+ 1. Parallelization - Use all the cores and GPUs
+ 2. Expanding to larger ints.
+ 3 Support for unlimited size ints
+ 4.More efficient use of memory to support unlimited prime calculations (right now, all the bitsets are kept in memory)
+ 5.More efficient storage of the numbers (ping me if you have ideas)
 
 While C++ is efficient, Python is more fun for trying out clever ideas. Some next "fun" steps are:
 
@@ -29,9 +31,15 @@ While C++ is efficient, Python is more fun for trying out clever ideas. Some nex
 
 
 **Motivation:**
-This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school. It took me days to calculate a set of prime numbers that today can be calculated in a few minutes.
+This is just a fun project.  I got a scholarship to the University of Florida for some work I did with prime numbers in high school. It took me days to calculate a set of prime numbers that today can be calculated in a few seconds.
 
 **Changes since Last Version:**
+For verison 0.3 the following changes were made:
+
+1. Require environment variable BOOST_ROOT to be set so that hard coded paths can be removed.
+2. Updated to Visual Studio 2019 and v142 toolset.
+3. Updated to Boost 1.72
+4. Added a few more python functions for creating and searching though Ulam Sprials. These aren't ready for real use but may be a useful example. 
 
 For version 0.2, the following changes were made:
 
