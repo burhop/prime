@@ -191,5 +191,4 @@ TAGLINKS =
 # USE_MDFILE_AS_MAINPAGE =
 # VERBATIM_HEADERS =
 #
-INPUT = Prime/Prime.h \
-        python/PrimeImage.ph
+INPUT = Prime/Prime.h python/PrimeImage.ph
