@@ -42,20 +42,24 @@ public:
 	size_t GetBitBlockSize();
 	/** Tells the Object to save each chunk of bits as it gets fully set. This is useful if you are searching 
 	    for a large set of prime numbers and want to be sure you don't lose data to a catastrphic failure.
-	@param b If true, saves each set of bits to a file as it is completed.*/
+	@param b If true, saves each set of bits to a file as it is completed.
+	*/
 	void SaveIncrementalFiles(bool b=false);
 	/** Efficient integer based square root fuction for size_t integers. It will be <= the floating point square root
 	@return An size_t integer that is less than or equal to the floating point square root function */
 	size_t Sqrt(size_t x);
 	/** Calculates all the prime numbers for one or more data blocks. Throws an exception if int is negative.
-		@param numberOfBlocks the number of blocks of memory to search though*/
+		@param numberOfBlocks the number of blocks of memory to search though
+		*/
 	void FindPrimes(int numberOfBLocks);
 	/** Calculates all the prime numbers for one or more data blocks.
-		@param numberOfBlocks the number of blocks of memory to search though */
+		@param numberOfBlocks the number of blocks of memory to search though
+		*/
 	void FindPrimes(size_t numberOfBlocks=1);
 	/** Load previously stored prime numbers in a set of .prm files. 
 		@param baseName This is the baseName of the file. Each base name gets appended with 1,2,3, ... n and 
-		the extenion '.prm'  (e.g. basename1.prm, basename2.prm) */
+		the extenion '.prm'  (e.g. basename1.prm, basename2.prm) 
+		*/
 	void LoadFromFile(std::string baseName);
 	/** Get the maximum value this instance has searched */
 	size_t GetMaxValue();
@@ -66,14 +70,16 @@ public:
 	int saveToFile(std::string baseName, size_t count);
 	/** Deletes existing prime files. Since the goal of this class is to find prime numbers, this is really only
 	    useful for testing the code.
-		@param basename  The basename of the set of files to delete.*/
+		@param basename  The basename of the set of files to delete.
+		*/
 	void DeleteExistingPrimeFiles(std::string baseName);
 	/** Saves all calculated primes to one or more files.  */
 	int SaveToFile(std::string baseName);
 	/** returns a list of primes between two numbers. Note that there may be a maximum size of the 
 	    std::vector.  A safe range should be less than 4294967295 (0xFFFFFFFF) 
 		@param lowVal The lower value of the range
-		@param highVal The upper value of the range*/
+		@param highVal The upper value of the range
+		*/
 	std::vector<size_t> GetPrimesAsVector(size_t lowVal, size_t highVal);
 	/** returns the number of primes between lowVal and highVal. 
 		@param lowVal The lower boundary of the range of numbers
