@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['findprimes_12',['FindPrimes',['../class_prime.html#a2b52d3dd084b0742f381e7bb4646ba84',1,'Prime']]]
+  ['deleteexistingprimefiles_19',['DeleteExistingPrimeFiles',['../class_prime.html#ac6545ae3603abcd8d255e04925e41921',1,'Prime']]]
 ];

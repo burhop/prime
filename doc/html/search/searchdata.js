@@ -1,9 +1,9 @@
 var indexSectionsWithContent =
 {
-  0: "bcfglps~",
+  0: "cdfglps~",
   1: "p",
-  2: "cfglps~",
-  3: "b"
+  2: "cdfglps~",
+  3: "p"
 };
 
 var indexSectionNames =
@@ -11,7 +11,7 @@ var indexSectionNames =
   0: "all",
   1: "classes",
   2: "functions",
-  3: "variables"
+  3: "pages"
 };
 
 var indexSectionLabels =
@@ -19,6 +19,6 @@ var indexSectionLabels =
   0: "All",
   1: "Classes",
   2: "Functions",
-  3: "Variables"
+  3: "Pages"
 };
 

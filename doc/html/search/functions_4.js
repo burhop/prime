@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['prime_15',['Prime',['../class_prime.html#aa109a9a38091694ac4eed8a0f208d05c',1,'Prime']]]
+  ['loadfromfile_26',['LoadFromFile',['../class_prime.html#aaf3cdeb13b463d52685f22df28cf7750',1,'Prime']]]
 ];
