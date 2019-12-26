@@ -1,25 +1,14 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <bitset>
 #include <boost/dynamic_bitset.hpp>
-
-//// The maximum size of a block of memory. Default is max for VS C++ default x64 compiler. 
-//#ifndef PRIMEMAX
-//#define PRIMEMAX  3000000 // 0xFFFFFFF0 //highest number divisiable by 30
-//#endif
-
-//#if( PRIMEMAX % 120 != 0 )
-//#error "Bitset block size PRIMEMAX must be divisible by 30 (2*3*5) "
-//#endif
-
+#include <thread>
 /**
 	This class is for calculating and storing prime numbers. It uses the Sieve of Eratosthenes to mark
 	bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve
-	to an ever increasing list of blocks. BLock size is set to 4294967280 (0xFFFFFFF0) by default but can be recompiled
-	by defining PRIMEMAX.  Note that PRIMEMAX must be devisible by 2,3, and 5 to keep blocks alligned.
+	to an ever increasing list of blocks.  Note that PRIMEMAX must be devisible by 2,3, and 5 to keep blocks alligned.
 
-	For version 0.1, it is limited to size_t (64 bits).  The plan is to extend thsi out to __int128 (128 bits) or use
+	For version 0.3, it is limited to size_t (64 bits).  The plan is to extend thsi out to __int128 (128 bits) or use
 	one of the "infinite" bit classes for integers in some futer versio0.
 
 	Storage of the prime numbers, at least the initial numbers, is inefficient as a list.  Storage of a bit for each
@@ -35,7 +24,7 @@
 	https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 
 	@author Mark Burhop
-	@version 0.2 10/06/2019
+	@version 0.3 11/01/2019
 */
 class __declspec(dllexport)  Prime
 {
@@ -94,13 +83,13 @@ public:
 	size_t CountPrimes(size_t lowVal, size_t highVal);
 
 private:
-	/** the size of the data block the library was compiled with. */
+	unsigned int threadCount = std::thread::hardware_concurrency();
 	size_t bitBlockSize=0;
-	size_t max =  0; //= (size_t)PRIMEMAX;           // 4294967295;
-	size_t max2 = 0; // max / 2 + max % 2;         // don't need to save the even numbers
-	size_t max3 = 0; // 2 * max2 / 3 + max2 % 3;   // don't need to save numbers divisible by 3
-	size_t max5 = 0; // 4 * max3 / 5 + max3 % 5;   // don't need to save numbers divisible by 5
-	size_t searchDisttance = 0;							  // Fartherest this class instance has search so far.
+	size_t max =  0;    // Can be up to 4294967280;
+	size_t max2 = 0;    // don't need to save the even numbers
+	size_t max3 = 0;    // don't need to save numbers divisible by 3
+	size_t max5 = 0;    // don't need to save numbers divisible by 5
+	size_t searchDisttance = 0;					   // Fartherest this class instance has search so far.
 	std::string baseFileName="primes";
 	bool saveIcrementalFiles = false;
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
@@ -112,13 +101,10 @@ private:
 	//Private Functions
 	void findFirstBlockOFPrimes();
 	size_t NextPrime(boost::dynamic_bitset<>* bSet, size_t index);
-	//void writeSparseBitSetToStream(const std::string fileName, boost::dynamic_bitset<> *bitss);
 	void writeBitSetToStream(const std::string fileName, boost::dynamic_bitset<>* bitss);
 	void readSparseBitSetFromStream(const char * my_file, boost::dynamic_bitset<>* b);
 	void readBitSetFromStream(const std::string my_file, boost::dynamic_bitset<>* b);
 	void clearBitsetVector();
-	//boost::dynamic_bitset<>* primeSieve();
-	//size_t countPrimes(boost::dynamic_bitset<>* b);
 	boost::dynamic_bitset<>* primeSieve(std::vector<boost::dynamic_bitset<>*> vec);
 	void compressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
 	void uncompressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
