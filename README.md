@@ -19,9 +19,9 @@ Some useful links:
 **Some next steps are:**
  1. Parallelization - Use all the cores and GPUs
  2. Expanding to larger ints.
- 3 Support for unlimited size ints
- 4.More efficient use of memory to support unlimited prime calculations (right now, all the bitsets are kept in memory)
- 5.More efficient storage of the numbers (ping me if you have ideas)
+ 3. Support for unlimited size ints
+ 4. More efficient use of memory to support unlimited prime calculations (right now, all the bitsets are kept in memory)
+ 5. More efficient storage of the numbers (ping me if you have ideas)
 
 
 While C++ is efficient, Python is more fun for trying out clever ideas. Some next "fun" steps are:
@@ -29,7 +29,7 @@ While C++ is efficient, Python is more fun for trying out clever ideas. Some nex
  1. Python code to read the output files.  THere is a rough version of this now.
  2. Python image creation based off prime numbers.  See below for an example of an [Ulam Spiral](https://en.wikipedia.org/wiki/Ulam_spiral)
  
- 3.) Maybe a "primes as a service" implementation :-)
+ 3. Maybe a "primes as a service" implementation :-)
 
 
 **Motivation:**
