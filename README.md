@@ -51,4 +51,4 @@ For version 0.2, the following changes were made:
 3. A new project called "go" that just keeps running and running looking for new primes. You can stop it and restarted it and it will remember any blocks of primes it already completed.
 3. Python files for reading in the prime files and creating some prime bases images.  THis is still rough and in development but I inlcude it here in case anyone wants a parcer for the files.
 
-![Spiral](https://github.com/burhop/prime/blob/master/python/primeSpiral.png)
+![Spiral](https://burhop.github.io/prime/images/primeSpiral.png)
