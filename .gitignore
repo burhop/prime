@@ -235,5 +235,5 @@ paket-files/
 *.sln.iml
 
 # doxygen folders
-html/
-latex/
+#html/
+#latex/
