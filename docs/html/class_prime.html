@@ -84,8 +84,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a65f756fa64961033ddf1075c17aaa8de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bc658a0531e8672da6417eb6a3dfddc"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_prime.html#a6bc658a0531e8672da6417eb6a3dfddc">GetBitBlockSize</a> ()</td></tr>
 <tr class="separator:a6bc658a0531e8672da6417eb6a3dfddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ae26d53094fa4606bc6aaac71de4c0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_prime.html#a9ae26d53094fa4606bc6aaac71de4c0d">SaveIncrementalFiles</a> (bool b=false)</td></tr>
-<tr class="separator:a9ae26d53094fa4606bc6aaac71de4c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad439e13bab66ff6123908e2c66719016"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_prime.html#ad439e13bab66ff6123908e2c66719016">SaveIncrementalFiles</a> (bool b=true)</td></tr>
+<tr class="separator:ad439e13bab66ff6123908e2c66719016"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae65f3e9ba1c1dabd836eefa3dfc19256"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_prime.html#ae65f3e9ba1c1dabd836eefa3dfc19256">Sqrt</a> (size_t x)</td></tr>
 <tr class="separator:ae65f3e9ba1c1dabd836eefa3dfc19256"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acacfaa6c7273053befa2adbc6819186e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_prime.html#acacfaa6c7273053befa2adbc6819186e">FindPrimes</a> (int numberOfBLocks)</td></tr>
@@ -100,9 +100,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad912923a08d52175063d482389599e16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe3aa31f88049119da202de139ff9199"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_prime.html#abe3aa31f88049119da202de139ff9199">GetMaxCount</a> ()</td></tr>
 <tr class="separator:abe3aa31f88049119da202de139ff9199"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a699df3c9d912828544370faa9019ef93"><td class="memItemLeft" align="right" valign="top"><a id="a699df3c9d912828544370faa9019ef93"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>saveToFile</b> (std::string baseName, size_t count)</td></tr>
-<tr class="separator:a699df3c9d912828544370faa9019ef93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6545ae3603abcd8d255e04925e41921"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_prime.html#ac6545ae3603abcd8d255e04925e41921">DeleteExistingPrimeFiles</a> (std::string baseName)</td></tr>
 <tr class="separator:ac6545ae3603abcd8d255e04925e41921"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56cceb6c89abba6e8252fc5de95f7f9f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_prime.html#a56cceb6c89abba6e8252fc5de95f7f9f">SaveToFile</a> (std::string baseName)</td></tr>
@@ -136,7 +133,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>saveToFile</b> (std::s
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Constructor. By default block size will be 0xFFFFFFF0 Constuctor. Set the block size explicitly. This can not be changed later. </p>
+<p>Constructor. By default block size will be 0xFFFFFFF0 </p>
 
 </div>
 </div>
@@ -174,7 +171,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>saveToFile</b> (std::s
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Continously calculates primes. For version 0.2, we are limited by size_t </p>
+<p>Continously calculates primes. For version 0.3, we are limited by size_t </p>
 
 </div>
 </div>
@@ -277,7 +274,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>saveToFile</b> (std::s
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calculates all the prime numbers for one or more data blocks. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculates all the prime numbers for one or more data blocks. Throws an exception if int is negative. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">numberOfBlocks</td><td>the number of blocks of memory to search though </td></tr>
   </table>
@@ -383,13 +380,14 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>saveToFile</b> (std::s
         </tr>
       </table>
 </div><div class="memdoc">
-<p>returns a list of primes between two numbers. Note that there may be a maximum size of the std::vector. A safe range should be less than 4294967295 (0xFFFFFFFF) </p><dl class="params"><dt>Parameters</dt><dd>
+<p>returns a list of primes between two numbers. Note that there may be a maximum size of the std::vector. A safe range should be less than 4294967295 (0xFFFFFFFF) members. At this time, the retrn value is meaningless. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lowVal</td><td>The lower value of the range </td></tr>
     <tr><td class="paramname">highVal</td><td>The upper value of the range </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>meaningless. May be used in future versions. </dd></dl>
 
 </div>
 </div>
@@ -417,8 +415,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>saveToFile</b> (std::s
 
 </div>
 </div>
-<a id="a9ae26d53094fa4606bc6aaac71de4c0d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ae26d53094fa4606bc6aaac71de4c0d">&#9670;&nbsp;</a></span>SaveIncrementalFiles()</h2>
+<a id="ad439e13bab66ff6123908e2c66719016"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad439e13bab66ff6123908e2c66719016">&#9670;&nbsp;</a></span>SaveIncrementalFiles()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -427,7 +425,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>saveToFile</b> (std::s
           <td class="memname">void Prime::SaveIncrementalFiles </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>b</em> = <code>false</code></td><td>)</td>
+          <td class="paramname"><em>b</em> = <code>true</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -456,8 +454,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>saveToFile</b> (std::s
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Saves all calculated primes to one or more files. <br  />
- </p>
+<p>Saves all calculated primes to one or more files. Each block is saved to a different file by apending 1,2,3,...n to the baseName followed by .prm </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">basename</td><td>The basename of the set of files to delete. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
