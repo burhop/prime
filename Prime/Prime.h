@@ -31,10 +31,8 @@ class __declspec(dllexport)  Prime
 
 public:
 	/** Constructor. By default block size will be 0xFFFFFFF0 */
-	//Prime();
-	/** Constuctor.  Set the block size explicitly.  This can not be changed later. */
 	Prime(size_t bitsetSize=0xFFFFFFF0);
-	/** Continously calculates primes.  For version 0.2, we are limited by size_t */
+	/** Continously calculates primes.  For version 0.3, we are limited by size_t */
 	int ContinousRun(std::string baseName);
 	/** Destructor */
 	~Prime();
@@ -44,7 +42,7 @@ public:
 	    for a large set of prime numbers and want to be sure you don't lose data to a catastrphic failure.
 	@param b If true, saves each set of bits to a file as it is completed.
 	*/
-	void SaveIncrementalFiles(bool b=false);
+	void SaveIncrementalFiles(bool b=true);
 	/** Efficient integer based square root fuction for size_t integers. It will be <= the floating point square root
 	@return An size_t integer that is less than or equal to the floating point square root function */
 	size_t Sqrt(size_t x);
@@ -52,7 +50,7 @@ public:
 		@param numberOfBlocks the number of blocks of memory to search though
 		*/
 	void FindPrimes(int numberOfBLocks);
-	/** Calculates all the prime numbers for one or more data blocks.
+	/** Calculates all the prime numbers for one or more data blocks. Throws an exception if int is negative.
 		@param numberOfBlocks the number of blocks of memory to search though
 		*/
 	void FindPrimes(size_t numberOfBlocks=1);
@@ -67,18 +65,22 @@ public:
 	size_t GetMaxPrime();
 	/** Get the total number of primes that have been found */
 	size_t GetMaxCount();
-	int saveToFile(std::string baseName, size_t count);
 	/** Deletes existing prime files. Since the goal of this class is to find prime numbers, this is really only
 	    useful for testing the code.
 		@param basename  The basename of the set of files to delete.
 		*/
 	void DeleteExistingPrimeFiles(std::string baseName);
-	/** Saves all calculated primes to one or more files.  */
+	/** Saves all calculated primes to one or more files. Each block is saved to a different file
+	    by apending 1,2,3,...n to the baseName followed by .prm
+		@param basename  The basename of the set of files to delete.
+		*/
 	int SaveToFile(std::string baseName);
 	/** returns a list of primes between two numbers. Note that there may be a maximum size of the 
-	    std::vector.  A safe range should be less than 4294967295 (0xFFFFFFFF) 
+	    std::vector.  A safe range should be less than 4294967295 (0xFFFFFFFF) members.
+		At this time, the retrn value is meaningless.
 		@param lowVal The lower value of the range
 		@param highVal The upper value of the range
+		@return meaningless.  May be used in future versions.
 		*/
 	std::vector<size_t> GetPrimesAsVector(size_t lowVal, size_t highVal);
 	/** returns the number of primes between lowVal and highVal. 
@@ -114,6 +116,7 @@ private:
 	boost::dynamic_bitset<>* primeSieve(std::vector<boost::dynamic_bitset<>*> vec);
 	void compressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
 	void uncompressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
+	int saveToFile(std::string baseName, size_t count);
 };
 
 
