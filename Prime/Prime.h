@@ -36,7 +36,7 @@ public:
 	int ContinousRun(std::string baseName);
 	/** Destructor */
 	~Prime();
-	/** returns the size of the bit blocks.  That is, how many bit each block of data stores */
+	/** returns the size of the bit blocks.  That is, how many bit each block of data stores.  This was the value passed to the constuctor*/
 	size_t GetBitBlockSize();
 	/** Tells the Object to save each chunk of bits as it gets fully set. This is useful if you are searching 
 	    for a large set of prime numbers and want to be sure you don't lose data to a catastrphic failure.
@@ -54,7 +54,9 @@ public:
 		@param numberOfBlocks the number of blocks of memory to search though
 		*/
 	void FindPrimes(size_t numberOfBlocks=1);
-	/** Load previously stored prime numbers in a set of .prm files. 
+	/** Load previously stored prime numbers in a set of .prm files. This will throw an exception if the 
+	    number of bits in in file is different from the number of bits for this instance of the class.  It 
+		will also throw exceptions if there are problems accessing the file or it finds bad data 
 		@param baseName This is the baseName of the file. Each base name gets appended with 1,2,3, ... n and 
 		the extenion '.prm'  (e.g. basename1.prm, basename2.prm) 
 		*/
@@ -72,7 +74,7 @@ public:
 	void DeleteExistingPrimeFiles(std::string baseName);
 	/** Saves all calculated primes to one or more files. Each block is saved to a different file
 	    by apending 1,2,3,...n to the baseName followed by .prm
-		@param basename  The basename of the set of files to delete.
+		@param basename  The basename of the set of files to save.
 		*/
 	int SaveToFile(std::string baseName);
 	/** returns a list of primes between two numbers. Note that there may be a maximum size of the 

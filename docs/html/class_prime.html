@@ -297,7 +297,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>returns the size of the bit blocks. That is, how many bit each block of data stores </p>
+<p>returns the size of the bit blocks. That is, how many bit each block of data stores. This was the value passed to the constuctor </p>
 
 </div>
 </div>
@@ -406,7 +406,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Load previously stored prime numbers in a set of .prm files. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Load previously stored prime numbers in a set of .prm files. This will throw an exception if the number of bits in in file is different from the number of bits for this instance of the class. It will also throw exceptions if there are problems accessing the file or it finds bad data </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">baseName</td><td>This is the baseName of the file. Each base name gets appended with 1,2,3, ... n and the extenion '.prm' (e.g. basename1.prm, basename2.prm) </td></tr>
   </table>
@@ -456,7 +456,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Saves all calculated primes to one or more files. Each block is saved to a different file by apending 1,2,3,...n to the baseName followed by .prm </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">basename</td><td>The basename of the set of files to delete. </td></tr>
+    <tr><td class="paramname">basename</td><td>The basename of the set of files to save. </td></tr>
   </table>
   </dd>
 </dl>

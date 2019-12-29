@@ -89,45 +89,45 @@ $(function() {
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#ae65f3e9ba1c1dabd836eefa3dfc19256">Sqrt</a>(<span class="keywordtype">size_t</span> x);</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_prime.html#acacfaa6c7273053befa2adbc6819186e">FindPrimes</a>(<span class="keywordtype">int</span> numberOfBLocks);</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_prime.html#acacfaa6c7273053befa2adbc6819186e">FindPrimes</a>(<span class="keywordtype">size_t</span> numberOfBlocks=1);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_prime.html#aaf3cdeb13b463d52685f22df28cf7750">LoadFromFile</a>(std::string baseName);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#a6f21b754c36c0f0fe4b0770e1f3a5b73">GetMaxValue</a>();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#ad912923a08d52175063d482389599e16">GetMaxPrime</a>();</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#abe3aa31f88049119da202de139ff9199">GetMaxCount</a>();</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_prime.html#ac6545ae3603abcd8d255e04925e41921">DeleteExistingPrimeFiles</a>(std::string baseName);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_prime.html#a56cceb6c89abba6e8252fc5de95f7f9f">SaveToFile</a>(std::string baseName);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::vector&lt;size_t&gt; <a class="code" href="class_prime.html#a592cae91bd34b9a588b67e7f4d9347b2">GetPrimesAsVector</a>(<span class="keywordtype">size_t</span> lowVal, <span class="keywordtype">size_t</span> highVal);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#ab2069bb5ff266090b4f3460afbceee3f">CountPrimes</a>(<span class="keywordtype">size_t</span> lowVal, <span class="keywordtype">size_t</span> highVal);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> threadCount = std::thread::hardware_concurrency();</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">size_t</span> bitBlockSize=0;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">size_t</span> max =  0;    <span class="comment">// Can be up to 4294967280;</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">size_t</span> max2 = 0;    <span class="comment">// don&#39;t need to save the even numbers</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">size_t</span> max3 = 0;    <span class="comment">// don&#39;t need to save numbers divisible by 3</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">size_t</span> max5 = 0;    <span class="comment">// don&#39;t need to save numbers divisible by 5</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">size_t</span> searchDisttance = 0;                    <span class="comment">// Fartherest this class instance has search so far.</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    std::string baseFileName=<span class="stringliteral">&quot;primes&quot;</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">bool</span> saveIcrementalFiles = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="comment">//Compiler worries this vector might get passed out of the DLL. Turn this warning off</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#pragma warning( push )   </span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">#pragma warning( disable : 4251)</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    std::vector&lt;boost::dynamic_bitset&lt;&gt; *&gt; vectorOfBitSets;       <span class="comment">// Place to save our bitsets</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment">//Private Functions</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">void</span> findFirstBlockOFPrimes();</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">size_t</span> NextPrime(boost::dynamic_bitset&lt;&gt;* bSet, <span class="keywordtype">size_t</span> index);</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">void</span> writeBitSetToStream(<span class="keyword">const</span> std::string fileName, boost::dynamic_bitset&lt;&gt;* bitss);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">void</span> readSparseBitSetFromStream(<span class="keyword">const</span> <span class="keywordtype">char</span> * my_file, boost::dynamic_bitset&lt;&gt;* b);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">void</span> readBitSetFromStream(<span class="keyword">const</span> std::string my_file, boost::dynamic_bitset&lt;&gt;* b);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">void</span> clearBitsetVector();</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    boost::dynamic_bitset&lt;&gt;* primeSieve(std::vector&lt;boost::dynamic_bitset&lt;&gt;*&gt; vec);</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> compressBitSet(boost::dynamic_bitset&lt;&gt;* iBitSet, boost::dynamic_bitset&lt;&gt;* b);</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">void</span> uncompressBitSet(boost::dynamic_bitset&lt;&gt;* iBitSet, boost::dynamic_bitset&lt;&gt;* b);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">int</span> saveToFile(std::string baseName, <span class="keywordtype">size_t</span> count);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_prime.html#aaf3cdeb13b463d52685f22df28cf7750">LoadFromFile</a>(std::string baseName);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#a6f21b754c36c0f0fe4b0770e1f3a5b73">GetMaxValue</a>();</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#ad912923a08d52175063d482389599e16">GetMaxPrime</a>();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#abe3aa31f88049119da202de139ff9199">GetMaxCount</a>();</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_prime.html#ac6545ae3603abcd8d255e04925e41921">DeleteExistingPrimeFiles</a>(std::string baseName);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="class_prime.html#a56cceb6c89abba6e8252fc5de95f7f9f">SaveToFile</a>(std::string baseName);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    std::vector&lt;size_t&gt; <a class="code" href="class_prime.html#a592cae91bd34b9a588b67e7f4d9347b2">GetPrimesAsVector</a>(<span class="keywordtype">size_t</span> lowVal, <span class="keywordtype">size_t</span> highVal);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="class_prime.html#ab2069bb5ff266090b4f3460afbceee3f">CountPrimes</a>(<span class="keywordtype">size_t</span> lowVal, <span class="keywordtype">size_t</span> highVal);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> threadCount = std::thread::hardware_concurrency();</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">size_t</span> bitBlockSize=0;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">size_t</span> max =  0;    <span class="comment">// Can be up to 4294967280;</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">size_t</span> max2 = 0;    <span class="comment">// don&#39;t need to save the even numbers</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">size_t</span> max3 = 0;    <span class="comment">// don&#39;t need to save numbers divisible by 3</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">size_t</span> max5 = 0;    <span class="comment">// don&#39;t need to save numbers divisible by 5</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">size_t</span> searchDisttance = 0;                    <span class="comment">// Fartherest this class instance has search so far.</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    std::string baseFileName=<span class="stringliteral">&quot;primes&quot;</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">bool</span> saveIcrementalFiles = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="comment">//Compiler worries this vector might get passed out of the DLL. Turn this warning off</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#pragma warning( push )   </span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#pragma warning( disable : 4251)</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    std::vector&lt;boost::dynamic_bitset&lt;&gt; *&gt; vectorOfBitSets;       <span class="comment">// Place to save our bitsets</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">//Private Functions</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">void</span> findFirstBlockOFPrimes();</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">size_t</span> NextPrime(boost::dynamic_bitset&lt;&gt;* bSet, <span class="keywordtype">size_t</span> index);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">void</span> writeBitSetToStream(<span class="keyword">const</span> std::string fileName, boost::dynamic_bitset&lt;&gt;* bitss);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">void</span> readSparseBitSetFromStream(<span class="keyword">const</span> <span class="keywordtype">char</span> * my_file, boost::dynamic_bitset&lt;&gt;* b);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">void</span> readBitSetFromStream(<span class="keyword">const</span> std::string my_file, boost::dynamic_bitset&lt;&gt;* b);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> clearBitsetVector();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    boost::dynamic_bitset&lt;&gt;* primeSieve(std::vector&lt;boost::dynamic_bitset&lt;&gt;*&gt; vec);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> compressBitSet(boost::dynamic_bitset&lt;&gt;* iBitSet, boost::dynamic_bitset&lt;&gt;* b);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">void</span> uncompressBitSet(boost::dynamic_bitset&lt;&gt;* iBitSet, boost::dynamic_bitset&lt;&gt;* b);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordtype">int</span> saveToFile(std::string baseName, <span class="keywordtype">size_t</span> count);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;};</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclass_prime_html_ad912923a08d52175063d482389599e16"><div class="ttname"><a href="class_prime.html#ad912923a08d52175063d482389599e16">Prime::GetMaxPrime</a></div><div class="ttdeci">size_t GetMaxPrime()</div></div>
 <div class="ttc" id="aclass_prime_html_a592cae91bd34b9a588b67e7f4d9347b2"><div class="ttname"><a href="class_prime.html#a592cae91bd34b9a588b67e7f4d9347b2">Prime::GetPrimesAsVector</a></div><div class="ttdeci">std::vector&lt; size_t &gt; GetPrimesAsVector(size_t lowVal, size_t highVal)</div></div>
