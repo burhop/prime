@@ -103,10 +103,7 @@ int main(int argc, char*argv[])
 		maxValue = prime2.GetMaxValue();
 		std::cout << "Found " << count << " prime numbers between 0 and " << maxValue << std::endl;
 		// Lets see how many primes in groups of 100
-		std::cout << "0-100   : " << prime2.CountPrimes(0, 100) << std::endl;
-		std::cout << "101-200 : " << prime2.CountPrimes(101, 200) << std::endl;
-		std::cout << "201-300 : " << prime2.CountPrimes(201, 300) << std::endl;
-		std::cout << "301-400 : " << prime2.CountPrimes(301, 400) << std::endl;
+		std::cout << "0-1000   : " << prime2.CountPrimes(0, 1000) << std::endl;
 		std::cout << "0-10000 : " << prime2.CountPrimes(0, 10000) << std::endl;
 		std::cout << "0-100000 : " << prime2.CountPrimes(0, 100000) << std::endl;
 		std::cout << "0-1000000 : " << prime2.CountPrimes(0, 1000000) << std::endl;
@@ -121,13 +118,10 @@ int main(int argc, char*argv[])
 	else if (opt == 2)
 	{
 		prime.LoadFromFile("RunRunRun");
-		std::cout << "total integers: " << prime.GetMaxCount() << std::endl;
-		std::cout << "Largest Prime : " << prime.GetMaxPrime() << std::endl;
-		std::cout << "Primes Found  : " << prime.GetMaxCount() << std::endl;
-		std::cout << "0-100   : " << prime.CountPrimes(0, 100) << std::endl;
-		std::cout << "101-200 : " << prime.CountPrimes(101, 200) << std::endl;
-		std::cout << "201-300 : " << prime.CountPrimes(201, 300) << std::endl;
-		std::cout << "301-400 : " << prime.CountPrimes(301, 400) << std::endl;
+		std::cout << "Total integers searched: " << prime.GetMaxValue() << std::endl;
+		std::cout << "Largest prime : " << prime.GetMaxPrime() << std::endl;
+		std::cout << "Total primes Found  : " << prime.GetMaxCount() << std::endl;
+		std::cout << "0-1000 : " << prime.CountPrimes(0, 1000) << std::endl;
 		std::cout << "0-10000 : " << prime.CountPrimes(0, 10000) << std::endl;
 		std::cout << "0-100000 : " << prime.CountPrimes(0, 100000) << std::endl;
 		std::cout << "0-1000000 : " << prime.CountPrimes(0, 1000000) << std::endl;
