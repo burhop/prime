@@ -152,9 +152,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="bitblock.h" />
     <ClInclude Include="Prime.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bitblock.cpp" />
     <ClCompile Include="Prime.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

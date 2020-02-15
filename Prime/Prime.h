@@ -3,6 +3,7 @@
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
 #include <thread>
+#include <bitblock.h>
 /**
 	This class is for calculating and storing prime numbers. It uses the Sieve of Eratosthenes to mark
 	bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve
