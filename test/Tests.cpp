@@ -30,6 +30,7 @@ size_t TestFindPrimes2(int blocks, size_t blocksize, size_t mmaxValueToSearch)
 	prime.DeleteExistingPrimeFiles("test");
 	return count;
 }
+
 size_t TestFileErrors1()
 {
 
@@ -58,6 +59,22 @@ size_t TestMaxCount(int blocks, size_t blocksize)
 	Prime prime(blocksize);
 	prime.FindPrimes(blocks);
 	return prime.GetMaxCount();
+
+}
+size_t TestMaxCountCompressed(int blocks, size_t blocksize)
+{
+	Prime prime(blocksize);
+	prime.FindPrimes(blocks);
+	prime.Compress();
+	return prime.GetMaxCount();
+}
+size_t TestMaxCountUncompressed(int blocks, size_t blocksize)
+{
+	Prime prime(blocksize);
+	prime.FindPrimes(blocks);
+	prime.Compress();
+	prime.Uncompress();
+	return prime.GetMaxCount();
 }
 size_t TestMaxPrime(int blocks, size_t blocksize)
 {
@@ -81,6 +98,23 @@ TEST_CASE("Test counting of primes is correct (pass)", "[single-file]") {
 	REQUIRE(TestMaxCount(1,    3000000) == 216816);
 	REQUIRE(TestMaxCount(321,   3000) == 75845);
 	REQUIRE(TestMaxCount(999, 900) == 71217);
+}
+TEST_CASE("Test counting of compressed primes is correct (pass)", "[single-file]") {
+
+	REQUIRE(TestMaxCountCompressed(1, 30) == 10);
+	REQUIRE(TestMaxCountCompressed(10, 60) == 109);
+	REQUIRE(TestMaxCountCompressed(1000, 90) == 8713);
+	REQUIRE(TestMaxCountCompressed(1, 3000000) == 216816);
+	REQUIRE(TestMaxCountCompressed(321, 3000) == 75845);
+	REQUIRE(TestMaxCountCompressed(999, 900) == 71217);
+}TEST_CASE("Test counting of primes that have been compressed and uncompressed is correct (pass)", "[single-file]") {
+
+	REQUIRE(TestMaxCountUncompressed(1, 30) == 10);
+	REQUIRE(TestMaxCountUncompressed(10, 60) == 109);
+	REQUIRE(TestMaxCountUncompressed(1000, 90) == 8713);
+	REQUIRE(TestMaxCountUncompressed(1, 3000000) == 216816);
+	REQUIRE(TestMaxCountUncompressed(321, 3000) == 75845);
+	REQUIRE(TestMaxCountUncompressed(999, 900) == 71217);
 }
 TEST_CASE("Test Max Prime is correct (pass)", "[single-file]") {
 
@@ -117,10 +151,12 @@ TEST_CASE("Test Max Value is correct with no calculation (pass)", "[single-file]
 	Prime prime(30);
 	REQUIRE(prime.GetMaxValue() == 0);
 }
-TEST_CASE("Test for class instance trying to load wrong size file (fail)", "[single-file]") {
+// In version .4, it will now figure the right size of the file and load it. This is no longer an error.
 
-	REQUIRE_THROWS(TestFileErrors1() == 0);
-}
+//TEST_CASE("Test for class instance trying to load wrong size file (fail)", "[single-file]") {
+//
+//	REQUIRE_THROWS(TestFileErrors1() == 0);
+//}
 
 
 TEST_CASE("Find Primes using different block sizes (pass)", "[single-file]") {

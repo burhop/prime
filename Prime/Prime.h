@@ -25,7 +25,7 @@
 	https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 
 	@author Mark Burhop
-	@version 0.3 11/01/2019
+	@version 0.4 29/02/2020
 */
 class __declspec(dllexport)  Prime
 {
@@ -92,6 +92,10 @@ public:
 		@return The number of prime numbers between and including the two numbers
 		*/
 	size_t CountPrimes(size_t lowVal, size_t highVal);
+	/** compresses the data so that less memory is used*/
+	void Compress();
+	/** uncompresses the data */
+	void Uncompress();
 
 private:
 	unsigned int threadCount = std::thread::hardware_concurrency();
@@ -106,19 +110,19 @@ private:
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   
 #pragma warning( disable : 4251)
-	std::vector<boost::dynamic_bitset<> *> vectorOfBitSets;       // Place to save our bitsets
+	std::vector<BitBlock*> vectorOfBitSets;       // Place to save our data
 #pragma warning(pop)
 
 	//Private Functions
 	void findFirstBlockOFPrimes();
 	size_t NextPrime(boost::dynamic_bitset<>* bSet, size_t index);
-	void writeBitSetToStream(const std::string fileName, boost::dynamic_bitset<>* bitss);
-	void readSparseBitSetFromStream(const char * my_file, boost::dynamic_bitset<>* b);
-	void readBitSetFromStream(const std::string my_file, boost::dynamic_bitset<>* b);
+	void writeBitSetToStream(const std::string fileName, BitBlock* bitss);
+	//void readSparseBitSetFromStream(const char * my_file, std::vector<BitBlock*> b);
+	//void readBitSetFromStream(const std::string my_file, std::vector<BitBlock*> b);
 	void clearBitsetVector();
-	boost::dynamic_bitset<>* primeSieve(std::vector<boost::dynamic_bitset<>*> vec);
-	void compressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
-	void uncompressBitSet(boost::dynamic_bitset<>* iBitSet, boost::dynamic_bitset<>* b);
+	BitBlock* primeSieve(std::vector<BitBlock*> vec);
+	//void compressBitSet(boost::dynamic_bitset<>* iBitSet, std::vector<BitBlock*> b);
+	//void uncompressBitSet(boost::dynamic_bitset<>* iBitSet, std::vector<BitBlock*> b);
 	int saveToFile(std::string baseName, size_t count);
 };
 

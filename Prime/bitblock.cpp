@@ -16,9 +16,14 @@ BitBlock::BitBlock(size_t s, size_t i)
 {
 	size=s;
 	index=i;
-	auto bitsetsize = getBitsetSize(size);
-	bits = new boost::dynamic_bitset(bitsetsize);
+	cached = false;
+	compressed = false;
+	//auto bitsetsize = getBitsetSize(size);
+	//block off the full size
+	bits = new boost::dynamic_bitset(size);
+	bits->set();
 }
+
 BitBlock::~BitBlock()
 {
 	//delete memory
@@ -36,15 +41,47 @@ size_t BitBlock::GetIndex()
 }
 
 //TODO  Test is if is faster to do this or just have the whole array in memory
-bool BitBlock::operator[](size_t index)
-{
 
-	if (index % 2 && index % 3 && index % 5)
-	{
-		size_t idx = index - index / 2 - index / 3 - index / 5 - index / 30 + index / 5 + index / 6 + index / 10 + index / 15;
-		return (*bits)[idx];
-	}
-	return false;
+// you can't use bool here because the setter won't work. This is because bitsets don't return a bool but a proxy
+boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
+{
+	if (compressed)
+	{ 
+		// if it is the first block, 2,3,5 are missing.
+		if (this->GetIndex() == 0)
+		{
+			if (loc == 1 || loc == 2 || loc == 4) return bDummy[1];
+		}
+		size_t index = loc + 1;
+		if (index % 2 && index % 3 && index % 5)
+		{
+			size_t idx = index + index / 6 + index / 10 + index / 15 - index / 2 - index / 3 - index / 5 - index / 30  - 1;
+			return (*bits)[idx];
+		}
+		return bDummy[0];
+	}	
+	bool x = (*bits)[loc];
+	return (*bits)[loc];
+}
+//const bool& BitBlock::operator[](size_t index) const
+//{
+//	if (compressed)
+//	{
+//		if (index % 2 && index % 3 && index % 5)
+//		{
+//			size_t idx = index - index / 2 - index / 3 - index / 5 - index / 30 + index / 5 + index / 6 + index / 10 + index / 15;
+//			return (*bits)[idx];
+//			//return x;
+//		}
+//		//auto x = false;
+//		return false;
+//	}
+//
+//	return (*bits)[index];
+//}
+bool BitBlock::test(size_t index)
+{
+	return this->bits->test(index);
 }
 
 void BitBlock::SaveFile(std::string filename)
@@ -53,9 +90,9 @@ void BitBlock::SaveFile(std::string filename)
 	outfile.open(filename, std::ios::out | std::ios::binary);
 	outfile.write((char*)&size, sizeof(size_t));
 	outfile.write((char*)&index, sizeof(size_t));
-
+	this->compressBitSet();
 	char buffer = 0;
-	for (size_t i = 0; i < size; i += 8)
+	for (size_t i = 0; i < bits->size(); i += 8)
 	{
 		for (char c = 0; c < 8; c++)
 		{
@@ -82,7 +119,8 @@ void BitBlock::LoadFile()
 	if (filename.empty())
 		throw std::exception("Filename is empty");
 
-
+	//load into a compressed dataset
+	compressed = true;
 	std::ifstream InFile;
 
 	//First read in our object data
@@ -96,7 +134,7 @@ void BitBlock::LoadFile()
 	// We want to cache the file so bring it into memory as a bitset
 
 	//Allocate memory 
-	size_t bitsetsize = getBitsetSize(size);   // don't need to save the even numbers
+	size_t bitsetsize = getBitsetSize(size);   
 	//do it on the heap to avoid stack issues
 	this->bits = new boost::dynamic_bitset(bitsetsize);
 
@@ -128,6 +166,8 @@ void BitBlock::LoadFile()
 		}
 	}
 	InFile.close();
+	//std::vector<size_t> primes = this->GetPrimes();
+	//auto s = primes.size();
 }
 
 void BitBlock::UnCache()
@@ -137,15 +177,33 @@ void BitBlock::UnCache()
 std::vector<size_t> BitBlock::GetPrimes()
 {
 	std::vector<size_t> listOfPrimes;
+	//2,3,5 are removed from compressed list.  Need to add them back
+	if (compressed && (this->GetIndex() == 0))
+	{
+		listOfPrimes.push_back(2);
+		listOfPrimes.push_back(3);
+		listOfPrimes.push_back(5);
+	}
 	for (size_t count = 0; count < this->GetSize(); count++)
 	{
-		bool isPrime = (*bits)[count];
+		bool isPrime = (*this)[count];
 		if (isPrime)
 		{
-			listOfPrimes.push_back(this->GetIndex() * this->GetSize() + count);
+			listOfPrimes.push_back(this->GetIndex() * this->GetSize() + count+1);
 		}
 	}
 	return listOfPrimes;
+}
+
+void BitBlock::Compress()
+{
+	this->compressBitSet();
+
+}
+
+void BitBlock::Uncompress()
+{
+	this->uncompressBitSet();
 }
 
 size_t BitBlock::getBitsetSize(size_t dataSize) {
@@ -155,10 +213,64 @@ size_t BitBlock::getBitsetSize(size_t dataSize) {
 	return max5;
 }
 
-//size_t BitBlock::getDataSize(size_t bitsettSize) {
-//	
-//	size_t max2 = dataSize / 2 + dataSize % 2;         // don't need to save the even numbers
-//	size_t max3 = 2 * max2 / 3 + max2 % 3;   // don't need to save numbers divisible by 3
-//	size_t max5 = 4 * max3 / 5 + max3 % 5;   // don't need to save numbers divisible by 5
-//	return max5;
-//}
+void BitBlock::compressBitSet()
+{
+	//if it is already compressed, do nothing
+	if (this->compressed) return;
+	size_t compSize = this->getBitsetSize(this->GetSize());
+	boost::dynamic_bitset<> *compBits = new boost::dynamic_bitset<>(compSize);
+	size_t count = 0;
+	for (size_t i = 1; i < size; i++)
+	{
+		if (i % 2 == 0 || i % 3 == 0 || i % 5 == 0 )
+		{
+			// don't do anything
+		}
+		else
+		{
+			//note that bits are off by 1 (e.g. 1 bit is a location 0, 7 bit is at location 6)
+			bool isPrime = this->bits->test(i-1);
+			compBits->set(count, isPrime);
+			count++;
+		}
+	}
+	compressed = true;
+	delete bits;
+	bits = compBits;
+	return;
+}
+
+void BitBlock::uncompressBitSet()
+{
+	size_t count = 0;  //first unmasked prime
+	//Create a new bitset with everything set to 0 (false)
+	boost::dynamic_bitset<> *newBits = new boost::dynamic_bitset<>(size);
+	if (index == 0)
+	{
+		(*newBits)[1] = true; //2
+		(*newBits)[2] = true; //3
+		(*newBits)[4] = true; //5
+	}
+	for (size_t i = 1; i < size; i++)
+	{
+		if (i % 2 == 0 || i % 3 == 0 || i % 5 == 0 )
+		{
+			// don't do anything
+		}
+		else
+		{
+			//if (index == 0)
+			//{
+			//	newBits->set(i + 5, bits->test(count));
+			//}
+			//else
+
+			newBits->set(i - 1, bits->test(count));
+			count++;
+		}
+	}
+	compressed = false;
+	delete bits;
+	bits = newBits;
+	return;
+}
