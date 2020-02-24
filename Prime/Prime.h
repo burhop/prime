@@ -116,7 +116,7 @@ private:
 	//Private Functions
 	void findFirstBlockOFPrimes();
 	size_t NextPrime(boost::dynamic_bitset<>* bSet, size_t index);
-	void writeBitSetToStream(const std::string fileName, BitBlock* bitss);
+	//void writeBitSetToStream(const std::string fileName, BitBlock* bitss);
 	//void readSparseBitSetFromStream(const char * my_file, std::vector<BitBlock*> b);
 	//void readBitSetFromStream(const std::string my_file, std::vector<BitBlock*> b);
 	void clearBitsetVector();
