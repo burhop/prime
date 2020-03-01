@@ -34,11 +34,12 @@ public:
 	void Compress();
 	/** Uncomresses the data */
 	void Uncompress();
-
+	size_t GetMaxValue();
 private:
 	//If size=1000, it means we can get a bit for 1000 numbers.  However, the actuall number of bits in the class and file may be less.
 	size_t size;
 	size_t index;
+	size_t maxValue;
 	std::string filename;
 	bool cached;
 	bool compressed;
@@ -48,7 +49,7 @@ private:
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   
 #pragma warning( disable : 4251)
-	std::vector<boost::dynamic_bitset<>*> vectorOfBitSets;       // Place to save our bitsets
+	//std::vector<boost::dynamic_bitset<>*> vectorOfBitSets;       // Place to save our bitsets
 #pragma warning(pop)
 	void setFile(size_t& size, size_t& count, bool loadbits);
 	//Gets the actually number of bit in the bitset if it is compressed.
@@ -56,6 +57,6 @@ private:
 
 	void compressBitSet();
 	void uncompressBitSet();
-
+	void setMaxValue();
 };
 

@@ -105,25 +105,35 @@ private:
 	size_t max3 = 0;    // don't need to save numbers divisible by 3
 	size_t max5 = 0;    // don't need to save numbers divisible by 5
 	size_t searchDisttance = 0;					   // Fartherest this class instance has search so far.
-	std::string baseFileName="primes";
+	size_t threadPauseOnDataWait = 500;  //Magic number of 5seconds to pause if data not yet calculated (multi-thread only)
+	BitBlock* *arrayOfBlocks;
+	size_t contiguousBlocks;
 	bool saveIcrementalFiles = false;
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   
 #pragma warning( disable : 4251)
 	std::vector<BitBlock*> vectorOfBitSets;       // Place to save our data
+	std::string baseFileName="primes";
 #pragma warning(pop)
 
 	//Private Functions
 	void findFirstBlockOFPrimes();
+	void updateContiguousBlocks();
+
 	size_t NextPrime(boost::dynamic_bitset<>* bSet, size_t index);
 	//void writeBitSetToStream(const std::string fileName, BitBlock* bitss);
 	//void readSparseBitSetFromStream(const char * my_file, std::vector<BitBlock*> b);
 	//void readBitSetFromStream(const std::string my_file, std::vector<BitBlock*> b);
 	void clearBitsetVector();
-	BitBlock* primeSieve(std::vector<BitBlock*> vec);
+	BitBlock* primeSieve(size_t block);
+	//BitBlock* primeSieve(std::vector<BitBlock*> vec,size_t block);
 	//void compressBitSet(boost::dynamic_bitset<>* iBitSet, std::vector<BitBlock*> b);
 	//void uncompressBitSet(boost::dynamic_bitset<>* iBitSet, std::vector<BitBlock*> b);
 	int saveToFile(std::string baseName, size_t count);
+
+	//OpenOMP variables
+	size_t nextFreeBlockIndex;
+	size_t maxValue;
 };
 
 

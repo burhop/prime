@@ -8,6 +8,8 @@ BitBlock::BitBlock(std::string file, bool cache)
 {
 	filename = file;
 	cached = cache;
+	cachedPrimes = nullptr;
+	maxValue = 0;
 	//Load part or all of the file depending on the cache setting
 	LoadFile();
 }
@@ -15,9 +17,11 @@ BitBlock::BitBlock(std::string file, bool cache)
 BitBlock::BitBlock(size_t s, size_t i)
 {
 	size=s;
-	index=i;
+	index=i;  
 	cached = false;
 	compressed = false;
+	cachedPrimes = nullptr;
+	maxValue = 0;
 	//auto bitsetsize = getBitsetSize(size);
 	//block off the full size
 	bits = new boost::dynamic_bitset(size);
@@ -61,6 +65,7 @@ boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 		return bDummy[0];
 	}	
 	bool x = (*bits)[loc];
+	size_t number = loc + 1;
 	return (*bits)[loc];
 }
 //const bool& BitBlock::operator[](size_t index) const
@@ -166,6 +171,8 @@ void BitBlock::LoadFile()
 		}
 	}
 	InFile.close();
+	//Save the largest prime in this file.
+	this->setMaxValue();
 	//std::vector<size_t> primes = this->GetPrimes();
 	//auto s = primes.size();
 }
@@ -204,6 +211,24 @@ void BitBlock::Compress()
 void BitBlock::Uncompress()
 {
 	this->uncompressBitSet();
+}
+
+size_t BitBlock::GetMaxValue()
+{
+	return this->maxValue;
+}
+void BitBlock::setMaxValue()
+{
+	for (auto i = this->size; i > 0; --i)
+	{
+		if ((*this)[i - 1])
+		{
+			maxValue = index * size + i - 1;
+			break;
+		}
+	}
+	maxValue = 0;
+				
 }
 
 size_t BitBlock::getBitsetSize(size_t dataSize) {

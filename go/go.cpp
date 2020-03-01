@@ -7,7 +7,8 @@
 
 int main()
 {
-	Prime *p = new Prime(0xFFFFFFF0);
+	Prime* p = new Prime(0xFFFFFFF0);
+	//Prime* p = new Prime(6000);
 	std::cout << "Reading existing results (if they exist...\n";
 	try
 	{
