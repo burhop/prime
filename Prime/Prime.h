@@ -33,7 +33,7 @@ class __declspec(dllexport)  Prime
 public:
 	/** Constructor. By default block size will be 0xFFFFFFF0 */
 	Prime(size_t bitsetSize=0xFFFFFFF0);
-	/** Continously calculates primes.  For version 0.3, we are limited by size_t */
+	/** Continously calculates primes.  For version 0.4, we are limited by size_t */
 	int ContinousRun(std::string baseName);
 	/** Destructor */
 	~Prime();

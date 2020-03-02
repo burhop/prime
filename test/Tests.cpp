@@ -90,7 +90,7 @@ size_t TestMaxValue(int blocks, size_t blocksize)
 }
 
 
-TEST_CASE("Test counting of primes is correct (pass)", "[single-file]") {
+TEST_CASE("Test counting of primes is correct", "[single-file]") {
 
 	REQUIRE(TestMaxCount(1,    30) == 10);
 	REQUIRE(TestMaxCount(10,   60) == 109);
@@ -99,7 +99,7 @@ TEST_CASE("Test counting of primes is correct (pass)", "[single-file]") {
 	REQUIRE(TestMaxCount(321,   3000) == 75845);
 	REQUIRE(TestMaxCount(999, 900) == 71217);
 }
-TEST_CASE("Test counting of compressed primes is correct (pass)", "[single-file]") {
+TEST_CASE("Test counting of compressed primes is correct", "[single-file]") {
 
 	REQUIRE(TestMaxCountCompressed(1, 30) == 10);
 	REQUIRE(TestMaxCountCompressed(10, 60) == 109);
@@ -107,7 +107,7 @@ TEST_CASE("Test counting of compressed primes is correct (pass)", "[single-file]
 	REQUIRE(TestMaxCountCompressed(1, 3000000) == 216816);
 	REQUIRE(TestMaxCountCompressed(321, 3000) == 75845);
 	REQUIRE(TestMaxCountCompressed(999, 900) == 71217);
-}TEST_CASE("Test counting of primes that have been compressed and uncompressed is correct (pass)", "[single-file]") {
+}TEST_CASE("Test counting of primes that have been compressed and uncompressed is correct", "[single-file]") {
 
 	REQUIRE(TestMaxCountUncompressed(1, 30) == 10);
 	REQUIRE(TestMaxCountUncompressed(10, 60) == 109);
@@ -116,7 +116,7 @@ TEST_CASE("Test counting of compressed primes is correct (pass)", "[single-file]
 	REQUIRE(TestMaxCountUncompressed(321, 3000) == 75845);
 	REQUIRE(TestMaxCountUncompressed(999, 900) == 71217);
 }
-TEST_CASE("Test Max Prime is correct (pass)", "[single-file]") {
+TEST_CASE("Test Max Prime is correct", "[single-file]") {
 
 	REQUIRE(TestMaxPrime(1, 30) == 29);
 	REQUIRE(TestMaxPrime(10, 60) == 599);
@@ -126,7 +126,7 @@ TEST_CASE("Test Max Prime is correct (pass)", "[single-file]") {
 	REQUIRE(TestMaxPrime(999, 900) == 899069);
 }
 
-TEST_CASE("Test Max Value is correct (pass)", "[single-file]") {
+TEST_CASE("Test Max Value is correct", "[single-file]") {
 
 	REQUIRE(TestMaxValue(1, 30) == 30);
 	REQUIRE(TestMaxValue(10, 60) == 600);
@@ -135,18 +135,18 @@ TEST_CASE("Test Max Value is correct (pass)", "[single-file]") {
 	REQUIRE(TestMaxValue(321, 3000) == 963000);
 	REQUIRE(TestMaxValue(999, 900) == 899100);
 }
-TEST_CASE("Test Max Count is correct with no calculation (pass)", "[single-file]") {
+TEST_CASE("Test Max Count is correct with no calculation", "[single-file]") {
 
 	Prime prime(30);
 	REQUIRE(prime.GetMaxCount() == 0);
 }
-TEST_CASE("Test Max Prime is correct with no calculation (pass)", "[single-file]") {
+TEST_CASE("Test Max Prime is correct with no calculation", "[single-file]") {
 
 	Prime prime(30);
 	REQUIRE(prime.GetMaxPrime() == 0);
 }
 
-TEST_CASE("Test Max Value is correct with no calculation (pass)", "[single-file]") {
+TEST_CASE("Test Max Value is correct with no calculation", "[single-file]") {
 
 	Prime prime(30);
 	REQUIRE(prime.GetMaxValue() == 0);
@@ -159,7 +159,7 @@ TEST_CASE("Test Max Value is correct with no calculation (pass)", "[single-file]
 //}
 
 
-TEST_CASE("Find Primes using different block sizes (pass)", "[single-file]") {
+TEST_CASE("Find Primes using different block sizes", "[single-file]") {
 	REQUIRE(TestFindPrimes1(1, 300, 100) == 25);
 	REQUIRE(TestFindPrimes1(1, 300, 10) == 4);
 	REQUIRE(TestFindPrimes1(1, 3000, 100) == 25);
@@ -167,7 +167,7 @@ TEST_CASE("Find Primes using different block sizes (pass)", "[single-file]") {
 	//check with zero data sets. No exception since we can give a valid answer
 	REQUIRE(TestFindPrimes1(0, 300, 100) == 0);
 }
-TEST_CASE("Find Primes using different number of blocks(pass)", "[single-file]") {
+TEST_CASE("Find Primes using different number of blocks", "[single-file]") {
 	REQUIRE(TestFindPrimes1(2, 300, 100) == 25);
 	REQUIRE(TestFindPrimes1(3, 300, 10) == 4);
 	REQUIRE(TestFindPrimes1(3, 300, 900) == 154);
@@ -184,13 +184,13 @@ TEST_CASE("Find Primes using different number of blocks(pass)", "[single-file]")
 	//check with zero data sets. No exception since we can give a valid answer
 	REQUIRE(TestFindPrimes1(0, 300, 100) == 0);
 }
-TEST_CASE("Find Primes using different block sizes (fail)", "[single-file]") {
+TEST_CASE("Find Primes using different block sizes (test throwing of exception)", "[single-file]") {
 	REQUIRE_THROWS(TestFindPrimes1(1, 301, 100));
 	REQUIRE_THROWS(TestFindPrimes1(-1, 300, 100));
 	REQUIRE_THROWS(TestFindPrimes1(0xFFFFFFF1, 300, 100));
 }
 
-TEST_CASE("Verify saving and loading of prime files works)", "[single-file]") {
+TEST_CASE("Verify saving and loading of prime files works", "[single-file]") {
 	REQUIRE(TestFindPrimes2(2, 300, 100) == 25);
 	REQUIRE(TestFindPrimes2(3, 300, 10) == 4);
 	REQUIRE(TestFindPrimes2(3, 300, 900) == 154);
