@@ -18,6 +18,8 @@ public:
 	boost::dynamic_bitset<>::reference operator[] (size_t);
 	//const bool& operator[] (size_t) const;
 
+	void set(size_t index, bool val);
+
 	/** Same as opperator[] kept for campitibility for bitarray */
 	bool test(size_t index);
 	/** Saves a file to disk.  This will also set the file name */

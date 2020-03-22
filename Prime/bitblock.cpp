@@ -68,22 +68,11 @@ boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 	size_t number = loc + 1;
 	return (*bits)[loc];
 }
-//const bool& BitBlock::operator[](size_t index) const
-//{
-//	if (compressed)
-//	{
-//		if (index % 2 && index % 3 && index % 5)
-//		{
-//			size_t idx = index - index / 2 - index / 3 - index / 5 - index / 30 + index / 5 + index / 6 + index / 10 + index / 15;
-//			return (*bits)[idx];
-//			//return x;
-//		}
-//		//auto x = false;
-//		return false;
-//	}
-//
-//	return (*bits)[index];
-//}
+
+void BitBlock::set(size_t index, bool val)
+{
+	this->bits->set(index, val);
+}
 bool BitBlock::test(size_t index)
 {
 	return this->bits->test(index);
@@ -132,7 +121,11 @@ void BitBlock::LoadFile()
 	InFile.open(filename, std::ios::out | std::ios::binary);
 	InFile.read((char*)&size, sizeof(size_t));
 	InFile.read((char*)&index, sizeof(size_t));
-
+	if (size < 1)
+	{
+		std::string message = std::string("bad File: ") + filename;
+		throw std::exception(message.c_str());
+	}
 	// If we don't need to read the rest of the file now, skip it.
 	if (cached == false) return;
 
@@ -183,23 +176,27 @@ void BitBlock::UnCache()
 
 std::vector<size_t> BitBlock::GetPrimes()
 {
-	std::vector<size_t> listOfPrimes;
-	//2,3,5 are removed from compressed list.  Need to add them back
-	if (compressed && (this->GetIndex() == 0))
+	if (!cachedPrimes)
 	{
-		listOfPrimes.push_back(2);
-		listOfPrimes.push_back(3);
-		listOfPrimes.push_back(5);
-	}
-	for (size_t count = 0; count < this->GetSize(); count++)
-	{
-		bool isPrime = (*this)[count];
-		if (isPrime)
+		std::vector<size_t> listOfPrimes;
+		//2,3,5 are removed from compressed list.  Need to add them back
+		if (compressed && (this->GetIndex() == 0))
 		{
-			listOfPrimes.push_back(this->GetIndex() * this->GetSize() + count+1);
+			listOfPrimes.push_back(2);
+			listOfPrimes.push_back(3);
+			listOfPrimes.push_back(5);
 		}
+		for (size_t count = 0; count < this->GetSize(); count++)
+		{
+			bool isPrime = (*this)[count];
+			if (isPrime)
+			{
+				listOfPrimes.push_back(this->GetIndex() * this->GetSize() + count + 1);
+			}
+		}
+		this->cachedPrimes = new std::vector<size_t>(listOfPrimes);
 	}
-	return listOfPrimes;
+	return *cachedPrimes;
 }
 
 void BitBlock::Compress()

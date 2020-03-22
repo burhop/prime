@@ -12,6 +12,7 @@ int main()
 	std::cout << "Reading existing results (if they exist...\n";
 	try
 	{
+		p->SetVerbose(true);
 		p->ContinousRun("RunRunRun");
 	}
 	catch(std::exception &ex)

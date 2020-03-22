@@ -96,6 +96,9 @@ public:
 	void Compress();
 	/** uncompresses the data */
 	void Uncompress();
+	/** Tells class to output timing information to standard output. Useful for seeing how fast
+	    the code is running. */
+	void SetVerbose(bool val);
 
 private:
 	unsigned int threadCount = std::thread::hardware_concurrency();
@@ -109,6 +112,7 @@ private:
 	BitBlock* *arrayOfBlocks;
 	size_t contiguousBlocks;
 	bool saveIcrementalFiles = false;
+	bool verbose = false;
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   
 #pragma warning( disable : 4251)
