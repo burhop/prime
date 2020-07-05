@@ -11,9 +11,13 @@ public:
 	/** Creates an empty bitblock */
 	BitBlock(size_t size, size_t index);
 	~BitBlock();
-	/** Gets the size of the bitblock (number of bits */
+	/** Gets the size of the bitblock (number of bits) */
 	size_t GetSize();
-	/** Gets the starting index of the bitblock */
+	/** Get First value in block */
+	size_t GetFirstValue();
+	/** Get last value in block */
+	size_t GetLastValue();
+	/** Gets the starting index of the bitblock (e.g. 2,3,5 will be in the first block so index 0). The next block or file will be in index 2 */
 	size_t GetIndex();
 	boost::dynamic_bitset<>::reference operator[] (size_t);
 	//const bool& operator[] (size_t) const;

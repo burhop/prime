@@ -43,12 +43,24 @@ size_t BitBlock::GetIndex()
 {
 	return index;
 }
+size_t BitBlock::GetFirstValue()
+{
+	return index * size;
+}
+size_t BitBlock::GetLastValue()
+{
+	return (index + 1)* size - 1;
+}
 
 //TODO  Test is if is faster to do this or just have the whole array in memory
 
 // you can't use bool here because the setter won't work. This is because bitsets don't return a bool but a proxy
 boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 {
+	if (!this->cached)
+	{
+		throw std::exception("Note implemented for uncached data sets.");
+	}
 	if (compressed)
 	{ 
 		// if it is the first block, 2,3,5 are missing.

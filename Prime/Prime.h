@@ -103,6 +103,8 @@ public:
 private:
 	unsigned int threadCount = std::thread::hardware_concurrency();
 	size_t bitBlockSize=0;
+	// Number of blocks to keep in memory.  Depends on how much memory the computer has available.
+	size_t cacheCount = 0;
 	size_t max =  0;    // Can be up to 4294967280;
 	size_t max2 = 0;    // don't need to save the even numbers
 	size_t max3 = 0;    // don't need to save numbers divisible by 3
@@ -113,6 +115,7 @@ private:
 	size_t contiguousBlocks;
 	bool saveIcrementalFiles = false;
 	bool verbose = false;
+
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   
 #pragma warning( disable : 4251)
