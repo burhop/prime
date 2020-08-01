@@ -8,6 +8,7 @@
 size_t TestFindPrimes1(int blocks, size_t blocksize, size_t mmaxValueToSearch)
 {
 	Prime prime(blocksize);
+
 	//if you have no data, lets find some primes
 	prime.FindPrimes(blocks);
 	// Lets see how mnay we found
@@ -17,7 +18,6 @@ size_t TestFindPrimes1(int blocks, size_t blocksize, size_t mmaxValueToSearch)
 
 size_t TestFindPrimes2(int blocks, size_t blocksize, size_t mmaxValueToSearch)
 {
-
 	Prime prime(blocksize);
 	prime.DeleteExistingPrimeFiles("test");
 	//if you have no data, lets find some primes
@@ -30,7 +30,17 @@ size_t TestFindPrimes2(int blocks, size_t blocksize, size_t mmaxValueToSearch)
 	prime.DeleteExistingPrimeFiles("test");
 	return count;
 }
+size_t TestMultiCores(int blocks, size_t blocksize, size_t mmaxValueToSearch,unsigned int cores)
+{
 
+	Prime prime(blocksize,cores);
+	//if you have no data, lets find some primes
+	prime.SetVerbose(true);
+	prime.FindPrimes(blocks);
+	std::cout << "If compiled with OpenMP, planning to use " << prime.GetThreadCount() << " threads\n";
+	size_t count = prime.CountPrimes(0, mmaxValueToSearch);;
+	return count;
+}
 size_t TestFileErrors1()
 {
 
@@ -197,10 +207,25 @@ TEST_CASE("Verify saving and loading of prime files works", "[single-file]") {
 	REQUIRE(TestFindPrimes2(2, 3000, 3000) == 430);
 	REQUIRE(TestFindPrimes2(2, 3000, 6000) == 783);
 	REQUIRE(TestFindPrimes2(10, 3000, 9000) == 1117);
-	REQUIRE(TestFindPrimes2(10, 3000, 30000) == 3245);
-	REQUIRE(TestFindPrimes2(10, 3000, 30000) == 3245);
-	REQUIRE(TestFindPrimes2(10, 3000, 30000) == 3245);
 	REQUIRE(TestFindPrimes2(100, 300, 30000) == 3245);
 	REQUIRE(TestFindPrimes2(1000, 300, 30000) == 3245);
 	REQUIRE(TestFindPrimes2(1000, 300, 300000) == 25997);
+}
+TEST_CASE("Verify code works with varying numbers of threads/cores", "[single-file]") {
+
+	REQUIRE(TestMultiCores(1000, 300, 300000,1) == 25997);
+	REQUIRE(TestMultiCores(1000, 300, 300000,2) == 25997);
+	REQUIRE(TestMultiCores(1000, 300, 300000,3) == 25997);
+	REQUIRE(TestMultiCores(1000, 300, 300000,8) == 25997);
+	REQUIRE(TestMultiCores(1000, 300, 300000,10) == 25997);
+	REQUIRE(TestMultiCores(1000, 300, 300000,30) == 25997);
+	REQUIRE(TestMultiCores(1000, 300, 300000, 0) == 25997);
+	REQUIRE(TestMultiCores(1000, 3000, 3000000, 0) == 216816);
+	REQUIRE(TestMultiCores(1000, 30000, 30000000, 0) == 1857859);
+	REQUIRE(TestMultiCores(1000, 300000, 300000000, 0) == 16252325);
+	REQUIRE(TestMultiCores(100, 3000, 300000, 3) == 25997);
+	REQUIRE(TestMultiCores(100, 30000, 3000000, 3) == 216816);
+	REQUIRE(TestMultiCores(100, 300000, 30000000, 3) == 1857859);
+	REQUIRE(TestMultiCores(100, 3000000, 300000000, 3) == 16252325);
+
 }

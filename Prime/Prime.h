@@ -3,14 +3,15 @@
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
 #include <thread>
-#include <bitblock.h>
+//#include <bitblock.h>
+#include <DataCacheManager.h>
 /**
 	This class is for calculating and storing prime numbers. It uses the Sieve of Eratosthenes to mark
 	bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve
 	to an ever increasing list of blocks.  Note that PRIMEMAX must be devisible by 2,3, and 5 to keep blocks alligned.
 
-	For version 0.3, it is limited to size_t (64 bits).  The plan is to extend thsi out to __int128 (128 bits) or use
-	one of the "infinite" bit classes for integers in some futer versio0.
+	This is currently limited to size_t (64 bits).  The plan is to extend thsi out to __int128 (128 bits) or use
+	one of the "infinite" bit classes for integers in some futer version.
 
 	Storage of the prime numbers, at least the initial numbers, is inefficient as a list.  Storage of a bit for each
 	number (true for prime) is initially more efficient.  This list of bits can be cut in 1/2 by only storing odd numbers.
@@ -25,14 +26,22 @@
 	https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 
 	@author Mark Burhop
-	@version 0.4 29/02/2020
+	@version 0.6 08/01/2020
+
 */
 class __declspec(dllexport)  Prime
 {
 
 public:
-	/** Constructor. By default block size will be 0xFFFFFFF0 */
-	Prime(size_t bitsetSize=0xFFFFFFF0);
+	/** Constructor. By default block size will be 0xFFFFFFF0 
+	@param bitsetSize= The number of bits in each block of data. THe maxium value is 0xFFFFFFF0. Needs to be increments of 30. Default is 100,000,020.
+	@param numberofThreads - 0 means to use the number of cores your CPU has. 
+	@param numberOfBlocksToKeepInMemory - THe more memory you have, the higher this can be. Default is 10.
+
+	Using all defaults, the software will use all the cores on your CPU, use 2-3 gig of memory, and create files of about 30 megabytes.
+	
+	*/
+	Prime(size_t bitsetSize=0xFFFFFFF0,unsigned int numberOfThreads=0, unsigned int numberOfBlocksToKeepInMemory=10);
 	/** Continously calculates primes.  For version 0.4, we are limited by size_t */
 	int ContinousRun(std::string baseName);
 	/** Destructor */
@@ -100,8 +109,16 @@ public:
 	    the code is running. */
 	void SetVerbose(bool val);
 
+	/** returns the number of threads to be used. If not specified in the constructor,  std::thread::hardware_concurrency() is used to check the logical number available. */
+	unsigned int GetThreadCount()
+	{
+		return threadCount;
+	}
+
 private:
-	unsigned int threadCount = std::thread::hardware_concurrency();
+	//Should a thread be waiting for data from another thread, have it wait this amount of time in miliseconds before checking if the other thread is done yet.
+	unsigned int threadSleep = 500; //Magic number of 0.5 seconds to pause if data not yet calculated (multi-thread only)
+	unsigned int threadCount = 0; 
 	size_t bitBlockSize=0;
 	// Number of blocks to keep in memory.  Depends on how much memory the computer has available.
 	size_t cacheCount = 0;
@@ -110,32 +127,19 @@ private:
 	size_t max3 = 0;    // don't need to save numbers divisible by 3
 	size_t max5 = 0;    // don't need to save numbers divisible by 5
 	size_t searchDisttance = 0;					   // Fartherest this class instance has search so far.
-	size_t threadPauseOnDataWait = 500;  //Magic number of 5seconds to pause if data not yet calculated (multi-thread only)
-	BitBlock* *arrayOfBlocks;
-	size_t contiguousBlocks;
+	DataCacheManager *blockManager=nullptr;
+	//BitBlock* *arrayOfBlocks;
+	size_t contiguousBlocks=0;
 	bool saveIcrementalFiles = false;
 	bool verbose = false;
-
-	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
-#pragma warning( push )   
-#pragma warning( disable : 4251)
-	std::vector<BitBlock*> vectorOfBitSets;       // Place to save our data
 	std::string baseFileName="primes";
-#pragma warning(pop)
+
 
 	//Private Functions
 	void findFirstBlockOFPrimes();
 	void updateContiguousBlocks();
-
 	size_t NextPrime(boost::dynamic_bitset<>* bSet, size_t index);
-	//void writeBitSetToStream(const std::string fileName, BitBlock* bitss);
-	//void readSparseBitSetFromStream(const char * my_file, std::vector<BitBlock*> b);
-	//void readBitSetFromStream(const std::string my_file, std::vector<BitBlock*> b);
-	void clearBitsetVector();
-	BitBlock* primeSieve(size_t block);
-	//BitBlock* primeSieve(std::vector<BitBlock*> vec,size_t block);
-	//void compressBitSet(boost::dynamic_bitset<>* iBitSet, std::vector<BitBlock*> b);
-	//void uncompressBitSet(boost::dynamic_bitset<>* iBitSet, std::vector<BitBlock*> b);
+	std::shared_ptr<BitBlock>  primeSieve(size_t block);
 	int saveToFile(std::string baseName, size_t count);
 
 	//OpenOMP variables

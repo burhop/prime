@@ -230,10 +230,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="bitblock.h" />
+    <ClInclude Include="DataCacheManager.h" />
     <ClInclude Include="Prime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bitblock.cpp" />
+    <ClCompile Include="DataCacheManager.cpp" />
     <ClCompile Include="Prime.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

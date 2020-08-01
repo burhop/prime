@@ -21,7 +21,7 @@ public:
 	size_t GetIndex();
 	boost::dynamic_bitset<>::reference operator[] (size_t);
 	//const bool& operator[] (size_t) const;
-
+	
 	void set(size_t index, bool val);
 
 	/** Same as opperator[] kept for campitibility for bitarray */
@@ -32,8 +32,10 @@ public:
 	void LoadFile();
 	/** Tells the class to expand the bit array.  This makes it faster but uses more memory */
 
-	/** removes the data from memory.  Access can still happen but it will be from the disk */
+	/** removes the data from memory. If the data was not previously saved to disk, an expception will be thrown. */
 	void UnCache();
+	/** Reads file data into disk for faster access */
+	void Cache();
 	/** Gets all the prime numbers stored in the block as a size_t vector */
 	std::vector<size_t> GetPrimes();
 	/** Compresses the data */
@@ -41,6 +43,8 @@ public:
 	/** Uncomresses the data */
 	void Uncompress();
 	size_t GetMaxValue();
+	/** If the data is loaded in memory or on disk */
+	bool InMemory();
 private:
 	//If size=1000, it means we can get a bit for 1000 numbers.  However, the actuall number of bits in the class and file may be less.
 	size_t size;
@@ -50,7 +54,7 @@ private:
 	bool cached;
 	bool compressed;
 	std::vector<size_t>* cachedPrimes;
-	boost::dynamic_bitset<> *bits;
+	boost::dynamic_bitset<>* bits = nullptr;
 	boost::dynamic_bitset<> bDummy{ 2,2 };
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   

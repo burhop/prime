@@ -18,7 +18,8 @@ BitBlock::BitBlock(size_t s, size_t i)
 {
 	size=s;
 	index=i;  
-	cached = false;
+	//Initially start in memory, so cached =true
+	cached = true;
 	compressed = false;
 	cachedPrimes = nullptr;
 	maxValue = 0;
@@ -59,7 +60,7 @@ boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 {
 	if (!this->cached)
 	{
-		throw std::exception("Note implemented for uncached data sets.");
+		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
 	}
 	if (compressed)
 	{ 
@@ -76,22 +77,35 @@ boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 		}
 		return bDummy[0];
 	}	
-	bool x = (*bits)[loc];
-	size_t number = loc + 1;
+	//bool x = (*bits)[loc];
+	//size_t number = loc + 1;
 	return (*bits)[loc];
 }
 
 void BitBlock::set(size_t index, bool val)
 {
+	if (!this->cached)
+	{
+		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+	}
 	this->bits->set(index, val);
 }
 bool BitBlock::test(size_t index)
 {
+	if (!this->cached)
+	{
+		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+	}
 	return this->bits->test(index);
 }
 
 void BitBlock::SaveFile(std::string filename)
 {
+	if (!this->cached)
+	{
+		throw std::exception("Error.  No Data in this BitBlock to save.");
+	}
+
 	std::ofstream outfile;
 	outfile.open(filename, std::ios::out | std::ios::binary);
 	outfile.write((char*)&size, sizeof(size_t));
@@ -120,6 +134,7 @@ void BitBlock::SaveFile(std::string filename)
 	outfile.close();
 	return;
 }
+
 void BitBlock::LoadFile()
 {
 	if (filename.empty())
@@ -139,13 +154,23 @@ void BitBlock::LoadFile()
 		throw std::exception(message.c_str());
 	}
 	// If we don't need to read the rest of the file now, skip it.
-	if (cached == false) return;
+	if (cached == false) 
+	{
+		InFile.close();
+		return;
+		// open a file for direct access and save the open file pointer so the bit can be accesssed without fileopen overhead.
+	}
+
 
 	// We want to cache the file so bring it into memory as a bitset
 
 	//Allocate memory 
 	size_t bitsetsize = getBitsetSize(size);   
 	//do it on the heap to avoid stack issues
+	if (this->bits != nullptr)
+	{
+		throw "Atempting to load file data into an existing structure. This will result in a Memory Leak";
+	}
 	this->bits = new boost::dynamic_bitset(bitsetsize);
 
 
@@ -178,35 +203,60 @@ void BitBlock::LoadFile()
 	InFile.close();
 	//Save the largest prime in this file.
 	this->setMaxValue();
+	this->cached = true;
 	//std::vector<size_t> primes = this->GetPrimes();
 	//auto s = primes.size();
 }
 
 void BitBlock::UnCache()
 {
+	if (filename.empty())
+		throw std::exception("Data on disk missing. You first must save the data.  Aborting uncache to avoid data loss.");
+	delete this->bits;
+	this-> bits = nullptr;
+	delete this->cachedPrimes;
+	this->cachedPrimes = nullptr;
+}
+void BitBlock::Cache()
+{
+	if (filename.empty())
+		throw std::exception("No filename for this data exists. Don't know where to load data from.");
+	//Turn on the cached flag and load the data
+	this->cached = true;
+	this->LoadFile();
 }
 
 std::vector<size_t> BitBlock::GetPrimes()
 {
-	if (!cachedPrimes)
+	//WE can have multiple threads building this at the same time.
+#pragma omp critical(GetPrimes)
 	{
-		std::vector<size_t> listOfPrimes;
-		//2,3,5 are removed from compressed list.  Need to add them back
-		if (compressed && (this->GetIndex() == 0))
+		if (!cachedPrimes)
 		{
-			listOfPrimes.push_back(2);
-			listOfPrimes.push_back(3);
-			listOfPrimes.push_back(5);
-		}
-		for (size_t count = 0; count < this->GetSize(); count++)
-		{
-			bool isPrime = (*this)[count];
-			if (isPrime)
+			//Calculate the primes
+
+			if (!this->cached)
 			{
-				listOfPrimes.push_back(this->GetIndex() * this->GetSize() + count + 1);
+				throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
 			}
+			std::vector<size_t> listOfPrimes;
+			//2,3,5 are removed from compressed list.  Need to add them back
+			if (compressed && (this->GetIndex() == 0))
+			{
+				listOfPrimes.push_back(2);
+				listOfPrimes.push_back(3);
+				listOfPrimes.push_back(5);
+			}
+			for (size_t count = 0; count < this->GetSize(); count++)
+			{
+				bool isPrime = (*this)[count];
+				if (isPrime)
+				{
+					listOfPrimes.push_back(this->GetIndex() * this->GetSize() + count + 1);
+				}
+			}
+			this->cachedPrimes = new std::vector<size_t>(listOfPrimes);
 		}
-		this->cachedPrimes = new std::vector<size_t>(listOfPrimes);
 	}
 	return *cachedPrimes;
 }
@@ -225,6 +275,10 @@ void BitBlock::Uncompress()
 size_t BitBlock::GetMaxValue()
 {
 	return this->maxValue;
+}
+bool BitBlock::InMemory()
+{
+	return this->cached;
 }
 void BitBlock::setMaxValue()
 {

@@ -21,12 +21,18 @@
     <ClInclude Include="bitblock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DataCacheManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Prime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bitblock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataCacheManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

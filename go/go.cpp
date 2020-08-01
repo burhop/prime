@@ -7,11 +7,15 @@
 
 int main()
 {
-	Prime* p = new Prime(0xFFFFFFF0);
+	//Prime* p = new Prime(0xFFFFFFF0);
 	//Prime* p = new Prime(600000000);
-	std::cout << "Reading existing results (if they exist...\n";
 	try
-	{
+	{	
+		Prime* p = new Prime(0xFFFFFFF0,0,26);  //4,294,967,280 or 4.2 billion or 536MB  If we save 26 and have 12 cores running, we are using about 20Gig of memory just for data  
+
+		//Prime* p = new Prime(100000020,0,800);  //100 million and 20   or 12.5MB.  So each 80 we keep in memory about 1 gig. 800 would be about 10Gig
+		std::cout << "Reading existing results (if they exist...\n";
+
 		p->SetVerbose(true);
 		p->ContinousRun("RunRunRun");
 	}
