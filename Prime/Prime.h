@@ -42,6 +42,8 @@ public:
 	
 	*/
 	Prime(size_t bitsetSize=0xFFFFFFF0,unsigned int numberOfThreads=0, unsigned int numberOfBlocksToKeepInMemory=10);
+	/** Creates the class instance using existing data.  If one or more files do not exist, an exception is thrown. */
+	Prime(std::string baseName, unsigned int numberOfThreads = 0, unsigned int numberOfBlocksToKeepInMemory = 10);
 	/** Continously calculates primes.  For version 0.4, we are limited by size_t */
 	int ContinousRun(std::string baseName);
 	/** Destructor */
@@ -122,11 +124,11 @@ private:
 	size_t bitBlockSize=0;
 	// Number of blocks to keep in memory.  Depends on how much memory the computer has available.
 	size_t cacheCount = 0;
-	size_t max =  0;    // Can be up to 4294967280;
-	size_t max2 = 0;    // don't need to save the even numbers
-	size_t max3 = 0;    // don't need to save numbers divisible by 3
-	size_t max5 = 0;    // don't need to save numbers divisible by 5
-	size_t searchDisttance = 0;					   // Fartherest this class instance has search so far.
+	//size_t max =  0;    // Can be up to 4294967280;
+	//mb size_t max2 = 0;    // don't need to save the even numbers
+	//mb size_t max3 = 0;    // don't need to save numbers divisible by 3
+	//mb size_t max5 = 0;    // don't need to save numbers divisible by 5
+	//size_t searchDisttance = 0;					   // Fartherest this class instance has search so far.
 	DataCacheManager *blockManager=nullptr;
 	//BitBlock* *arrayOfBlocks;
 	size_t contiguousBlocks=0;
@@ -140,7 +142,7 @@ private:
 	void updateContiguousBlocks();
 	size_t NextPrime(boost::dynamic_bitset<>* bSet, size_t index);
 	std::shared_ptr<BitBlock>  primeSieve(size_t block);
-	int saveToFile(std::string baseName, size_t count);
+	//int saveToFile(std::string baseName, size_t count);
 
 	//OpenOMP variables
 	size_t nextFreeBlockIndex;
