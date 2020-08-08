@@ -42,16 +42,16 @@ Primes Found : 8408427012
 const size_t arraySize = 0xFFFFFFF0;
 void CreatePrimeMetaData()
 {
-	std::string filename = "Findme.txt";
 	size_t size = 1000;
 	size_t index = 1000;
 	std::ofstream outfile;
+	std::string filename ="PrimeMeta.txt";
 	outfile.open(filename, std::ios::out | std::ios::binary);
-	outfile.write((char*)&size, sizeof(size_t));
-	outfile.write((char*)&index, sizeof(size_t));
-	outfile.close();
+
+	
 	//std::cout << boost::format("#1.0 %16i %16i %16i") % size % index % 0xFFFFFFF0;
-	Prime prime("RunRunRun", 0, 2);
+	Prime prime("Prime100000020-", 0, 2);
+	std::cout << "All files counted." << std::endl;
 	size_t numbersPerBlock = prime.GetBitBlockSize();
 	size_t maxValue = prime.GetMaxValue();
 	size_t numberOfBlocks = maxValue / numbersPerBlock;
@@ -61,15 +61,18 @@ void CreatePrimeMetaData()
 		size_t start = i * numbersPerBlock;
 		size_t end = start + numbersPerBlock;
 		size_t count = prime.CountPrimes(start,end);
-		std::cout << boost::format("%16i %16i %16i\n") % start % end % count;
-		//std::cout << start << "\t - " << end << "\t" << count << std::endl;
 		totalCount = totalCount + count;
+		std::cout << "block " << i << " of " << numberOfBlocks << std::endl;
+		outfile << boost::format("%16i %16i %16i %16i %16i\n") % i % start % end % count % totalCount; 
+		std::cout << boost::format(" %16i %16i %16i %16i\n") % start % end % count % totalCount;
+		//std::cout << start << "\t - " << end << "\t" << count << std::endl;
+
 		std::cout << "total primes less than " << end << "\t " << totalCount << std::endl;
 	}
 
 	//prime.LoadFromFile("RunRunRun");
 	//size_t bitsPerBlock = prime.GetBitBlockSize();
-
+	outfile.close();
 }
 
 

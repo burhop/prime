@@ -45,9 +45,11 @@ public:
 	/** Creates the class instance using existing data.  If one or more files do not exist, an exception is thrown. */
 	Prime(std::string baseName, unsigned int numberOfThreads = 0, unsigned int numberOfBlocksToKeepInMemory = 10);
 	/** Continously calculates primes.  For version 0.4, we are limited by size_t */
-	int ContinousRun(std::string baseName);
+	//int ContinousRun(std::string baseName,size_t blocksize);
 	/** Destructor */
 	~Prime();
+	/** Sets the base file name if the data is written to disk. The default is "prime" and file names would be "prime0.prm", "prime1.prm" and so on */
+	void SetBaseName(std::string basename);
 	/** returns the size of the bit blocks.  That is, how many bit each block of data stores.  This was the value passed to the constuctor*/
 	size_t GetBitBlockSize();
 	/** Tells the Object to save each chunk of bits as it gets fully set. This is useful if you are searching 
