@@ -158,9 +158,7 @@ void BitBlock::LoadFile()
 	{
 		InFile.close();
 		return;
-		// open a file for direct access and save the open file pointer so the bit can be accesssed without fileopen overhead.
 	}
-
 
 	// We want to cache the file so bring it into memory as a bitset
 
@@ -186,12 +184,10 @@ void BitBlock::LoadFile()
 				if (buffer & (bit << c))
 				{
 					bits->set(i * 8 + c);
-					//printf("%d", 1);
 				}
 				else
 				{
 					bits->set(i * 8 + c, false);
-					//printf("%d", 0);
 				}
 			}
 			else
@@ -201,11 +197,10 @@ void BitBlock::LoadFile()
 		}
 	}
 	InFile.close();
+
 	//Save the largest prime in this file.
 	this->setMaxValue();
 	this->cached = true;
-	//std::vector<size_t> primes = this->GetPrimes();
-	//auto s = primes.size();
 }
 
 void BitBlock::UnCache()
@@ -228,7 +223,7 @@ void BitBlock::Cache()
 
 std::vector<size_t> BitBlock::GetPrimes()
 {
-	//WE can have multiple threads building this at the same time.
+	//We can't have multiple threads building this at the same time.
 #pragma omp critical(GetPrimes)
 	{
 		if (!cachedPrimes)
@@ -347,12 +342,6 @@ void BitBlock::uncompressBitSet()
 		}
 		else
 		{
-			//if (index == 0)
-			//{
-			//	newBits->set(i + 5, bits->test(count));
-			//}
-			//else
-
 			newBits->set(i - 1, bits->test(count));
 			count++;
 		}
