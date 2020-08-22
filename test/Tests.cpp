@@ -35,7 +35,7 @@ size_t TestMultiCores(int blocks, size_t blocksize, size_t mmaxValueToSearch,uns
 
 	Prime prime(blocksize,cores);
 	//if you have no data, lets find some primes
-	prime.SetVerbose(true);
+	//prime.SetVerbose(true);
 	prime.FindPrimes(blocks);
 	std::cout << "If compiled with OpenMP, planning to use " << prime.GetThreadCount() << " threads\n";
 	size_t count = prime.CountPrimes(0, mmaxValueToSearch);;

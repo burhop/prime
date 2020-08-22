@@ -29,11 +29,19 @@ int main()
 
 			//size_t is FFFFFFFFFFFFFFFF == 18, 446, 744, 073, 709, 551, 615  on win10-64 intel
 			
-		}	
-		p->SetBaseName("Prime100000020-");
-		p->SetVerbose(true);
-		p->SaveIncrementalFiles(true);
-		p->FindPrimes((size_t)0xFFFFFFF0);  //largest number we can do with size_t
+		}
+		try {
+			p->SetBaseName("Prime100000020-");
+			p->SetVerbose(true);
+			p->SaveIncrementalFiles(true);
+			p->FindPrimes((size_t)0xFFFFFFF0);  //largest number we can do with size_t
+		}
+		catch (std::exception & e)
+		{
+			std::cout << e.what();
+		}
+		std::cout << "FindPrimes exiting\n";
+		std::cout << "Max Prime found is " << p->GetMaxPrime() << std::endl;
 		return 0;
 
 

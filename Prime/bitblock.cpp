@@ -3,6 +3,7 @@
 #include <fstream> 
 #include <boost/dynamic_bitset.hpp>
 #include <cstdio>
+#include <filesystem>
 
 BitBlock::BitBlock(std::string file, bool cache)
 {
@@ -139,6 +140,11 @@ void BitBlock::LoadFile()
 {
 	if (filename.empty())
 		throw std::exception("Filename is empty");
+	
+	if (cached == false && std::filesystem::exists(this->filename))
+	{
+		return;
+	}
 
 	//load into a compressed dataset
 	compressed = true;
@@ -153,12 +159,12 @@ void BitBlock::LoadFile()
 		std::string message = std::string("bad File: ") + filename;
 		throw std::exception(message.c_str());
 	}
-	// If we don't need to read the rest of the file now, skip it.
-	if (cached == false) 
-	{
-		InFile.close();
-		return;
-	}
+	//// If we don't need to read the rest of the file now, skip it.
+	//if (cached == false) 
+	//{
+	//	InFile.close();
+	//	return;
+	//}
 
 	// We want to cache the file so bring it into memory as a bitset
 
