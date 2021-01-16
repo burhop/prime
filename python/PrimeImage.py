@@ -4,7 +4,7 @@ from PIL import Image
 import svgwrite
 import sys
 import struct
-# Some code to measure speed of code.
+# Something to measure speed of code.
 import time
 class Prime:
     #Initializer / Instance Attributes

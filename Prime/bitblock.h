@@ -2,12 +2,14 @@
 #include <string>
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
+#include <omp.h>
+#include <iostream>
 
 class BitBlock
 {
 public:
 	/** Links a bitblock to a file. There is an option to load it to memory (cache = true by default) or leave it on disk. (false) */
-	BitBlock(std::string file, bool cache=true);
+	BitBlock(std::string file, bool cache=true,size_t size=0);
 	/** Creates an empty bitblock */
 	BitBlock(size_t size, size_t index);
 	~BitBlock();
@@ -56,6 +58,7 @@ private:
 	std::vector<size_t>* cachedPrimes;
 	boost::dynamic_bitset<>* bits = nullptr;
 	boost::dynamic_bitset<> bDummy{ 2,2 };
+	omp_lock_t theLock;
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   
 #pragma warning( disable : 4251)
@@ -68,5 +71,40 @@ private:
 	void compressBitSet();
 	void uncompressBitSet();
 	void setMaxValue();
+
+
+	friend class lock;
 };
 
+//just a simple lock class so losing scope will unlock
+class lock
+{
+private:
+	BitBlock* block;
+public:
+	lock(BitBlock* b)
+	{
+		block = b;
+
+		//if (_DEBUG)
+		//{
+		//	//Debug purposes. See if the lock is set
+		//	if (omp_test_lock(&block->theLock))
+		//	{
+		//		omp_unset_lock(&block->theLock);
+		//	}
+		//	else
+		//	{
+		//		assert(false);
+		//	}		
+		int num= omp_get_thread_num();
+		///std::cout << num << std::endl;
+		omp_set_lock(&(block->theLock));
+
+		//}
+	}
+	~lock()
+	{
+ 		omp_unset_lock(&(block->theLock));
+	}
+};

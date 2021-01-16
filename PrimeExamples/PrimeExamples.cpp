@@ -36,7 +36,6 @@ Primes Found : 8408427012
 #include <iostream>
 #include <vector>
 #include <bitset>
-#include <iostream>
 #include <fstream> 
 #include <boost/format.hpp>
 const size_t arraySize = 0xFFFFFFF0;

@@ -2,25 +2,39 @@
 #include <iostream>
 #include <fstream> 
 #include <boost/dynamic_bitset.hpp>
+#include <boost/filesystem.hpp>
 #include <cstdio>
 #include <filesystem>
+#include <cstdio>
+#include <omp.h>
 
-BitBlock::BitBlock(std::string file, bool cache)
+BitBlock::BitBlock(std::string file, bool cache, size_t inputSize)
 {
+	//Multiple threads may access this object at the same time. Be able to lock it.
+	omp_init_lock(&theLock);
 	filename = file;
 	cached = cache;
 	cachedPrimes = nullptr;
 	maxValue = 0;
+	size = inputSize;  //if 0, the file will be opened to get the value. If the value is alrady known, no point in wasting time for fileIO
+
 	//Load part or all of the file depending on the cache setting
 	LoadFile();
+	if (size == 0)
+	{
+		throw "Error loading file. Size could not be determined. Bad file?";
+	}
 }
 
 BitBlock::BitBlock(size_t s, size_t i)
 {
+	//User doesn't care about name. Just create a unique one (probably in /tmp or $TEMP) and use that. Use Boost ast std version is security issue
+	filename  = boost::filesystem::unique_path().string();
+	//Multiple threads may access this object at the same time. Be able to lock it.
+	omp_init_lock(&theLock);
 	size=s;
 	index=i;  
 	//Initially start in memory, so cached =true
-	cached = true;
 	compressed = false;
 	cachedPrimes = nullptr;
 	maxValue = 0;
@@ -28,10 +42,12 @@ BitBlock::BitBlock(size_t s, size_t i)
 	//block off the full size
 	bits = new boost::dynamic_bitset(size);
 	bits->set();
+	cached = true;
 }
 
 BitBlock::~BitBlock()
 {
+	omp_destroy_lock(&theLock);
 	//delete memory
 	delete bits;
 }
@@ -59,43 +75,55 @@ size_t BitBlock::GetLastValue()
 // you can't use bool here because the setter won't work. This is because bitsets don't return a bool but a proxy
 boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 {
-	if (!this->cached)
+//#pragma omp critical(BitBlock)
+	///lock ompLock(this);
 	{
-		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+		if (!this->cached)
+		{
+			throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+		}
+		if (compressed)
+		{
+			// if it is the first block, 2,3,5 are missing.
+			if (this->GetIndex() == 0)
+			{
+				if (loc == 1 || loc == 2 || loc == 4) return bDummy[1];
+			}
+			size_t index = loc + 1;
+			if (index % 2 && index % 3 && index % 5)
+			{
+				size_t idx = index + index / 6 + index / 10 + index / 15 - index / 2 - index / 3 - index / 5 - index / 30 - 1;
+				return (*bits)[idx];
+			}
+			return bDummy[0];
+		}
+		//bool x = (*bits)[loc];
+		//size_t number = loc + 1;
+		return (*bits)[loc];
 	}
-	if (compressed)
-	{ 
-		// if it is the first block, 2,3,5 are missing.
-		if (this->GetIndex() == 0)
-		{
-			if (loc == 1 || loc == 2 || loc == 4) return bDummy[1];
-		}
-		size_t index = loc + 1;
-		if (index % 2 && index % 3 && index % 5)
-		{
-			size_t idx = index + index / 6 + index / 10 + index / 15 - index / 2 - index / 3 - index / 5 - index / 30  - 1;
-			return (*bits)[idx];
-		}
-		return bDummy[0];
-	}	
-	//bool x = (*bits)[loc];
-	//size_t number = loc + 1;
-	return (*bits)[loc];
 }
+
 
 void BitBlock::set(size_t index, bool val)
 {
+	///lock ompLock(this);
 	if (!this->cached)
-	{
+	{		
 		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+
 	}
 	this->bits->set(index, val);
 }
 bool BitBlock::test(size_t index)
 {
+	///lock ompLock(this);;
 	if (!this->cached)
 	{
 		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+	}
+	if (this->compressed)
+	{
+		throw std::exception("test() function only works on uncompressed data. Please uncompress the bitblock or use the [] operator.");
 	}
 	return this->bits->test(index);
 }
@@ -138,10 +166,13 @@ void BitBlock::SaveFile(std::string filename)
 
 void BitBlock::LoadFile()
 {
+	///std::cout << "BitBlock::LoadFile" << std::endl;
+
+	//lock ompLock(this);
 	if (filename.empty())
 		throw std::exception("Filename is empty");
 	
-	if (cached == false && std::filesystem::exists(this->filename))
+	if (this->size!=0 && cached == false && std::filesystem::exists(this->filename))
 	{
 		return;
 	}
@@ -159,12 +190,12 @@ void BitBlock::LoadFile()
 		std::string message = std::string("bad File: ") + filename;
 		throw std::exception(message.c_str());
 	}
-	//// If we don't need to read the rest of the file now, skip it.
-	//if (cached == false) 
-	//{
-	//	InFile.close();
-	//	return;
-	//}
+	// If we don't need to read the rest of the file now, skip it.
+	if (cached == false) 
+	{
+		InFile.close();
+		return;
+	}
 
 	// We want to cache the file so bring it into memory as a bitset
 
@@ -207,31 +238,47 @@ void BitBlock::LoadFile()
 	//Save the largest prime in this file.
 	this->setMaxValue();
 	this->cached = true;
+	//this->Uncompress();
+	return;
 }
 
+//Clears the memory for the bitset.  Note that it is not thread safe so be careful if you have multiple threads with access to this object.
 void BitBlock::UnCache()
 {
+	///std::cout << " BitBlock::UnCache" << std::endl;
+	lock ompLock(this);
+	if (cached == false) return;
 	if (filename.empty())
 		throw std::exception("Data on disk missing. You first must save the data.  Aborting uncache to avoid data loss.");
 	delete this->bits;
 	this-> bits = nullptr;
 	delete this->cachedPrimes;
 	this->cachedPrimes = nullptr;
+	this->cached = false;
 }
 void BitBlock::Cache()
 {
+	///std::cout << "BitBlock::Cache " << std::endl;
+
+	lock ompLock(this);
+	//since multithreaded, could have paused at lock due to other call cacheing.
 	if (filename.empty())
 		throw std::exception("No filename for this data exists. Don't know where to load data from.");
 	//Turn on the cached flag and load the data
 	this->cached = true;
 	this->LoadFile();
+	this->Uncompress();
+	this->cached = true;
 }
 
 std::vector<size_t> BitBlock::GetPrimes()
 {
 	//We can't have multiple threads building this at the same time.
+
+
 #pragma omp critical(GetPrimes)
 	{
+		//lock ompLock(this);
 		if (!cachedPrimes)
 		{
 			//Calculate the primes
@@ -283,6 +330,7 @@ bool BitBlock::InMemory()
 }
 void BitBlock::setMaxValue()
 {
+	///lock ompLock(this);
 	for (auto i = this->size; i > 0; --i)
 	{
 		if ((*this)[i - 1])
@@ -304,6 +352,9 @@ size_t BitBlock::getBitsetSize(size_t dataSize) {
 
 void BitBlock::compressBitSet()
 {
+	///std::cout << "BitBlock::compressBitSet " << std::endl;
+
+	//lock ompLock(this);
 	//if it is already compressed, do nothing
 	if (this->compressed) return;
 	size_t compSize = this->getBitsetSize(this->GetSize());
@@ -331,6 +382,11 @@ void BitBlock::compressBitSet()
 
 void BitBlock::uncompressBitSet()
 {
+	///std::cout << " BitBlock::uncompressBitSet" << std::endl;
+
+	//lock ompLock(this);
+	//if it is already un compressed, do nothing
+	if (!this->compressed) return;
 	size_t count = 0;  //first unmasked prime
 	//Create a new bitset with everything set to 0 (false)
 	boost::dynamic_bitset<> *newBits = new boost::dynamic_bitset<>(size);

@@ -125,7 +125,7 @@ private:
 	unsigned int threadCount = 0; 
 	size_t bitBlockSize=0;
 	// Number of blocks to keep in memory.  Depends on how much memory the computer has available.
-	size_t cacheCount = 0;
+	//size_t cacheCount = 0;
 	//size_t max =  0;    // Can be up to 4294967280;
 	//mb size_t max2 = 0;    // don't need to save the even numbers
 	//mb size_t max3 = 0;    // don't need to save numbers divisible by 3
