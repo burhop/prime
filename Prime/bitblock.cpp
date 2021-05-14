@@ -8,10 +8,12 @@
 #include <cstdio>
 #include <omp.h>
 
+// [[ omp::sequence(directive(parallel), directive(for)) ]] 
+
 BitBlock::BitBlock(std::string file, bool cache, size_t inputSize)
 {
 	//Multiple threads may access this object at the same time. Be able to lock it.
-	omp_init_lock(&theLock);
+	omp_init_lock(&theLock);  //doesn't lock, just creates one. Initially it is unlocked
 	filename = file;
 	cached = cache;
 	cachedPrimes = nullptr;
@@ -31,7 +33,7 @@ BitBlock::BitBlock(size_t s, size_t i)
 	//User doesn't care about name. Just create a unique one (probably in /tmp or $TEMP) and use that. Use Boost ast std version is security issue
 	filename  = boost::filesystem::unique_path().string();
 	//Multiple threads may access this object at the same time. Be able to lock it.
-	omp_init_lock(&theLock);
+	omp_init_lock(&theLock);//doesn't lock, just creates one. Initially it is unlocked
 	size=s;
 	index=i;  
 	//Initially start in memory, so cached =true
@@ -170,7 +172,7 @@ void BitBlock::LoadFile()
 
 	//lock ompLock(this);
 	if (filename.empty())
-		throw std::exception("Filename is empty");
+		throw std::exception("File is empty");
 	
 	if (this->size!=0 && cached == false && std::filesystem::exists(this->filename))
 	{
