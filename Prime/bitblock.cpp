@@ -15,6 +15,7 @@ BitBlock::BitBlock(std::string file, bool cache, size_t inputSize)
 	//Multiple threads may access this object at the same time. Be able to lock it.
 	omp_init_lock(&theLock);  //doesn't lock, just creates one. Initially it is unlocked
 	filename = file;
+	savedToDisk = false;
 	cached = cache;
 	cachedPrimes = nullptr;
 	maxValue = 0;
@@ -32,6 +33,7 @@ BitBlock::BitBlock(size_t s, size_t i)
 {
 	//User doesn't care about name. Just create a unique one (probably in /tmp or $TEMP) and use that. Use Boost ast std version is security issue
 	filename  = boost::filesystem::unique_path().string();
+	savedToDisk = false;
 	//Multiple threads may access this object at the same time. Be able to lock it.
 	omp_init_lock(&theLock);//doesn't lock, just creates one. Initially it is unlocked
 	size=s;
@@ -163,6 +165,7 @@ void BitBlock::SaveFile(std::string filename)
 		buffer = 0;
 	}
 	outfile.close();
+	savedToDisk = true;
 	return;
 }
 
@@ -249,9 +252,15 @@ void BitBlock::UnCache()
 {
 	///std::cout << " BitBlock::UnCache" << std::endl;
 	lock ompLock(this);
+
+	//if it is not in memory already, nothing to do
 	if (cached == false) return;
-	if (filename.empty())
-		throw std::exception("Data on disk missing. You first must save the data.  Aborting uncache to avoid data loss.");
+
+	//If we have never saved this data to permanent storage, better do it now.
+	if (savedToDisk == false)
+	{
+		SaveFile(filename);
+	}
 	delete this->bits;
 	this-> bits = nullptr;
 	delete this->cachedPrimes;

@@ -19,7 +19,7 @@ public:
 	size_t GetFirstValue();
 	/** Get last value in block */
 	size_t GetLastValue();
-	/** Gets the starting index of the bitblock (e.g. 2,3,5 will be in the first block so index 0). The next block or file will be in index 2 */
+	/** Gets the starting index of the bitblock (e.g. 2,3,5 will be in the first block so index 0). The next block or file will be in index 1 */
 	size_t GetIndex();
 	boost::dynamic_bitset<>::reference operator[] (size_t);
 	//const bool& operator[] (size_t) const;
@@ -32,8 +32,6 @@ public:
 	void SaveFile(std::string);
 	/** Loads the file into memory if it was not already loaded */
 	void LoadFile();
-	/** Tells the class to expand the bit array.  This makes it faster but uses more memory */
-
 	/** removes the data from memory. If the data was not previously saved to disk, an expception will be thrown. */
 	void UnCache();
 	/** Reads file data into disk for faster access */
@@ -55,6 +53,7 @@ private:
 	std::string filename;
 	bool cached;
 	bool compressed;
+	bool savedToDisk;  //if this block has been saved to disk already
 	std::vector<size_t>* cachedPrimes;
 	boost::dynamic_bitset<>* bits = nullptr;
 	boost::dynamic_bitset<> bDummy{ 2,2 };
