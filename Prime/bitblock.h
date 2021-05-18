@@ -22,6 +22,7 @@ public:
 	/** Gets the starting index of the bitblock (e.g. 2,3,5 will be in the first block so index 0). The next block or file will be in index 1 */
 	size_t GetIndex();
 	boost::dynamic_bitset<>::reference operator[] (size_t);
+
 	//const bool& operator[] (size_t) const;
 	
 	void set(size_t index, bool val);
@@ -32,6 +33,7 @@ public:
 	void SaveFile(std::string);
 	/** Loads the file into memory if it was not already loaded */
 	void LoadFile();
+
 	/** removes the data from memory. If the data was not previously saved to disk, an expception will be thrown. */
 	void UnCache();
 	/** Reads file data into disk for faster access */
@@ -70,7 +72,9 @@ private:
 	void compressBitSet();
 	void uncompressBitSet();
 	void setMaxValue();
-
+	boost::dynamic_bitset<>::reference getAtIndex(size_t loc);
+	void loadFile();
+	void saveFile(std::string);
 
 	friend class lock;
 };
@@ -87,23 +91,27 @@ public:
 
 		//if (_DEBUG)
 		//{
+		//	//int num= omp_get_thread_num();
+		//	///std::cout << num << std::endl;
 		//	//Debug purposes. See if the lock is set
 		//	if (omp_test_lock(&block->theLock))
 		//	{
-		//		omp_unset_lock(&block->theLock);
+		//		//omp_unset_lock(&block->theLock);
 		//	}
 		//	else
 		//	{
 		//		assert(false);
-		//	}		
-		int num= omp_get_thread_num();
-		///std::cout << num << std::endl;
-		omp_set_lock(&(block->theLock));
+		//	}
+		//}
+		//else
+		//{
 
+			omp_set_lock(&(block->theLock));
 		//}
 	}
+
 	~lock()
 	{
- 		omp_unset_lock(&(block->theLock));
+		omp_unset_lock(&(block->theLock));
 	}
 };
