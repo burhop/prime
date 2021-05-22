@@ -58,23 +58,23 @@ BitBlock::~BitBlock()
 
 size_t BitBlock::GetSize()
 {
-	lock ompLock(this);
+	//lock ompLock(this);
 	return this->size;
 }
 
 size_t BitBlock::GetIndex()
 {
-	lock ompLock(this);
+	//lock ompLock(this);
 	return index;
 }
 size_t BitBlock::GetFirstValue()
 {
-	lock ompLock(this);
+	//lock ompLock(this);
 	return index * size;
 }
 size_t BitBlock::GetLastValue()
 {
-	lock ompLock(this);
+	//lock ompLock(this);
 	return (index + 1)* size - 1;
 }
 
@@ -83,14 +83,17 @@ size_t BitBlock::GetLastValue()
 // you can't use bool here because the setter won't work. This is because bitsets don't return a bool but a proxy
 boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 {
-	//#pragma omp critical(BitBlock)
 	lock ompLock(this);
-	return getAtIndex(loc);
+//#pragma omp critical
+	{
+		return getAtIndex(loc);
+	}
 }
 boost::dynamic_bitset<>::reference BitBlock::getAtIndex(size_t loc)
 {
 	{
-		if (!this->cached)
+		//because of parallel code, cached could be true and bits is null
+		if (!this->cached || bits==nullptr)
 		{
 			throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
 		}
@@ -124,6 +127,12 @@ void BitBlock::set(size_t index, bool val)
 		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
 
 	}
+	if (this->compressed)
+	{
+		throw std::exception("This function only works with uncompressed data. Call Uncompress()");
+
+	}
+
 	this->bits->set(index, val);
 }
 bool BitBlock::test(size_t index)
@@ -225,10 +234,14 @@ void BitBlock::loadFile()
 	//do it on the heap to avoid stack issues
 	if (this->bits != nullptr)
 	{
+		assert(false);
 		throw "Atempting to load file data into an existing structure. This will result in a Memory Leak";
 	}
-	this->bits = new boost::dynamic_bitset(bitsetsize);
 
+//#pragma omp critical 
+	{
+		this->bits = new boost::dynamic_bitset(bitsetsize);
+	}
 
 	char buffer = 0;
 	for (size_t i = 0; i <= bitsetsize / 8; i++)
@@ -289,10 +302,13 @@ void BitBlock::Cache()
 	if (filename.empty())
 		throw std::exception("No filename for this data exists. Don't know where to load data from.");
 	//Turn on the cached flag and load the data
-	this->cached = true;
-	this->loadFile();
-	this->uncompressBitSet();
-	this->cached = true;
+#pragma omp critical 
+	{
+		this->cached = true;
+		this->loadFile();
+		this->uncompressBitSet();
+		this->cached = true;
+	}
 }
 
 std::vector<size_t> BitBlock::GetPrimes()

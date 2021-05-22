@@ -1,10 +1,50 @@
 #include <iostream>
 #include <exception>
 #include "Prime.h"
-
+#include "bitblock.h"
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-
+size_t TestBitBlockOMP(int number_of_threads, int blocksize)
+{
+	omp_set_num_threads(number_of_threads);
+	try
+	{
+		BitBlock* block1 = new BitBlock("t1.prm", true, blocksize);
+		BitBlock* block2 = new BitBlock("t2.prm", true, blocksize);
+		BitBlock* block3 = new BitBlock("t3.prm", true, blocksize);
+		BitBlock* block4 = new BitBlock("t4.prm", true, blocksize);
+		BitBlock* block5 = new BitBlock("t4.prm", true, blocksize);
+#pragma omp parallel
+		{
+			int th=omp_get_thread_num();
+			std::cout <<th << "u1";
+			block1->UnCache();
+			std::cout << "uC2";
+			block2->Uncompress();
+			for (size_t i = 0; i < blocksize ; ++i)
+			{
+				block2->set(i, true);
+			}
+			std::cout << "c1";
+			block1->Cache();
+			std::cout << "s1";
+			block1->SaveFile("Junkt1.prm");
+			std::cout << "U2";
+			block2->UnCache();
+			std::cout << "C3";
+			block3->Compress();
+			std::cout << "i4";
+			block4->GetIndex();
+		}
+	}
+	catch (std::exception e)
+	{
+		return 1;
+	}
+	Prime p;
+	p.DeleteExistingPrimeFiles("t");
+	return 0;
+}
 size_t TestFindPrimes1(int blocks, size_t blocksize, size_t mmaxValueToSearch)
 {
 	Prime prime(blocksize);
@@ -99,6 +139,18 @@ size_t TestMaxValue(int blocks, size_t blocksize)
 	return prime.GetMaxValue();
 }
 
+TEST_CASE("Test Thread safety of Bitblock", "[single-file]")
+{
+	REQUIRE(TestBitBlockOMP(10, 3000) == 0);
+	REQUIRE(TestBitBlockOMP(5, 3000) == 0);
+
+	REQUIRE(TestBitBlockOMP(10, 30) == 0);
+	REQUIRE(TestBitBlockOMP(10, 30000) == 0);
+	REQUIRE(TestBitBlockOMP(1, 3000) == 0);
+	REQUIRE(TestBitBlockOMP(10, 30) == 0);
+	REQUIRE(TestBitBlockOMP(100, 300) == 0);
+
+}
 
 TEST_CASE("Test counting of primes is correct", "[single-file]") {
 

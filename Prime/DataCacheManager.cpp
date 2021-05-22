@@ -10,6 +10,8 @@ DataCacheManager::DataCacheManager(size_t blockcount,size_t maximumInMemory)
 	this->maximumBlocksInMemory = maximumInMemory;
 	//arrayOfBlocks = new BitBlock * [blockCount]();  //Allocate an array of pointers and initialize them to 0.
 	arrayOfBlocks = new std::shared_ptr<BitBlock> [blockCount]();  //Allocate an array of pointers and initialize them to 0.
+	//initializes the OMP lock, does not lock or unlock
+	omp_init_lock(&theLock);
 }
 
 std::shared_ptr<BitBlock> DataCacheManager::MakeBitBlock(std::string file, bool cache =true,size_t size=0)
@@ -45,6 +47,7 @@ DataCacheManager::~DataCacheManager()
 
 bool DataCacheManager::BlockExists(size_t block)
 {
+	DataCacheManagerLock(this);
 	return this->arrayOfBlocks[block]? true: false;
 }
 
@@ -52,6 +55,7 @@ bool DataCacheManager::BlockExists(size_t block)
 //Note that the calling function may need to be is in an OMP Critical section
 void DataCacheManager::updateCache(size_t loc)
 {
+	DataCacheManagerLock(this);
 //#pragma omp critical(DataCacheManagerUpdate)
 	{
 		// if we are updating the Cache but the new block is not in memory do nothing.
@@ -89,6 +93,7 @@ void DataCacheManager::updateCache(size_t loc)
 
 std::shared_ptr<BitBlock> DataCacheManager::get(size_t loc)
 {
+	DataCacheManagerLock(this);
 //#pragma omp critical(DataCacheManager)
 	{
 		// if our smart pointer exists but it is not in memory, load it
@@ -104,6 +109,7 @@ std::shared_ptr<BitBlock> DataCacheManager::get(size_t loc)
 
 void DataCacheManager::set(std::shared_ptr<BitBlock> obj, size_t idx)
 {
+	DataCacheManagerLock(this);
 //#pragma omp critical(DataCacheManager2)
 	{
 		this->arrayOfBlocks[idx] = obj;
@@ -113,6 +119,7 @@ void DataCacheManager::set(std::shared_ptr<BitBlock> obj, size_t idx)
 
 void DataCacheManager::PrintStatus()
 {
+	DataCacheManagerLock(this);
 //#pragma omp critical(print3)
 	{
 

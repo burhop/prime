@@ -2,6 +2,7 @@
 #include <list>	
 #include <memory>
 #include "bitblock.h"
+
 class DataCacheManager
 {
 	//struct proxy
@@ -60,10 +61,48 @@ private:
 	std::list<size_t> listOfBlocks;
 	//std::shared_ptr<BitBlock*> p;
 	std::shared_ptr<BitBlock>* arrayOfBlocks;
+	omp_lock_t theLock;  //allow locking of DataCacheManager to reading of data while changing of data
 	//BitBlock** arrayOfBlocks;
 
 	void updateCache(size_t idx);
-
+	friend class DataCacheManagerLock;
 
 };
+class DataCacheManagerLock
+{
+private:
+	DataCacheManager* mgr;
+public:
+	DataCacheManagerLock(DataCacheManager* mgr)
+	{
+		this->mgr = mgr;
+#ifdef _DEBUG
+		{
+			if (omp_test_lock(&(mgr->theLock)))
+			{
+				omp_unset_lock(&(mgr->theLock));
+			}
+			else
+			{
+				//In single thread mode should not get here
+				assert(true);
+			}
+			//int num = omp_get_thread_num();
+			//std::cout << num << std::endl;
 
+			//Set the lock and checks the result
+		}
+#endif
+
+
+
+
+		omp_set_lock(&(mgr->theLock));
+		//}
+	}
+
+	~DataCacheManagerLock()
+	{
+		omp_unset_lock(&(mgr->theLock));
+	}
+};

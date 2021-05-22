@@ -5,7 +5,7 @@
 #include <omp.h>
 #include <iostream>
 
-class BitBlock
+class __declspec(dllexport) BitBlock
 {
 public:
 	/** Links a bitblock to a file. There is an option to load it to memory (cache = true by default) or leave it on disk. (false) */
@@ -89,25 +89,16 @@ public:
 	{
 		block = b;
 
-		//if (_DEBUG)
-		//{
-		//	//int num= omp_get_thread_num();
-		//	///std::cout << num << std::endl;
-		//	//Debug purposes. See if the lock is set
-		//	if (omp_test_lock(&block->theLock))
-		//	{
-		//		//omp_unset_lock(&block->theLock);
-		//	}
-		//	else
-		//	{
-		//		assert(false);
-		//	}
-		//}
-		//else
-		//{
+#ifdef _DEBUG
+		{
+			//int num = omp_get_thread_num();
+			//std::cout << num << std::endl;
 
-			omp_set_lock(&(block->theLock));
-		//}
+			//Set the lock and checks the result
+		}
+#endif
+
+		omp_set_lock(&(block->theLock));
 	}
 
 	~lock()
