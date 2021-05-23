@@ -23,7 +23,7 @@ size_t TestBitBlockOMP(int number_of_threads, int blocksize)
 			block2->Uncompress();
 			for (size_t i = 0; i < blocksize ; ++i)
 			{
-				block2->set(i, true);
+				block2->set(i, true);	
 			}
 			std::cout << "c1";
 			block1->Cache();

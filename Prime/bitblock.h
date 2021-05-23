@@ -31,8 +31,8 @@ public:
 	bool test(size_t index);
 	/** Saves a file to disk.  This will also set the file name */
 	void SaveFile(std::string);
-	/** Loads the file into memory if it was not already loaded */
-	void LoadFile();
+	/** Loads the file into memory if it was not already loaded. Options to laod the entire file and uncompress the data */
+	void LoadFile(bool loadAll, bool uncompress);
 
 	/** removes the data from memory. If the data was not previously saved to disk, an expception will be thrown. */
 	void UnCache();
@@ -48,7 +48,7 @@ public:
 	/** If the data is loaded in memory or on disk */
 	bool InMemory();
 private:
-	//If size=1000, it means we can get a bit for 1000 numbers.  However, the actuall number of bits in the class and file may be less.
+	//If size=1000, it means we can get a bit for 1000 numbers.  However, the actuall number of bits in the class and file may be less due to compression
 	size_t size;
 	size_t index;
 	size_t maxValue;
@@ -73,7 +73,7 @@ private:
 	void uncompressBitSet();
 	void setMaxValue();
 	boost::dynamic_bitset<>::reference getAtIndex(size_t loc);
-	void loadFile();
+	void loadFile(bool,bool);
 	void saveFile(std::string);
 
 	friend class lock;

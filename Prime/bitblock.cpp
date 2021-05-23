@@ -21,8 +21,8 @@ BitBlock::BitBlock(std::string file, bool cache, size_t inputSize)
 	maxValue = 0;
 	size = inputSize;  //if 0, the file will be opened to get the value. If the value is alrady known, no point in wasting time for fileIO
 
-	//Load part or all of the file depending on the cache setting
-	LoadFile();
+	//Load part or all of the file depending on the cache setting.  Do not uncompress as this takes time.
+	LoadFile(cache,false);
 	if (size == 0)
 	{
 		throw "Error loading file. Size could not be determined. Bad file?";
@@ -38,7 +38,7 @@ BitBlock::BitBlock(size_t s, size_t i)
 	omp_init_lock(&theLock);//doesn't lock, just creates one. Initially it is unlocked
 	size=s;
 	index=i;  
-	//Initially start in memory, so cached =true
+
 	compressed = false;
 	cachedPrimes = nullptr;
 	maxValue = 0;
@@ -46,6 +46,7 @@ BitBlock::BitBlock(size_t s, size_t i)
 	//block off the full size
 	bits = new boost::dynamic_bitset(size);
 	bits->set();
+	//Initially start in memory, so cached =true even though ti is blank
 	cached = true;
 }
 
@@ -119,21 +120,34 @@ boost::dynamic_bitset<>::reference BitBlock::getAtIndex(size_t loc)
 }
 
 
-void BitBlock::set(size_t index, bool val)
+void BitBlock::set(size_t loc, bool val)
 {
 	lock ompLock(this);
 	if (!this->cached)
 	{		
-		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+		throw std::exception("Data must be loaded into memory for access. Start with a new object or Call Cache() or LoadFile().");
 
 	}
 	if (this->compressed)
 	{
-		throw std::exception("This function only works with uncompressed data. Call Uncompress()");
-
+		if (this->index == 0)
+		{
+			//this rpresents 2,3,and 5 which are not saved in compressed data.  They will always be true;
+			if (loc == 1 || loc == 2 || loc == 4) return;
+		}
+		size_t index = loc + 1;
+		if (index % 2 && index % 3 && index % 5)
+		{
+			size_t idx = index + index / 6 + index / 10 + index / 15 - index / 2 - index / 3 - index / 5 - index / 30 - 1;
+			this->bits->set(idx, val);
+		}
+		else
+		{
+			//do nothing as it is divisible by 2, 3, or 5.  It will always return 0 from the compressed data.
+		}
 	}
 
-	this->bits->set(index, val);
+	this->bits->set(loc, val);
 }
 bool BitBlock::test(size_t index)
 {
@@ -151,10 +165,17 @@ bool BitBlock::test(size_t index)
 void BitBlock::SaveFile(std::string filename)
 {
 	lock ompLock(this);
+	std::cout << "saving " << filename;
 	saveFile(filename);
+	std::cout << " ...saved\n";
 }
 void BitBlock::saveFile(std::string filename)
 {
+	if (this->savedToDisk)
+	{
+		return;
+	}
+	// if it has not been saved to disk AND it is not in memory, we have an error.
 	if (!this->cached)
 	{
 		throw std::exception("Error.  No Data in this BitBlock to save.");
@@ -189,25 +210,29 @@ void BitBlock::saveFile(std::string filename)
 	savedToDisk = true;
 	return;
 }
-void BitBlock::LoadFile()
+void BitBlock::LoadFile(bool fullFile=true, bool unCompress=false)
 {
 	lock ompLock(this);
-	loadFile();
+	loadFile(fullFile,unCompress);
 }
-void BitBlock::loadFile()
+void BitBlock::loadFile(bool fullFile, bool unCompress)
 {
-	///std::cout << "BitBlock::LoadFile" << std::endl;
-
+	//First see if it was already loaded. We don't need to load again.
+	if (this->cached && this->bits != nullptr)
+	{
+		return;
+	}
 	//lock ompLock(this);
 	if (filename.empty())
 		throw std::exception("File is empty");
 	
-	if (this->size!=0 && cached == false && std::filesystem::exists(this->filename))
+	//If the file exists, we've already loaded its header (size!=0) and we don't want the data there is nothing to do
+	if (this->size!=0 && fullFile == false && std::filesystem::exists(this->filename))
 	{
 		return;
 	}
 
-	//load into a compressed dataset
+	//load into a compressed dataset.  This is what is saved in the file.
 	compressed = true;
 	std::ifstream InFile;
 
@@ -221,7 +246,7 @@ void BitBlock::loadFile()
 		throw std::exception(message.c_str());
 	}
 	// If we don't need to read the rest of the file now, skip it.
-	if (cached == false) 
+	if (fullFile == false)
 	{
 		InFile.close();
 		return;
@@ -268,11 +293,14 @@ void BitBlock::loadFile()
 		}
 	}
 	InFile.close();
-
+	this->cached = true;
+	if (unCompress)
+	{
+		this->uncompressBitSet();
+	}
 	//Save the largest prime in this file.
 	this->setMaxValue();
-	this->cached = true;
-	//this->Uncompress();
+
 	return;
 }
 
@@ -304,10 +332,9 @@ void BitBlock::Cache()
 	//Turn on the cached flag and load the data
 #pragma omp critical 
 	{
-		this->cached = true;
-		this->loadFile();
-		this->uncompressBitSet();
-		this->cached = true;
+		//this->cached = true;
+		this->loadFile(true,true);
+		//this->uncompressBitSet();
 	}
 }
 
@@ -361,7 +388,15 @@ void BitBlock::Compress()
 void BitBlock::Uncompress()
 {
 	lock ompLock(this);
-	this->uncompressBitSet();
+	if (this->cached)
+	{
+		this->uncompressBitSet();
+	}
+	else
+	{
+		//We first need to load the data.  Second option means to uncompress so no need to do this a second time
+		this->loadFile(true, true);
+	}
 }
 
 size_t BitBlock::GetMaxValue()
