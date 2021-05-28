@@ -65,6 +65,7 @@ private:
 	//BitBlock** arrayOfBlocks;
 
 	void updateCache(size_t idx);
+	void cleanCache();
 	friend class DataCacheManagerLock;
 
 };
@@ -77,26 +78,22 @@ public:
 	{
 		this->mgr = mgr;
 #ifdef _DEBUG
-		{
-			if (omp_test_lock(&(mgr->theLock)))
-			{
-				omp_unset_lock(&(mgr->theLock));
-			}
-			else
-			{
-				//In single thread mode should not get here
-				assert(true);
-			}
-			//int num = omp_get_thread_num();
-			//std::cout << num << std::endl;
+		//{
+		//	if (omp_test_lock(&(mgr->theLock)))
+		//	{
+		//		omp_unset_lock(&(mgr->theLock));
+		//	}
+		//	else
+		//	{
+		//		//In single thread mode should not get here
+		//		assert(false);
+		//	}
+		//	//int num = omp_get_thread_num();
+		//	//std::cout << num << std::endl;
 
-			//Set the lock and checks the result
-		}
+		//	//Set the lock and checks the result
+		//}
 #endif
-
-
-
-
 		omp_set_lock(&(mgr->theLock));
 		//}
 	}

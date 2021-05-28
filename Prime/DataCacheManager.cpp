@@ -24,26 +24,10 @@ std::shared_ptr<BitBlock> DataCacheManager::MakeBitBlock(size_t size, size_t ind
 }
 DataCacheManager::~DataCacheManager()
 {
-	//for (size_t i = 0; i < blockCount;++i)
-	//{
-	//	if (arrayOfBlocks[i] != 0) delete arrayOfBlocks[i];
-	//}
 	delete[] arrayOfBlocks;
 	arrayOfBlocks = nullptr;
 }
 
-//std::shared_ptr<BitBlock>& DataCacheManager::operator[](size_t loc)
-//{
-//	#pragma omp critical(DataCacheManager)
-//	{
-//		if (arrayOfBlocks[loc] != 0 && !arrayOfBlocks[loc]->InMemory())
-//		{
-//			(arrayOfBlocks[loc])->Cache();
-//			updateCache(loc);
-//		}
-//	}
-//	return this->arrayOfBlocks[loc];
-//}
 
 bool DataCacheManager::BlockExists(size_t block)
 {
@@ -52,43 +36,44 @@ bool DataCacheManager::BlockExists(size_t block)
 }
 
 // A simple cache that removes the last accessed BitArray if we are out of space
-//Note that the calling function may need to be is in an OMP Critical section
 void DataCacheManager::updateCache(size_t loc)
 {
 	DataCacheManagerLock(this);
-//#pragma omp critical(DataCacheManagerUpdate)
+	//#pragma omp critical(DataCacheManagerUpdate)
 	{
 		// if we are updating the Cache but the new block is not in memory do nothing.
 		if (this->arrayOfBlocks[loc]->InMemory() == false)
 		{
 			return;
 		}
-		//	std::cout << "Cashe Size: " << listOfBlocks.size() << std::endl;
-		{
-			//remove it from the list, as we will be re adding it to the back.
-			this->listOfBlocks.remove(loc);
-			this->listOfBlocks.push_back(loc);
-
-			//Do we have too many in memory?  If so, remove the last used (if it is free).
-			if (this->listOfBlocks.size() > this->maximumBlocksInMemory)
-			{
-				size_t idx = this->listOfBlocks.front();
-
-				//If We have the only pointer to this block, we can unload it. If others do, leave it there for now and try the next oldest
-				for (size_t val : listOfBlocks)
-				{
-					long use_count = this->arrayOfBlocks[val].use_count();
-					if (use_count < 2 && val != loc)
-					{
-						this->listOfBlocks.remove(val);
-						arrayOfBlocks[val]->UnCache();
-						break;
-					}
-				}
-				// If all blocks are being referenced outside of this class, we could end up with more in the list than the maximumBlocksInMemory.
-			}
-		}
+		//remove it from the list, as we will be re adding it to the back.
+		this->listOfBlocks.remove(loc);
+		this->listOfBlocks.push_back(loc);
+		cleanCache();
 	}
+}
+void DataCacheManager::cleanCache()
+{
+	//##### issue!   ListOFBlocks is changing (it was size 12 to start and size 10 with bad data in line 61)
+	auto blockCount = this->listOfBlocks.size();
+	long count = blockCount - this->maximumBlocksInMemory;
+	if (count < 1)return;
+	auto tempList = this->listOfBlocks;
+	//We will try to remove 'count' blocks
+	for (auto const& i :tempList)
+	{
+		long use_count = this->arrayOfBlocks[i].use_count();
+		if (use_count < 2)
+		{   
+			this->listOfBlocks.remove(i);
+			arrayOfBlocks[i]->UnCache();
+			count--;
+		}
+		//if we have removed 'count' blocks, we are done
+		if (count < 1) break;
+	}
+	// It possible to get here and not have removed 'count' blocks
+	// That should be a rare case when everything in the cache is being used in another thread
 }
 
 std::shared_ptr<BitBlock> DataCacheManager::get(size_t loc)
