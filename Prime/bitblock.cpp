@@ -96,7 +96,8 @@ boost::dynamic_bitset<>::reference BitBlock::getAtIndex(size_t loc)
 		//because of parallel code, cached could be true and bits is null
 		if (!this->cached || bits==nullptr)
 		{
-			throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+			//Load the cached data
+			this->loadFile(true,true);
 		}
 		if (compressed)
 		{
@@ -125,7 +126,8 @@ void BitBlock::set(size_t loc, bool val)
 	lock ompLock(this);
 	if (!this->cached)
 	{		
-		throw std::exception("Data must be loaded into memory for access. Start with a new object or Call Cache() or LoadFile().");
+		this->LoadFile(true, true);
+		//throw std::exception("Data must be loaded into memory for access. Start with a new object or Call Cache() or LoadFile().");
 
 	}
 	if (this->compressed)
@@ -353,7 +355,7 @@ std::vector<size_t> BitBlock::GetPrimes()
 
 			if (!this->cached)
 			{
-				throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
+				this->loadFile(true, true);
 			}
 			std::vector<size_t> listOfPrimes;
 			//2,3,5 are removed from compressed list.  Need to add them back
