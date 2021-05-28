@@ -30,7 +30,7 @@ size_t TestBitBlockOMP(int number_of_threads, int blocksize)
 			std::cout << "s1";
 			block1->SaveFile("Junkt1.prm");
 			std::cout << "U2";
-			block2->UnCache();
+			//block2->UnCache();
 			std::cout << "C3";
 			block3->Compress();
 			std::cout << "i4";
