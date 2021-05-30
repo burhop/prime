@@ -23,6 +23,7 @@ BitBlock::BitBlock(std::string file, bool cache, size_t inputSize)
 
 	//Load part or all of the file depending on the cache setting.  Do not uncompress as this takes time.
 	LoadFile(cache,false);
+	this->complete = true;
 	if (size == 0)
 	{
 		throw "Error loading file. Size could not be determined. Bad file?";
@@ -49,6 +50,8 @@ BitBlock::BitBlock(size_t s, size_t i)
 	bits->set();
 	//Initially start in memory, so cached =true even though ti is blank
 	cached = true;
+	//No data yet so complete=false
+	complete = false;
 }
 
 BitBlock::~BitBlock()
@@ -91,6 +94,14 @@ boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 		return getAtIndex(loc);
 	}
 }
+void BitBlock::SetComplete(bool c)
+{
+	this->complete = c;
+}
+bool BitBlock::GetComplete()
+{
+	return this->complete;
+}
 boost::dynamic_bitset<>::reference BitBlock::getAtIndex(size_t loc)
 {
 	{
@@ -124,33 +135,33 @@ boost::dynamic_bitset<>::reference BitBlock::getAtIndex(size_t loc)
 
 void BitBlock::set(size_t loc, bool val)
 {
-	lock ompLock(this);
-	if (!this->cached)
-	{		
-		this->LoadFile(true, true);
-		//throw std::exception("Data must be loaded into memory for access. Start with a new object or Call Cache() or LoadFile().");
+	//lock ompLock(this);
+	//if (!this->cached)
+	//{		
+	//	this->LoadFile(true, true);
+	//	//throw std::exception("Data must be loaded into memory for access. Start with a new object or Call Cache() or LoadFile().");
 
-	}
-	if (this->compressed)
-	{
-		if (this->index == 0)
-		{
-			//this rpresents 2,3,and 5 which are not saved in compressed data.  They will always be true;
-			if (loc == 1 || loc == 2 || loc == 4) return;
-		}
-		size_t index = loc + 1;
-		if (index % 2 && index % 3 && index % 5)
-		{
-			size_t idx = index + index / 6 + index / 10 + index / 15 - index / 2 - index / 3 - index / 5 - index / 30 - 1;
-			this->bits->set(idx, val);
-		}
-		else
-		{
-			//do nothing as it is divisible by 2, 3, or 5.  It will always return 0 from the compressed data.
-		}
-	}
+	//}
+	//if (this->compressed)
+	//{
+	//	if (this->index == 0)
+	//	{
+	//		//this rpresents 2,3,and 5 which are not saved in compressed data.  They will always be true;
+	//		if (loc == 1 || loc == 2 || loc == 4) return;
+	//	}
+	//	size_t index = loc + 1;
+	//	if (index % 2 && index % 3 && index % 5)
+	//	{
+	//		size_t idx = index + index / 6 + index / 10 + index / 15 - index / 2 - index / 3 - index / 5 - index / 30 - 1;
+	//		this->bits->set(idx, val);
+	//	}
+	//	else
+	//	{
+	//		//do nothing as it is divisible by 2, 3, or 5.  It will always return 0 from the compressed data.
+	//	}
+	//}
 
-	this->bits->set(loc, val);
+ 	this->bits->set(loc, val);
 }
 bool BitBlock::test(size_t index)
 {

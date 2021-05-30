@@ -22,6 +22,11 @@ public:
 	/** Gets the starting index of the bitblock (e.g. 2,3,5 will be in the first block so index 0). The next block or file will be in index 1 */
 	size_t GetIndex();
 	boost::dynamic_bitset<>::reference operator[] (size_t);
+	/** Says if the data is complete or still being calculated */
+	void SetComplete(bool);
+	/** gets the data status. If true, all the data is there and it can be moved in or out of memory/disk */
+	bool GetComplete();
+
 	
 	//const bool& operator[] (size_t) const;
 	
@@ -54,6 +59,7 @@ private:
 	size_t index;
 	size_t maxValue;
 	std::string filename;
+	bool complete; // true if all data has been added and will no longer be changed
 	bool cached;
 	bool compressed;
 	bool savedToDisk;  //if this block has been saved to disk already
