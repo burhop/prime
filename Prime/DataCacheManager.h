@@ -44,12 +44,9 @@ public:
 	/** Sets or accesses the bit at the location provided. If the data is on disk, it will be cached in memory as it assumes you will access more bits in this block */
 
 	//std::shared_ptr<BitBlock>& operator[] (size_t);
-	/** checks the pointer for a block to see if it exists.  The operator[] should not be used just to check existence as it will load the data*/
+	/** checks the pointer for a block to see if it exists.  */
 	bool BlockExists(size_t block);
-	//proxy operator [] (size_t index)
-	//{
-	//	return DataCacheManager::proxy(this, index);
-	//}
+
 	std::shared_ptr<BitBlock> get(size_t);
 	void set(std::shared_ptr<BitBlock>, size_t);
 	//Prints the status to stdio.  This is mainly for debug to see how memory is being managed
@@ -72,34 +69,16 @@ private:
 class DataCacheManagerLock
 {
 private:
-	DataCacheManager* mgr;
+	DataCacheManager* dcm;
 public:
 	DataCacheManagerLock(DataCacheManager* mgr)
 	{
-		this->mgr = mgr;
-#ifdef _DEBUG
-		//{
-		//	if (omp_test_lock(&(mgr->theLock)))
-		//	{
-		//		omp_unset_lock(&(mgr->theLock));
-		//	}
-		//	else
-		//	{
-		//		//In single thread mode should not get here
-		//		assert(false);
-		//	}
-		//	//int num = omp_get_thread_num();
-		//	//std::cout << num << std::endl;
-
-		//	//Set the lock and checks the result
-		//}
-#endif
+		dcm = mgr;
 		omp_set_lock(&(mgr->theLock));
-		//}
 	}
 
 	~DataCacheManagerLock()
 	{
-		omp_unset_lock(&(mgr->theLock));
+		omp_unset_lock(&(dcm->theLock));
 	}
 };

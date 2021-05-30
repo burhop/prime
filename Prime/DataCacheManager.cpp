@@ -38,7 +38,8 @@ bool DataCacheManager::BlockExists(size_t block)
 // A simple cache that removes the last accessed BitArray if we are out of space
 void DataCacheManager::updateCache(size_t loc)
 {
-	DataCacheManagerLock(this);
+	//DataCacheManagerLock Lock(this);
+
 	//#pragma omp critical(DataCacheManagerUpdate)
 	{
 		// if we are updating the Cache but the new block is not in memory do nothing.
@@ -56,7 +57,7 @@ void DataCacheManager::cleanCache()
 {
 	//##### issue!   ListOFBlocks is changing (it was size 12 to start and size 10 with bad data in line 61)
 	auto blockCount = this->listOfBlocks.size();
-	long count = blockCount - this->maximumBlocksInMemory;
+	long count = (long) (blockCount - this->maximumBlocksInMemory);
 	if (count < 1)return;
 	auto tempList = this->listOfBlocks;
 	//We will try to remove 'count' blocks
@@ -78,7 +79,8 @@ void DataCacheManager::cleanCache()
 
 std::shared_ptr<BitBlock> DataCacheManager::get(size_t loc)
 {
-	DataCacheManagerLock(this);
+	DataCacheManagerLock Lock(this);
+
 //#pragma omp critical(DataCacheManager)
 	{
 		// if our smart pointer exists but it is not in memory, load it
@@ -94,7 +96,7 @@ std::shared_ptr<BitBlock> DataCacheManager::get(size_t loc)
 
 void DataCacheManager::set(std::shared_ptr<BitBlock> obj, size_t idx)
 {
-	DataCacheManagerLock(this);
+	DataCacheManagerLock Lock(this);
 //#pragma omp critical(DataCacheManager2)
 	{
 		this->arrayOfBlocks[idx] = obj;
@@ -104,7 +106,8 @@ void DataCacheManager::set(std::shared_ptr<BitBlock> obj, size_t idx)
 
 void DataCacheManager::PrintStatus()
 {
-	DataCacheManagerLock(this);
+	DataCacheManagerLock Lock(this);
+
 //#pragma omp critical(print3)
 	{
 
