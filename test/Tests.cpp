@@ -2,11 +2,15 @@
 #include <exception>
 #include "Prime.h"
 #include "bitblock.h"
+#include <boost/filesystem.hpp>
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
+
 size_t TestBitBlockOMP(int number_of_threads, int blocksize)
 {
 	omp_set_num_threads(number_of_threads);
+
+	//Compiler setting or hardware may cause us not to get all the threads we want changing the text.  Check for it.
 	try
 	{
 		BitBlock* block1 = new BitBlock("t1.prm", true, blocksize);
@@ -16,26 +20,36 @@ size_t TestBitBlockOMP(int number_of_threads, int blocksize)
 		BitBlock* block5 = new BitBlock("t4.prm", true, blocksize);
 #pragma omp parallel
 		{
-			int th=omp_get_thread_num();
-			std::cout <<th << "u1";
-			block1->UnCache();
-			std::cout << "uC2";
-			block2->Uncompress();
-			for (size_t i = 0; i < blocksize ; ++i)
+#pragma omp single
 			{
-				block2->set(i, true);	
+				CHECK(omp_get_num_threads() == number_of_threads);
 			}
-			std::cout << "c1";
+			int th = omp_get_thread_num();
+
+			//std::cout << th << "u1";
+			block1->UnCache();
+			//std::cout << "uC2";
+			block2->Uncompress();
+			for (size_t i = 0; i < blocksize; ++i)
+			{
+				block2->set(i, true);
+			}
+			//std::cout << "c1";
 			block1->Cache();
-			std::cout << "s1";
-			block1->SaveFile("Junkt1.prm");
-			std::cout << "U2";
+			//std::cout << "s1";
+			//std::cout << "U2";
 			//block2->UnCache();
-			std::cout << "C3";
+			//std::cout << "C3";
 			block3->Compress();
-			std::cout << "i4";
+			//std::cout << "i4";
 			block4->GetIndex();
-		}
+		} //implicit barrier here 
+		
+		// Don't remove files until all threads are done
+		block1->RemoveFile();
+		block2->RemoveFile();
+		block3->RemoveFile();
+		block4->RemoveFile();
 	}
 	catch (std::exception e)
 	{
@@ -72,12 +86,12 @@ size_t TestFindPrimes2(int blocks, size_t blocksize, size_t mmaxValueToSearch)
 }
 size_t TestMultiCores(int blocks, size_t blocksize, size_t mmaxValueToSearch,unsigned int cores)
 {
-
 	Prime prime(blocksize,cores);
+
 	//if you have no data, lets find some primes
 	//prime.SetVerbose(true);
+	std::cout << "If compiled with OpenMP, planning to use " << prime.GetThreadCount() << " threads\n";	
 	prime.FindPrimes(blocks);
-	std::cout << "If compiled with OpenMP, planning to use " << prime.GetThreadCount() << " threads\n";
 	size_t count = prime.CountPrimes(0, mmaxValueToSearch);;
 	return count;
 }
@@ -137,6 +151,40 @@ size_t TestMaxValue(int blocks, size_t blocksize)
 	Prime prime(blocksize);
 	prime.FindPrimes(blocks);
 	return prime.GetMaxValue();
+}
+
+bool Cleanup()
+{
+	//std::string path = boost::filesystem::temp_directory_path();
+	boost::system::error_code ec;
+	auto di = boost::filesystem::directory_iterator(boost::filesystem::temp_directory_path(), ec);
+	try {
+		size_t count = 0;
+
+		// loop over all the "directory_entry"'s in "pathtofolder":
+		for (auto& de : di)
+		{
+			auto ext = boost::filesystem::extension(de);
+			if (ext == ".prm")
+			{
+				// returns the number of deleted entities since c++17:
+				count += boost::filesystem::remove(de);
+			}
+		}
+		std::cout << "Deleted " << count << " olf test files in temp directory.\n";
+
+	}
+	catch (const std::exception & ex) 
+	{
+		std::cerr << ex.what() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+TEST_CASE("Cleanup old test files if they exist", "[single-file]")
+{
+	REQUIRE(Cleanup() == true);
 }
 
 TEST_CASE("Test Thread safety of Bitblock", "[single-file]")
@@ -252,7 +300,7 @@ TEST_CASE("Find Primes using different block sizes (test throwing of exception)"
 	REQUIRE_THROWS(TestFindPrimes1(0xFFFFFFF1, 300, 100));
 }
 
-TEST_CASE("Verify saving and loading of prime files works", "[single-file]") {
+TEST_CASE("Verify saving and loading of prime files works", "[single-file],[error]") {
 	REQUIRE(TestFindPrimes2(2, 300, 100) == 25);
 	REQUIRE(TestFindPrimes2(3, 300, 10) == 4);
 	REQUIRE(TestFindPrimes2(3, 300, 900) == 154);
@@ -280,4 +328,9 @@ TEST_CASE("Verify code works with varying numbers of threads/cores", "[single-fi
 	REQUIRE(TestMultiCores(100, 300000, 30000000, 3) == 1857859);
 	REQUIRE(TestMultiCores(100, 3000000, 300000000, 3) == 16252325);
 
+}
+
+TEST_CASE("Cleanup any remaining test files", "[single-file]")
+{
+	REQUIRE(Cleanup() == true);
 }
