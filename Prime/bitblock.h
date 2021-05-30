@@ -22,7 +22,7 @@ public:
 	/** Gets the starting index of the bitblock (e.g. 2,3,5 will be in the first block so index 0). The next block or file will be in index 1 */
 	size_t GetIndex();
 	boost::dynamic_bitset<>::reference operator[] (size_t);
-
+	
 	//const bool& operator[] (size_t) const;
 	
 	void set(size_t index, bool val);
@@ -33,7 +33,8 @@ public:
 	void SaveFile(std::string);
 	/** Loads the file into memory if it was not already loaded. Options to laod the entire file and uncompress the data */
 	void LoadFile(bool loadAll, bool uncompress);
-
+	/** deletes the file on disk for this data. Mainly used for testing. */
+	bool RemoveFile();
 	/** removes the data from memory. If the data was not previously saved to disk, an expception will be thrown. */
 	void UnCache();
 	/** Reads file data into disk for faster access */
@@ -73,6 +74,7 @@ private:
 	void uncompressBitSet();
 	void setMaxValue();
 	boost::dynamic_bitset<>::reference getAtIndex(size_t loc);
+	bool removeFile();
 	void loadFile(bool,bool);
 	void saveFile(std::string);
 

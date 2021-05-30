@@ -31,8 +31,9 @@ BitBlock::BitBlock(std::string file, bool cache, size_t inputSize)
 
 BitBlock::BitBlock(size_t s, size_t i)
 {
-	//User doesn't care about name. Just create a unique one (probably in /tmp or $TEMP) and use that. Use Boost ast std version is security issue
-	filename  = boost::filesystem::unique_path().string();
+	//User doesn't care about name. Just create a unique one (probably in /tmp or $TEMP) and use that. Use Boost as std version is security issue
+	
+	filename  = boost::filesystem::temp_directory_path().string() + "\\" + boost::filesystem::unique_path("%%%%-%%%%-%%%%-%%%%.prm").string();
 	savedToDisk = false;
 	//Multiple threads may access this object at the same time. Be able to lock it.
 	omp_init_lock(&theLock);//doesn't lock, just creates one. Initially it is unlocked
@@ -167,22 +168,22 @@ bool BitBlock::test(size_t index)
 void BitBlock::SaveFile(std::string filename)
 {
 	lock ompLock(this);
-	std::cout << "saving " << filename;
+	std::string orginalName;
+	//std::cout << "saving " << filename;
 	saveFile(filename);
-	std::cout << " ...saved\n";
+	//std::cout << " ...saved\n";
 }
 void BitBlock::saveFile(std::string filename)
 {
-	if (this->savedToDisk)
+	if (this->savedToDisk && this->filename==filename)
 	{
 		return;
 	}
-	// if it has not been saved to disk AND it is not in memory, we have an error.
+	// if it is not in memory, we have an error.
 	if (!this->cached)
 	{
 		throw std::exception("Error.  No Data in this BitBlock to save.");
 	}
-
 	std::ofstream outfile;
 	outfile.open(filename, std::ios::out | std::ios::binary);
 	outfile.write((char*)&size, sizeof(size_t));
@@ -210,12 +211,40 @@ void BitBlock::saveFile(std::string filename)
 	}
 	outfile.close();
 	savedToDisk = true;
+
+	////if we cached it automatically, get rid of it. This is the new location.
+	//if (this->cached && this->filename.length() > 1)
+	//{
+	//	this->removeFile();
+	//}
+	this->filename = filename;
 	return;
 }
 void BitBlock::LoadFile(bool fullFile=true, bool unCompress=false)
 {
 	lock ompLock(this);
 	loadFile(fullFile,unCompress);
+}
+bool BitBlock::RemoveFile()
+{
+	lock ompLock(this);
+	return removeFile();
+}
+
+bool BitBlock::removeFile()
+{
+	// If the file doesn't exist, just returns false.  If it can't removed it, throws ans exception
+	try
+	{
+		boost::filesystem::remove(this->filename);
+
+	}
+	catch (std::exception)
+	{
+		return false;
+	}
+	this->savedToDisk = false;
+	return true;
 }
 void BitBlock::loadFile(bool fullFile, bool unCompress)
 {
