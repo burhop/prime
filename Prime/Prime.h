@@ -11,7 +11,7 @@
 	to an ever increasing list of blocks.  Note that PRIMEMAX must be devisible by 2,3, and 5 to keep blocks alligned.
 
 	This is currently limited to size_t (64 bits).  The plan is to extend thsi out to __int128 (128 bits) or use
-	one of the "infinite" bit classes for integers in some futer version.
+	one of the "infinite" bit classes for integers in some future version. 
 
 	Storage of the prime numbers, at least the initial numbers, is inefficient as a list.  Storage of a bit for each
 	number (true for prime) is initially more efficient.  This list of bits can be cut in 1/2 by only storing odd numbers.
@@ -20,13 +20,15 @@
 	eventually be the most effiecient for higher ranges. I invite anyone with a more efficient method let me know of
 	your solution so I can futher compress the data.
 
+	For version 0.8, this code was parallelized using OpenMP giving it a big speadup if you have multiple cores.
+
 	P.S. The most efficient way to store these numbers is to just store the algorithm.  However, we want to be able to
 	find the numbers in roughly constant time.
 
 	https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
 
 	@author Mark Burhop
-	@version 0.6 08/01/2020
+	@version 0.8 05/31/2021
 
 */
 class __declspec(dllexport)  Prime
@@ -124,27 +126,21 @@ private:
 	unsigned int threadSleep = 500; //Magic number of 0.5 seconds to pause if data not yet calculated (multi-thread only)
 	unsigned int threadCount = 0; 
 	size_t bitBlockSize=0;
-	// Number of blocks to keep in memory.  Depends on how much memory the computer has available.
-	//size_t cacheCount = 0;
-	//size_t max =  0;    // Can be up to 4294967280;
-	//mb size_t max2 = 0;    // don't need to save the even numbers
-	//mb size_t max3 = 0;    // don't need to save numbers divisible by 3
-	//mb size_t max5 = 0;    // don't need to save numbers divisible by 5
-	//size_t searchDisttance = 0;					   // Fartherest this class instance has search so far.
 	DataCacheManager *blockManager=nullptr;
 	//BitBlock* *arrayOfBlocks;
 	size_t contiguousBlocks=0;
 	bool saveIcrementalFiles = false;
 	bool verbose = false;
+
+#pragma warning( push )   
+#pragma warning( disable : 4251)
 	std::string baseFileName="primes";
+#pragma warning(pop)
 
-
-	//Private Functions
 	void findFirstBlockOFPrimes();
 	void updateContiguousBlocks();
 	size_t NextPrime(boost::dynamic_bitset<>* bSet, size_t index);
 	std::shared_ptr<BitBlock>  primeSieve(size_t block);
-	//int saveToFile(std::string baseName, size_t count);
 
 	//OpenOMP variables
 	size_t nextFreeBlockIndex;

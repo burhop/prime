@@ -26,10 +26,7 @@ public:
 	void SetComplete(bool);
 	/** gets the data status. If true, all the data is there and it can be moved in or out of memory/disk */
 	bool GetComplete();
-
-	
-	//const bool& operator[] (size_t) const;
-	
+	/**Sets the bit to the value you want */
 	void set(size_t index, bool val);
 
 	/** Same as opperator[] kept for campitibility for bitarray */
@@ -58,19 +55,19 @@ private:
 	size_t size;
 	size_t index;
 	size_t maxValue;
-	std::string filename;
 	bool complete; // true if all data has been added and will no longer be changed
 	bool cached;
 	bool compressed;
 	bool savedToDisk;  //if this block has been saved to disk already
 	std::vector<size_t>* cachedPrimes;
-	boost::dynamic_bitset<>* bits = nullptr;
-	boost::dynamic_bitset<> bDummy{ 2,2 };
 	omp_lock_t theLock;
 	//Compiler worries this vector might get passed out of the DLL. Turn this warning off
 #pragma warning( push )   
 #pragma warning( disable : 4251)
 	//std::vector<boost::dynamic_bitset<>*> vectorOfBitSets;       // Place to save our bitsets
+	std::string filename;
+	boost::dynamic_bitset<>* bits = nullptr;
+	boost::dynamic_bitset<> bDummy{ 2,2 };
 #pragma warning(pop)
 	void setFile(size_t& size, size_t& count, bool loadbits);
 	//Gets the actually number of bit in the bitset if it is compressed.
@@ -96,16 +93,6 @@ public:
 	lock(BitBlock* b)
 	{
 		block = b;
-
-#ifdef _DEBUG
-		{
-			//int num = omp_get_thread_num();
-			//std::cout << num << std::endl;
-
-			//Set the lock and checks the result
-		}
-#endif
-
 		omp_set_lock(&(block->theLock));
 	}
 

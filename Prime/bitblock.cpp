@@ -8,8 +8,6 @@
 #include <cstdio>
 #include <omp.h>
 
-// [[ omp::sequence(directive(parallel), directive(for)) ]] 
-
 BitBlock::BitBlock(std::string file, bool cache, size_t inputSize)
 {
 	//Multiple threads may access this object at the same time. Be able to lock it.
@@ -48,7 +46,7 @@ BitBlock::BitBlock(size_t s, size_t i)
 	//block off the full size
 	bits = new boost::dynamic_bitset(size);
 	bits->set();
-	//Initially start in memory, so cached =true even though ti is blank
+	//Initially start in memory, so cached =true even though it is blank
 	cached = true;
 	//No data yet so complete=false
 	complete = false;
@@ -83,13 +81,10 @@ size_t BitBlock::GetLastValue()
 	return (index + 1)* size - 1;
 }
 
-//TODO  Test is if is faster to do this or just have the whole array in memory
-
 // you can't use bool here because the setter won't work. This is because bitsets don't return a bool but a proxy
 boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 {
 	lock ompLock(this);
-//#pragma omp critical
 	{
 		return getAtIndex(loc);
 	}
@@ -126,8 +121,6 @@ boost::dynamic_bitset<>::reference BitBlock::getAtIndex(size_t loc)
 			}
 			return bDummy[0];
 		}
-		//bool x = (*bits)[loc];
-		//size_t number = loc + 1;
 		return (*bits)[loc];
 	}
 }
@@ -135,32 +128,6 @@ boost::dynamic_bitset<>::reference BitBlock::getAtIndex(size_t loc)
 
 void BitBlock::set(size_t loc, bool val)
 {
-	//lock ompLock(this);
-	//if (!this->cached)
-	//{		
-	//	this->LoadFile(true, true);
-	//	//throw std::exception("Data must be loaded into memory for access. Start with a new object or Call Cache() or LoadFile().");
-
-	//}
-	//if (this->compressed)
-	//{
-	//	if (this->index == 0)
-	//	{
-	//		//this rpresents 2,3,and 5 which are not saved in compressed data.  They will always be true;
-	//		if (loc == 1 || loc == 2 || loc == 4) return;
-	//	}
-	//	size_t index = loc + 1;
-	//	if (index % 2 && index % 3 && index % 5)
-	//	{
-	//		size_t idx = index + index / 6 + index / 10 + index / 15 - index / 2 - index / 3 - index / 5 - index / 30 - 1;
-	//		this->bits->set(idx, val);
-	//	}
-	//	else
-	//	{
-	//		//do nothing as it is divisible by 2, 3, or 5.  It will always return 0 from the compressed data.
-	//	}
-	//}
-
  	this->bits->set(loc, val);
 }
 bool BitBlock::test(size_t index)
@@ -180,9 +147,7 @@ void BitBlock::SaveFile(std::string filename)
 {
 	lock ompLock(this);
 	std::string orginalName;
-	//std::cout << "saving " << filename;
 	saveFile(filename);
-	//std::cout << " ...saved\n";
 }
 void BitBlock::saveFile(std::string filename)
 {
@@ -213,7 +178,6 @@ void BitBlock::saveFile(std::string filename)
 			else
 			{
 				v = bits->test(i + c) << c;
-				//printf("%d", (bitss->test(i + c)) ? 1 : 0);
 			}
 			buffer = buffer + v; //set one bit at a time
 		}
@@ -222,12 +186,6 @@ void BitBlock::saveFile(std::string filename)
 	}
 	outfile.close();
 	savedToDisk = true;
-
-	////if we cached it automatically, get rid of it. This is the new location.
-	//if (this->cached && this->filename.length() > 1)
-	//{
-	//	this->removeFile();
-	//}
 	this->filename = filename;
 	return;
 }
@@ -293,9 +251,7 @@ void BitBlock::loadFile(bool fullFile, bool unCompress)
 		InFile.close();
 		return;
 	}
-
 	// We want to cache the file so bring it into memory as a bitset
-
 	//Allocate memory 
 	size_t bitsetsize = getBitsetSize(size);   
 	//do it on the heap to avoid stack issues
@@ -305,10 +261,7 @@ void BitBlock::loadFile(bool fullFile, bool unCompress)
 		throw "Atempting to load file data into an existing structure. This will result in a Memory Leak";
 	}
 
-//#pragma omp critical 
-	{
-		this->bits = new boost::dynamic_bitset(bitsetsize);
-	}
+	this->bits = new boost::dynamic_bitset(bitsetsize);
 
 	char buffer = 0;
 	for (size_t i = 0; i <= bitsetsize / 8; i++)
@@ -374,57 +327,47 @@ void BitBlock::Cache()
 	//Turn on the cached flag and load the data
 #pragma omp critical 
 	{
-		//this->cached = true;
 		this->loadFile(true,true);
-		//this->uncompressBitSet();
 	}
 }
 
 std::vector<size_t> BitBlock::GetPrimes()
 {
 	lock ompLock(this);
-	//We can't have multiple threads building this at the same time.
-
-
-//#pragma omp critical(GetPrimes)
-	{
 		//lock ompLock(this);
-		if (!cachedPrimes)
-		{
-			//Calculate the primes
+	if (!cachedPrimes)
+	{
+		//Calculate the primes
 
-			if (!this->cached)
-			{
-				this->loadFile(true, true);
-			}
-			std::vector<size_t> listOfPrimes;
-			//2,3,5 are removed from compressed list.  Need to add them back
-			if (compressed && (this->index == 0))
-			{
-				listOfPrimes.push_back(2);
-				listOfPrimes.push_back(3);
-				listOfPrimes.push_back(5);
-			}
-			for (size_t count = 0; count < this->size; count++)
-			{
-				bool isPrime = getAtIndex(count);
-				if (isPrime)
-				{
-					listOfPrimes.push_back(this->index * this->size + count + 1);
-				}
-			}
-			this->cachedPrimes = new std::vector<size_t>(listOfPrimes);
+		if (!this->cached)
+		{
+			this->loadFile(true, true);
 		}
+		std::vector<size_t> listOfPrimes;
+		//2,3,5 are removed from compressed list.  Need to add them back
+		if (compressed && (this->index == 0))
+		{
+			listOfPrimes.push_back(2);
+			listOfPrimes.push_back(3);
+			listOfPrimes.push_back(5);
+		}
+		for (size_t count = 0; count < this->size; count++)
+		{
+			bool isPrime = getAtIndex(count);
+			if (isPrime)
+			{
+				listOfPrimes.push_back(this->index * this->size + count + 1);
+			}
+		}
+		this->cachedPrimes = new std::vector<size_t>(listOfPrimes);
 	}
 	return *cachedPrimes;
 }
 
 void BitBlock::Compress()
 {
-
 	lock ompLock(this);
 	this->compressBitSet();
-
 }
 
 void BitBlock::Uncompress()
@@ -463,7 +406,6 @@ void BitBlock::setMaxValue()
 		}
 	}
 	maxValue = 0;
-				
 }
 
 size_t BitBlock::getBitsetSize(size_t dataSize) {

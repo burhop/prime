@@ -19,7 +19,7 @@ int main()
 			try {
 				p = new Prime("Prime100000020-", 0, 800);
 			}
-			catch (std::exception & e)
+			catch (std::exception)
 			{
 				//no existing files found we need to start new
 				std::cout << "No existing data found. Starting prime search from 0\n";

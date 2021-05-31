@@ -8,7 +8,6 @@ DataCacheManager::DataCacheManager(size_t blockcount,size_t maximumInMemory)
 {
 	this->blockCount = blockcount;
 	this->maximumBlocksInMemory = maximumInMemory;
-	//arrayOfBlocks = new BitBlock * [blockCount]();  //Allocate an array of pointers and initialize them to 0.
 	arrayOfBlocks = new std::shared_ptr<BitBlock> [blockCount]();  //Allocate an array of pointers and initialize them to 0.
 	//initializes the OMP lock, does not lock or unlock
 	omp_init_lock(&theLock);
@@ -38,28 +37,26 @@ bool DataCacheManager::BlockExists(size_t block)
 // A simple cache that removes the last accessed BitArray if we are out of space
 void DataCacheManager::updateCache(size_t loc)
 {
-	//DataCacheManagerLock Lock(this);
 
-	//#pragma omp critical(DataCacheManagerUpdate)
+
+	// if we are updating the Cache but the new block is not in memory do nothing.
+	if (this->arrayOfBlocks[loc]->InMemory() == false)
 	{
-		// if we are updating the Cache but the new block is not in memory do nothing.
-		if (this->arrayOfBlocks[loc]->InMemory() == false)
-		{
-			return;
-		}
-		//remove it from the list, as we will be re adding it to the back.
-		this->listOfBlocks.remove(loc);
-		this->listOfBlocks.push_back(loc);
-		cleanCache();
+		return;
 	}
+	//remove it from the list, as we will be re adding it to the back.
+	this->listOfBlocks.remove(loc);
+	this->listOfBlocks.push_back(loc);
+	cleanCache();
+
 }
 void DataCacheManager::cleanCache()
 {
-	//##### issue!   ListOFBlocks is changing (it was size 12 to start and size 10 with bad data in line 61)
 	auto blockCount = this->listOfBlocks.size();
 	long count = (long) (blockCount - this->maximumBlocksInMemory);
 	if (count < 1)return;
 	auto tempList = this->listOfBlocks;
+
 	//We will try to remove 'count' blocks
 	for (auto const& i :tempList)
 	{
@@ -81,15 +78,13 @@ std::shared_ptr<BitBlock> DataCacheManager::get(size_t loc)
 {
 	DataCacheManagerLock Lock(this);
 
-//#pragma omp critical(DataCacheManager)
+
+	// if our smart pointer exists but it is not in memory, load it
+	if (arrayOfBlocks[loc] != 0 && !arrayOfBlocks[loc]->InMemory())
 	{
-		// if our smart pointer exists but it is not in memory, load it
-		if (arrayOfBlocks[loc] != 0 && !arrayOfBlocks[loc]->InMemory())
-		{
-			(arrayOfBlocks[loc])->Cache();
-			//since we are loading a new block of primes, we need to update our list of loaded blocks and possibly unload if we are at the max
-			updateCache(loc);
-		}
+		(arrayOfBlocks[loc])->Cache();
+		//since we are loading a new block of primes, we need to update our list of loaded blocks and possibly unload if we are at the max
+		updateCache(loc);
 	}
 	return this->arrayOfBlocks[loc];
 }
@@ -97,7 +92,6 @@ std::shared_ptr<BitBlock> DataCacheManager::get(size_t loc)
 void DataCacheManager::set(std::shared_ptr<BitBlock> obj, size_t idx)
 {
 	DataCacheManagerLock Lock(this);
-//#pragma omp critical(DataCacheManager2)
 	{
 		this->arrayOfBlocks[idx] = obj;
 		this->updateCache(idx);
@@ -108,29 +102,26 @@ void DataCacheManager::PrintStatus()
 {
 	DataCacheManagerLock Lock(this);
 
-//#pragma omp critical(print3)
-	{
-
-		std::cout << "DataCache maximum blocks " << this->maximumBlocksInMemory << std::endl;
-		std::cout << "list of Blocks that are in memory ";
-		for (auto const& i : this->listOfBlocks) {
-			std::cout << i << " ";
-		}
-		std::cout << std::endl;
-		std::cout << "Blocks used ___________________" << std::endl;
-		size_t count = 0;
-		for (size_t i = 0; i < this->blockCount; ++i)
-		{
-			if (arrayOfBlocks[i] != 0 && arrayOfBlocks[i]->InMemory())
-			{
-				std::cout << "block " << i << " has refcount : " << arrayOfBlocks[i].use_count() << std::endl;
-				count++;
-			}
-			else if (arrayOfBlocks[i] != 0)
-			{
-				//std::cout << "block" << i << " not in memory" << std::endl;
-			}
-		}
-		std::cout << "blocks in memory: " << count << std::endl;
+	std::cout << "DataCache maximum blocks " << this->maximumBlocksInMemory << std::endl;
+	std::cout << "list of Blocks that are in memory ";
+	for (auto const& i : this->listOfBlocks) {
+		std::cout << i << " ";
 	}
+	std::cout << std::endl;
+	std::cout << "Blocks used ___________________" << std::endl;
+	size_t count = 0;
+	for (size_t i = 0; i < this->blockCount; ++i)
+	{
+		if (arrayOfBlocks[i] != 0 && arrayOfBlocks[i]->InMemory())
+		{
+			std::cout << "block " << i << " has refcount : " << arrayOfBlocks[i].use_count() << std::endl;
+			count++;
+		}
+		else if (arrayOfBlocks[i] != 0)
+		{
+			//std::cout << "block" << i << " not in memory" << std::endl;
+		}
+	}
+	std::cout << "blocks in memory: " << count << std::endl;
+
 }

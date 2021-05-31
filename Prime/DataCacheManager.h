@@ -5,29 +5,6 @@
 
 class DataCacheManager
 {
-	//struct proxy
-	//{
-	//	DataCacheManager* cache;
-	//	size_t pos;
-
-	//	proxy(DataCacheManager* us, size_t position)
-	//		: cache(us), pos(position)
-	//	{}
-
-	//	// Invoked when proxy is used to modify the value.
-	//	void operator = (const std::shared_ptr<BitBlock>& block)
-	//	{
-	//		cache->set(block, pos);
-
-	//	}
-
-	//	// Invoked when proxy is used to read the value.
-	//	operator const std::shared_ptr<BitBlock>& () const
-	//	{
-	//		return cache->get(pos);
-	//	}
-	//};
-
 public:
 	/**
 	A class for managing blocks of prime numbers.  The blocks are BitBlocks and tracked via reference counting.
@@ -40,10 +17,6 @@ public:
 	/** Creates an empty BitBlock of a given size and stores a pointer to it at the index location provided*/
 	std::shared_ptr<BitBlock> MakeBitBlock(size_t size, size_t index);
 	~DataCacheManager();
-	//BitBlock*& operator[] (size_t);
-	/** Sets or accesses the bit at the location provided. If the data is on disk, it will be cached in memory as it assumes you will access more bits in this block */
-
-	//std::shared_ptr<BitBlock>& operator[] (size_t);
 	/** checks the pointer for a block to see if it exists.  */
 	bool BlockExists(size_t block);
 
