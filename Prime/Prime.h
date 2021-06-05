@@ -46,8 +46,6 @@ public:
 	Prime(size_t bitsetSize=0xFFFFFFF0,unsigned int numberOfThreads=0, unsigned int numberOfBlocksToKeepInMemory=10);
 	/** Creates the class instance using existing data.  If one or more files do not exist, an exception is thrown. */
 	Prime(std::string baseName, unsigned int numberOfThreads = 0, unsigned int numberOfBlocksToKeepInMemory = 10);
-	/** Continously calculates primes.  For version 0.4, we are limited by size_t */
-	//int ContinousRun(std::string baseName,size_t blocksize);
 	/** Destructor */
 	~Prime();
 	/** Sets the base file name if the data is written to disk. The default is "prime" and file names would be "prime0.prm", "prime1.prm" and so on */
