@@ -81,22 +81,22 @@ private:
 	void loadFile(bool,bool);
 	void saveFile(std::string);
 
-	friend class lock;
+	friend class BitBlockLock;
 };
 
-//just a simple lock class so losing scope will unlock
-class lock
+/** just a simple lock class for OpenMP so losing scope will unlock */
+class BitBlockLock
 {
 private:
 	BitBlock* block;
 public:
-	lock(BitBlock* b)
+	BitBlockLock(BitBlock* b)
 	{
 		block = b;
 		omp_set_lock(&(block->theLock));
 	}
 
-	~lock()
+	~BitBlockLock()
 	{
 		omp_unset_lock(&(block->theLock));
 	}

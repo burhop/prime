@@ -84,7 +84,7 @@ size_t BitBlock::GetLastValue()
 // you can't use bool here because the setter won't work. This is because bitsets don't return a bool but a proxy
 boost::dynamic_bitset<>::reference BitBlock::operator[](size_t loc)
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	{
 		return getAtIndex(loc);
 	}
@@ -132,7 +132,7 @@ void BitBlock::set(size_t loc, bool val)
 }
 bool BitBlock::test(size_t index)
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	if (!this->cached)
 	{
 		throw std::exception("Data must be loaded into memory for access.  Call Cache() or LoadFile().");
@@ -145,7 +145,7 @@ bool BitBlock::test(size_t index)
 }
 void BitBlock::SaveFile(std::string filename)
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	std::string orginalName;
 	saveFile(filename);
 }
@@ -191,12 +191,12 @@ void BitBlock::saveFile(std::string filename)
 }
 void BitBlock::LoadFile(bool fullFile=true, bool unCompress=false)
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	loadFile(fullFile,unCompress);
 }
 bool BitBlock::RemoveFile()
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	return removeFile();
 }
 
@@ -302,7 +302,7 @@ void BitBlock::loadFile(bool fullFile, bool unCompress)
 //Clears the memory for the bitset.  Note that it is not thread safe so be careful if you have multiple threads with access to this object.
 void BitBlock::UnCache()
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 
 	//if it is not in memory already, nothing to do
 	if (cached == false) return;
@@ -320,7 +320,7 @@ void BitBlock::UnCache()
 }
 void BitBlock::Cache()
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	//since multithreaded, could have paused at lock due to other call cacheing.
 	if (filename.empty())
 		throw std::exception("No filename for this data exists. Don't know where to load data from.");
@@ -333,7 +333,7 @@ void BitBlock::Cache()
 
 std::vector<size_t> BitBlock::GetPrimes()
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 		//lock ompLock(this);
 	if (!cachedPrimes)
 	{
@@ -366,13 +366,13 @@ std::vector<size_t> BitBlock::GetPrimes()
 
 void BitBlock::Compress()
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	this->compressBitSet();
 }
 
 void BitBlock::Uncompress()
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	if (this->cached)
 	{
 		this->uncompressBitSet();
@@ -386,12 +386,12 @@ void BitBlock::Uncompress()
 
 size_t BitBlock::GetMaxValue()
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	return this->maxValue;
 }
 bool BitBlock::InMemory()
 {
-	lock ompLock(this);
+	BitBlockLock ompLock(this);
 	return this->cached;
 }
 void BitBlock::setMaxValue()
