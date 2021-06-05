@@ -39,6 +39,8 @@ private:
 	friend class DataCacheManagerLock;
 
 };
+
+/** just a simple lock class for OpenMP so losing scope will unlock */
 class DataCacheManagerLock
 {
 private:
