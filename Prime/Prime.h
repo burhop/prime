@@ -1,6 +1,8 @@
 #pragma once
 /** \file Prime.h
-	\brief The hearder needed to generate and operate on prime numbers
+	\brief The hearder needed to generate and operate on prime numbers.
+
+	See the Prime class for more information.
 */
 #include <string>
 #include <vector>
