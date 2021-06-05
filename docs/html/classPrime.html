@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo2.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">prime
-   &#160;<span id="projectnumber">0.3</span>
+   &#160;<span id="projectnumber">0.4</span>
    </div>
    <div id="projectbrief">Prime Number Generation</div>
   </td>
@@ -72,16 +72,21 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>This is the main C++ high level class if you want to generate and operate on prime numbers.  
+ <a href="classPrime.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="Prime_8h_source.html">Prime.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa4ce487e0ba45ead90644f454af40237"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#aa4ce487e0ba45ead90644f454af40237">Prime</a> (size_t bitsetSize=0xFFFFFFF0)</td></tr>
-<tr class="separator:aa4ce487e0ba45ead90644f454af40237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af844aeb8495bd17b17cef8b96212881e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#af844aeb8495bd17b17cef8b96212881e">ContinousRun</a> (std::string baseName)</td></tr>
-<tr class="separator:af844aeb8495bd17b17cef8b96212881e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac22a38b8817dd8d36cb7f6575a9b0ffd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#ac22a38b8817dd8d36cb7f6575a9b0ffd">Prime</a> (size_t bitsetSize=0xFFFFFFF0, unsigned int numberOfThreads=0, unsigned int numberOfBlocksToKeepInMemory=10)</td></tr>
+<tr class="separator:ac22a38b8817dd8d36cb7f6575a9b0ffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f0f8c7e05337c05ade7c5ef3467eba6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#a4f0f8c7e05337c05ade7c5ef3467eba6">Prime</a> (std::string baseName, unsigned int numberOfThreads=0, unsigned int numberOfBlocksToKeepInMemory=10)</td></tr>
+<tr class="separator:a4f0f8c7e05337c05ade7c5ef3467eba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65f756fa64961033ddf1075c17aaa8de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#a65f756fa64961033ddf1075c17aaa8de">~Prime</a> ()</td></tr>
 <tr class="separator:a65f756fa64961033ddf1075c17aaa8de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadf8f8ea4876755a9ed523a93e50e0c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#aadf8f8ea4876755a9ed523a93e50e0c4">SetBaseName</a> (std::string basename)</td></tr>
+<tr class="separator:aadf8f8ea4876755a9ed523a93e50e0c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bc658a0531e8672da6417eb6a3dfddc"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#a6bc658a0531e8672da6417eb6a3dfddc">GetBitBlockSize</a> ()</td></tr>
 <tr class="separator:a6bc658a0531e8672da6417eb6a3dfddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad439e13bab66ff6123908e2c66719016"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#ad439e13bab66ff6123908e2c66719016">SaveIncrementalFiles</a> (bool b=true)</td></tr>
@@ -108,18 +113,28 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a592cae91bd34b9a588b67e7f4d9347b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2069bb5ff266090b4f3460afbceee3f"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#ab2069bb5ff266090b4f3460afbceee3f">CountPrimes</a> (size_t lowVal, size_t highVal)</td></tr>
 <tr class="separator:ab2069bb5ff266090b4f3460afbceee3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bd5d749cb25d87c9d3378f736da7b9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#a4bd5d749cb25d87c9d3378f736da7b9a">Compress</a> ()</td></tr>
+<tr class="separator:a4bd5d749cb25d87c9d3378f736da7b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8345c4a79b3d1179b915d6b905b08fd1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#a8345c4a79b3d1179b915d6b905b08fd1">Uncompress</a> ()</td></tr>
+<tr class="separator:a8345c4a79b3d1179b915d6b905b08fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8689241b1e5be058a38b8e5ea2cc0032"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#a8689241b1e5be058a38b8e5ea2cc0032">SetVerbose</a> (bool val)</td></tr>
+<tr class="separator:a8689241b1e5be058a38b8e5ea2cc0032"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fdbf9cb4ef922e2a1e304ff88677e9b"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPrime.html#a1fdbf9cb4ef922e2a1e304ff88677e9b">GetThreadCount</a> ()</td></tr>
+<tr class="separator:a1fdbf9cb4ef922e2a1e304ff88677e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This class is for calculating and storing prime numbers. It uses the Sieve of Eratosthenes to mark bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve to an ever increasing list of blocks. Note that PRIMEMAX must be devisible by 2,3, and 5 to keep blocks alligned.</p>
-<p>For version 0.3, it is limited to size_t (64 bits). The plan is to extend thsi out to __int128 (128 bits) or use one of the "infinite" bit classes for integers in some futer versio0.</p>
+<div class="textblock"><p>This is the main C++ high level class if you want to generate and operate on prime numbers. </p>
+<p>This class is for calculating and storing prime numbers. It uses the Sieve of Eratosthenes to mark bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve to an ever increasing list of blocks. Note that PRIMEMAX must be devisible by 2,3, and 5 to keep blocks alligned.</p>
+<p>This is currently limited to size_t (64 bits). The plan is to extend thsi out to __int128 (128 bits) or use one of the "infinite" bit classes for integers in some future version.</p>
 <p>Storage of the prime numbers, at least the initial numbers, is inefficient as a list. Storage of a bit for each number (true for prime) is initially more efficient. This list of bits can be cut in 1/2 by only storing odd numbers. It can be further cut by 1/3 by eliminating numbers divisible by 3, 1/5 by eliminating numbers devisible by 5 and so on. Since future cuts beyond 5 give diminishing returns, version 0.1 stops here. I hypothosize that a list of numbers will eventually be the most effiecient for higher ranges. I invite anyone with a more efficient method let me know of your solution so I can futher compress the data.</p>
+<p>For version 0.8, this code was parallelized using OpenMP giving it a big speadup if you have multiple cores.</p>
 <p>P.S. The most efficient way to store these numbers is to just store the algorithm. However, we want to be able to find the numbers in roughly constant time.</p>
 <p><a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes</a></p>
 <dl class="section author"><dt>Author</dt><dd>Mark Burhop </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.3 11/01/2019 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.8 05/31/2021 </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa4ce487e0ba45ead90644f454af40237"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4ce487e0ba45ead90644f454af40237">&#9670;&nbsp;</a></span>Prime()</h2>
+<a id="ac22a38b8817dd8d36cb7f6575a9b0ffd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac22a38b8817dd8d36cb7f6575a9b0ffd">&#9670;&nbsp;</a></span>Prime() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -128,12 +143,71 @@ Public Member Functions</h2></td></tr>
           <td class="memname">Prime::Prime </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>bitsetSize</em> = <code>0xFFFFFFF0</code></td><td>)</td>
+          <td class="paramname"><em>bitsetSize</em> = <code>0xFFFFFFF0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>numberOfThreads</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>numberOfBlocksToKeepInMemory</em> = <code>10</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Constructor. By default block size will be 0xFFFFFFF0 </p>
+<p>Constructor. By default block size will be 0xFFFFFFF0 </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">bitsetSize=</td><td>The number of bits in each block of data. THe maxium value is 0xFFFFFFF0. Needs to be increments of 30. Default is 100,000,020. </td></tr>
+    <tr><td class="paramname">numberofThreads</td><td>- 0 means to use the number of cores your CPU has. </td></tr>
+    <tr><td class="paramname">numberOfBlocksToKeepInMemory</td><td>- THe more memory you have, the higher this can be. Default is 10.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Using all defaults, the software will use all the cores on your CPU, use 2-3 gig of memory, and create files of about 30 megabytes. </p>
+
+</div>
+</div>
+<a id="a4f0f8c7e05337c05ade7c5ef3467eba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f0f8c7e05337c05ade7c5ef3467eba6">&#9670;&nbsp;</a></span>Prime() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Prime::Prime </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>baseName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>numberOfThreads</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>numberOfBlocksToKeepInMemory</em> = <code>10</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates the class instance using existing data. If one or more files do not exist, an exception is thrown. </p>
 
 </div>
 </div>
@@ -156,22 +230,21 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af844aeb8495bd17b17cef8b96212881e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af844aeb8495bd17b17cef8b96212881e">&#9670;&nbsp;</a></span>ContinousRun()</h2>
+<a id="a4bd5d749cb25d87c9d3378f736da7b9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bd5d749cb25d87c9d3378f736da7b9a">&#9670;&nbsp;</a></span>Compress()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Prime::ContinousRun </td>
+          <td class="memname">void Prime::Compress </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>baseName</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Continously calculates primes. For version 0.3, we are limited by size_t </p>
+<p>compresses the data so that less memory is used </p>
 
 </div>
 </div>
@@ -391,6 +464,32 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a1fdbf9cb4ef922e2a1e304ff88677e9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fdbf9cb4ef922e2a1e304ff88677e9b">&#9670;&nbsp;</a></span>GetThreadCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int Prime::GetThreadCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>returns the number of threads to be used. If not specified in the constructor, std::thread::hardware_concurrency() is used to check the logical number available. </p>
+
+</div>
+</div>
 <a id="aaf3cdeb13b463d52685f22df28cf7750"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf3cdeb13b463d52685f22df28cf7750">&#9670;&nbsp;</a></span>LoadFromFile()</h2>
 
@@ -463,6 +562,44 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aadf8f8ea4876755a9ed523a93e50e0c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadf8f8ea4876755a9ed523a93e50e0c4">&#9670;&nbsp;</a></span>SetBaseName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Prime::SetBaseName </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>basename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the base file name if the data is written to disk. The default is "prime" and file names would be "prime0.prm", "prime1.prm" and so on </p>
+
+</div>
+</div>
+<a id="a8689241b1e5be058a38b8e5ea2cc0032"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8689241b1e5be058a38b8e5ea2cc0032">&#9670;&nbsp;</a></span>SetVerbose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Prime::SetVerbose </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Tells class to output timing information to standard output. Useful for seeing how fast the code is running. </p>
+
+</div>
+</div>
 <a id="ae65f3e9ba1c1dabd836eefa3dfc19256"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae65f3e9ba1c1dabd836eefa3dfc19256">&#9670;&nbsp;</a></span>Sqrt()</h2>
 
@@ -479,6 +616,24 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Efficient integer based square root fuction for size_t integers. It will be &lt;= the floating point square root </p><dl class="section return"><dt>Returns</dt><dd>An size_t integer that is less than or equal to the floating point square root function </dd></dl>
+
+</div>
+</div>
+<a id="a8345c4a79b3d1179b915d6b905b08fd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8345c4a79b3d1179b915d6b905b08fd1">&#9670;&nbsp;</a></span>Uncompress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Prime::Uncompress </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>uncompresses the data </p>
 
 </div>
 </div>

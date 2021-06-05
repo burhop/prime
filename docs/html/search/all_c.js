@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['prime_91',['prime',['../md__d_1_development_repos_prime__r_e_a_d_m_e.html',1,'']]],
-  ['pluralise_92',['pluralise',['../struct_catch_1_1pluralise.html',1,'Catch']]],
-  ['predicatematcher_93',['PredicateMatcher',['../class_catch_1_1_matchers_1_1_generic_1_1_predicate_matcher.html',1,'Catch::Matchers::Generic']]],
-  ['prime_94',['Prime',['../class_prime_image_1_1_prime.html',1,'PrimeImage.Prime'],['../class_prime.html',1,'Prime'],['../class_prime.html#aa4ce487e0ba45ead90644f454af40237',1,'Prime::Prime()']]]
+  ['uncache_41',['UnCache',['../classBitBlock.html#a19dcd09bfd45cb36930999b336021d7d',1,'BitBlock']]],
+  ['uncompress_42',['Uncompress',['../classPrime.html#a8345c4a79b3d1179b915d6b905b08fd1',1,'Prime::Uncompress()'],['../classBitBlock.html#ae77aa3bbf686a192ccefb2afe4190d27',1,'BitBlock::Uncompress()']]]
 ];

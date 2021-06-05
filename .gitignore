@@ -237,3 +237,8 @@ paket-files/
 # doxygen folders
 #html/
 #latex/
+
+#Don't check in PRM files
+*.prm
+*.dll
+*.exe

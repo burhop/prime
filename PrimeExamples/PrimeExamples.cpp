@@ -36,7 +36,46 @@ Primes Found : 8408427012
 #include <iostream>
 #include <vector>
 #include <bitset>
+#include <fstream> 
+#include <boost/format.hpp>
 const size_t arraySize = 0xFFFFFFF0;
+void CreatePrimeMetaData()
+{
+	size_t size = 1000;
+	size_t index = 1000;
+	std::ofstream outfile;
+	std::string filename ="PrimeMeta.txt";
+	outfile.open(filename, std::ios::out | std::ios::binary);
+
+	
+	//std::cout << boost::format("#1.0 %16i %16i %16i") % size % index % 0xFFFFFFF0;
+	Prime prime("Prime100000020-", 0, 2);
+	std::cout << "All files counted." << std::endl;
+	size_t numbersPerBlock = prime.GetBitBlockSize();
+	size_t maxValue = prime.GetMaxValue();
+	size_t numberOfBlocks = maxValue / numbersPerBlock;
+	size_t totalCount = 0;
+	for (size_t i = 0; i < numberOfBlocks; ++i)
+	{
+		size_t start = i * numbersPerBlock;
+		size_t end = start + numbersPerBlock;
+		size_t count = prime.CountPrimes(start,end);
+		totalCount = totalCount + count;
+		std::cout << "block " << i << " of " << numberOfBlocks << std::endl;
+		outfile << boost::format("%16i %16i %16i %16i %16i\n") % i % start % end % count % totalCount; 
+		std::cout << boost::format(" %16i %16i %16i %16i\n") % start % end % count % totalCount;
+		//std::cout << start << "\t - " << end << "\t" << count << std::endl;
+
+		std::cout << "total primes less than " << end << "\t " << totalCount << std::endl;
+	}
+
+	//prime.LoadFromFile("RunRunRun");
+	//size_t bitsPerBlock = prime.GetBitBlockSize();
+	outfile.close();
+}
+
+
+
 int main(int argc, char*argv[])
 {
 	//Create our Instance
@@ -44,10 +83,11 @@ int main(int argc, char*argv[])
 	std::cout << " Selection Option: \n";
 	std::cout << "     1 - find and count primes \n";
 	std::cout << "     2 - read existing files and count primes. \n";
+	std::cout << "     3 - Create metadata on files. \n";
 
 	int opt;
-	std::cin >> opt;
-
+	//std::cin >> opt;
+	opt = 3;
 	if (opt == 1)
 	{
 
@@ -122,16 +162,20 @@ int main(int argc, char*argv[])
 		std::cout << "Largest prime : " << prime.GetMaxPrime() << std::endl;
 		std::cout << "Total primes Found  : " << prime.GetMaxCount() << std::endl;
 		std::cout << "0-1000 : " << prime.CountPrimes(0, 1000) << std::endl;
-		std::cout << "0-10000 : " << prime.CountPrimes(0, 10000) << std::endl;
-		std::cout << "0-100000 : " << prime.CountPrimes(0, 100000) << std::endl;
-		std::cout << "0-1000000 : " << prime.CountPrimes(0, 1000000) << std::endl;
-		std::cout << "0-10000000 : " << prime.CountPrimes(0, 10000000) << std::endl;
-		std::cout << "0-100000000 : " << prime.CountPrimes(0, 100000000) << std::endl;
-		std::cout << "0-1000000000 : " << prime.CountPrimes(0, 1000000000) << std::endl;
-		std::cout << "0-10000000000 : " << prime.CountPrimes(0, 10000000000) << std::endl;
-		std::cout << "0-100000000000 : " << prime.CountPrimes(0, 100000000000) << std::endl;
-		std::cout << "0-1000000000000 : " << prime.CountPrimes(0, 1000000000000) << std::endl;
-		std::cout << "0-10000000000000 : " << prime.CountPrimes(0, 10000000000000) << std::endl;
+		std::cout << "0-10,000 : " << prime.CountPrimes(0, 10000) << std::endl;
+		std::cout << "0-100,000 : " << prime.CountPrimes(0, 100000) << std::endl;
+		std::cout << "0-1,000,000 : " << prime.CountPrimes(0, 1000000) << std::endl;
+		std::cout << "0-10,000,000 : " << prime.CountPrimes(0, 10000000) << std::endl;
+		std::cout << "0-100,000,000 : " << prime.CountPrimes(0, 100000000) << std::endl;
+		std::cout << "0-1,000,000,000 : " << prime.CountPrimes(0, 1000000000) << std::endl;
+		std::cout << "0-10,000,000,000 : " << prime.CountPrimes(0, 10000000000) << std::endl;
+		std::cout << "0-100,000,000,000 : " << prime.CountPrimes(0, 100000000000) << std::endl;
+		std::cout << "0-1,000,000,000,000 : " << prime.CountPrimes(0, 1000000000000) << std::endl;
+		std::cout << "0-10,000,000,000,000 : " << prime.CountPrimes(0, 10000000000000) << std::endl;
+	}
+	else if (opt == 3)
+	{
+		CreatePrimeMetaData();
 	}
 return 0;
 }

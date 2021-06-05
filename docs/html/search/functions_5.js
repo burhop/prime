@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['prime_27',['Prime',['../classPrime.html#aa4ce487e0ba45ead90644f454af40237',1,'Prime']]]
+  ['inmemory_72',['InMemory',['../classBitBlock.html#ac0d95310924aa0c9e0e7f89e5b659433',1,'BitBlock']]]
 ];

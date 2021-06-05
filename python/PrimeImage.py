@@ -1,8 +1,16 @@
+"""@package docstring Experimental Python
+"""
+# Useful code for Image Creation
 from PIL import Image
+# Useful code for creating SVG files
 import svgwrite
 import sys
 import struct
+# Something to measure speed of code.
+import time
+## Experimental Python class  for image creation, parcing .prm files, etc.
 class Prime:
+    """Experimental Python class for image creation, parcing .prm files, etc."""
     #Initializer / Instance Attributes
     def __init__(self): 
         #initalize the list with 2,3,5  
@@ -31,7 +39,7 @@ class Prime:
         #we need to know this as there may be some buffer bits in the last byte that should be ignored. 
         #We can't just read until the end of the file
         self.maxValue= bitsInFile*5*3*2//8
-
+        self.maxValue=400000000
         #Start counting until we get to maxValue
         count = 6
         #start with no bitcount so that we will read a byte first time through
@@ -174,7 +182,7 @@ class Prime:
         j=y
         count=0
         while True:
-            img.putpixel((i,j),(255,90,255))
+            img.putpixel((i,j),(0,0,255))
             i=i+xstep
             j=j+ystep
             count=count +1
@@ -229,10 +237,10 @@ class Prime:
         #path now contains a list of command to go right, up, left, or down
         path=self.GetSpiralPath()
         pathIndex=0
-        i=(self.iSqrt(self.maxValue)+1)//2  # set it to the center of the grid
+        i=(self.iSqrt(self.maxValue)+1)//2-1  # set it to the center of the grid
         j=i
         count=0
-        img = Image.new( 'RGB', (i*2+4,j*2+4), "blue") # create a new black image
+        img = Image.new( 'RGB', (i*2+2,j*2+2), "blue") # create a new black image
         pixels = img.load() # create the pixel map
         for k in range(start-1,self.maxValue,step):
         #for k in range(start-1,29928,step):
@@ -364,14 +372,23 @@ print("c = ", c)
 def main():
     #bits(open('myPrimes1.prm', 'rb'))
     prime = Prime()
+    print("loading primes")
+    t1=time.perf_counter()
     prime.LoadPrimes('myPrimes1.prm')
+    t2=time.perf_counter()
+    print ("Time to Load: "+ str(t2-t1))
     #prime.SaveSpiralSVG('primesSkip.svg',41,1,20)
-    for i in range(49):
+    for i in range(1000):
+        t3=time.perf_counter()
         img=prime.GetSpiralImage(i,1)
+        t4=time.perf_counter()
+        print ("Time to create spiral "+ str(i) + " : " + str(t4-t3))
         (x,y,length,stepx,stepy)=prime.FindLongLine(img,1)
+        t5=time.perf_counter()
+        print ("Time to search spiral "+ str(i) + " : " + str(t5-t4))
         prime.SetPixelLine(img,x,y,length,stepx,stepy)
-        filename= "prime-"+str(i)+"-"+str(length)
-        #img.save(filename+".png")
+        filename= "Bigprime-"+str(i).zfill(10)+"-"+str(length)
+        img.save(filename+".png")
         #prime.SaveSpiralSVG(filename+".svg",i,1,20)
  
     #img = prime.GetSlabBitmap(500,10000)
