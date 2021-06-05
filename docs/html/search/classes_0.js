@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['prime_16',['Prime',['../classPrime.html',1,'Prime'],['../classPrimeImage_1_1Prime.html',1,'PrimeImage.Prime']]]
+  ['bitblock_44',['BitBlock',['../classBitBlock.html',1,'']]],
+  ['bitblocklock_45',['BitBlockLock',['../classBitBlockLock.html',1,'']]]
 ];

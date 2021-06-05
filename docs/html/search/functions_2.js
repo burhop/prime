@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['findprimes_20',['FindPrimes',['../classPrime.html#acacfaa6c7273053befa2adbc6819186e',1,'Prime::FindPrimes(int numberOfBLocks)'],['../classPrime.html#a2b52d3dd084b0742f381e7bb4646ba84',1,'Prime::FindPrimes(size_t numberOfBlocks=1)']]]
+  ['datacachemanager_57',['DataCacheManager',['../classDataCacheManager.html#ae3e58800c997697e5601216c9cd58e87',1,'DataCacheManager']]],
+  ['deleteexistingprimefiles_58',['DeleteExistingPrimeFiles',['../classPrime.html#ac6545ae3603abcd8d255e04925e41921',1,'Prime']]]
 ];

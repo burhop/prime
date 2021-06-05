@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['prime_32',['prime',['../index.html',1,'']]]
+  ['prime_90',['prime',['../index.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['decomposer_180',['Decomposer',['../struct_catch_1_1_decomposer.html',1,'Catch']]]
+  ['prime_45',['Prime',['../classPrimeImage_1_1Prime.html',1,'PrimeImage.Prime'],['../classPrime.html',1,'Prime']]]
 ];

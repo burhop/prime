@@ -23,7 +23,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo2.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">prime
-   &#160;<span id="projectnumber">0.3</span>
+   &#160;<span id="projectnumber">0.4</span>
    </div>
    <div id="projectbrief">Prime Number Generation</div>
   </td>
@@ -72,76 +72,91 @@ $(function() {
 <div class="title">Prime.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;boost/dynamic_bitset.hpp&gt;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classPrime.html">   29</a></span>&#160;<span class="keyword">class </span><span class="keyword">__declspec(dllexport)</span>  <a class="code" href="classPrime.html">Prime</a></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="classPrime.html#aa4ce487e0ba45ead90644f454af40237">Prime</a>(<span class="keywordtype">size_t</span> bitsetSize=0xFFFFFFF0);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classPrime.html#af844aeb8495bd17b17cef8b96212881e">ContinousRun</a>(std::string baseName);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="classPrime.html#a65f756fa64961033ddf1075c17aaa8de">~Prime</a>();</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#a6bc658a0531e8672da6417eb6a3dfddc">GetBitBlockSize</a>();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#ad439e13bab66ff6123908e2c66719016">SaveIncrementalFiles</a>(<span class="keywordtype">bool</span> b=<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#ae65f3e9ba1c1dabd836eefa3dfc19256">Sqrt</a>(<span class="keywordtype">size_t</span> x);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#acacfaa6c7273053befa2adbc6819186e">FindPrimes</a>(<span class="keywordtype">int</span> numberOfBLocks);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#acacfaa6c7273053befa2adbc6819186e">FindPrimes</a>(<span class="keywordtype">size_t</span> numberOfBlocks=1);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#aaf3cdeb13b463d52685f22df28cf7750">LoadFromFile</a>(std::string baseName);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#a6f21b754c36c0f0fe4b0770e1f3a5b73">GetMaxValue</a>();</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#ad912923a08d52175063d482389599e16">GetMaxPrime</a>();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#abe3aa31f88049119da202de139ff9199">GetMaxCount</a>();</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#ac6545ae3603abcd8d255e04925e41921">DeleteExistingPrimeFiles</a>(std::string baseName);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classPrime.html#a56cceb6c89abba6e8252fc5de95f7f9f">SaveToFile</a>(std::string baseName);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    std::vector&lt;size_t&gt; <a class="code" href="classPrime.html#a592cae91bd34b9a588b67e7f4d9347b2">GetPrimesAsVector</a>(<span class="keywordtype">size_t</span> lowVal, <span class="keywordtype">size_t</span> highVal);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#ab2069bb5ff266090b4f3460afbceee3f">CountPrimes</a>(<span class="keywordtype">size_t</span> lowVal, <span class="keywordtype">size_t</span> highVal);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> threadCount = std::thread::hardware_concurrency();</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">size_t</span> bitBlockSize=0;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">size_t</span> max =  0;    <span class="comment">// Can be up to 4294967280;</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">size_t</span> max2 = 0;    <span class="comment">// don&#39;t need to save the even numbers</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">size_t</span> max3 = 0;    <span class="comment">// don&#39;t need to save numbers divisible by 3</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">size_t</span> max5 = 0;    <span class="comment">// don&#39;t need to save numbers divisible by 5</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">size_t</span> searchDisttance = 0;                    <span class="comment">// Fartherest this class instance has search so far.</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    std::string baseFileName=<span class="stringliteral">&quot;primes&quot;</span>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">bool</span> saveIcrementalFiles = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="comment">//Compiler worries this vector might get passed out of the DLL. Turn this warning off</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#pragma warning( push )   </span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#pragma warning( disable : 4251)</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    std::vector&lt;boost::dynamic_bitset&lt;&gt; *&gt; vectorOfBitSets;       <span class="comment">// Place to save our bitsets</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">//Private Functions</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">void</span> findFirstBlockOFPrimes();</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">size_t</span> NextPrime(boost::dynamic_bitset&lt;&gt;* bSet, <span class="keywordtype">size_t</span> index);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">void</span> writeBitSetToStream(<span class="keyword">const</span> std::string fileName, boost::dynamic_bitset&lt;&gt;* bitss);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">void</span> readSparseBitSetFromStream(<span class="keyword">const</span> <span class="keywordtype">char</span> * my_file, boost::dynamic_bitset&lt;&gt;* b);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">void</span> readBitSetFromStream(<span class="keyword">const</span> std::string my_file, boost::dynamic_bitset&lt;&gt;* b);</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> clearBitsetVector();</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    boost::dynamic_bitset&lt;&gt;* primeSieve(std::vector&lt;boost::dynamic_bitset&lt;&gt;*&gt; vec);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> compressBitSet(boost::dynamic_bitset&lt;&gt;* iBitSet, boost::dynamic_bitset&lt;&gt;* b);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">void</span> uncompressBitSet(boost::dynamic_bitset&lt;&gt;* iBitSet, boost::dynamic_bitset&lt;&gt;* b);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordtype">int</span> saveToFile(std::string baseName, <span class="keywordtype">size_t</span> count);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;};</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<a href="Prime_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;boost/dynamic_bitset.hpp&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//#include &lt;bitblock.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;DataCacheManager.h&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classPrime.html">   40</a></span>&#160;<span class="keyword">class </span><span class="keyword">__declspec(dllexport)</span>  <a class="code" href="classPrime.html">Prime</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classPrime.html#ac22a38b8817dd8d36cb7f6575a9b0ffd">Prime</a>(<span class="keywordtype">size_t</span> bitsetSize=0xFFFFFFF0,<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> numberOfThreads=0, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> numberOfBlocksToKeepInMemory=10);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="classPrime.html#ac22a38b8817dd8d36cb7f6575a9b0ffd">Prime</a>(std::string baseName, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> numberOfThreads = 0, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> numberOfBlocksToKeepInMemory = 10);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="classPrime.html#a65f756fa64961033ddf1075c17aaa8de">~Prime</a>();</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#aadf8f8ea4876755a9ed523a93e50e0c4">SetBaseName</a>(std::string basename);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#a6bc658a0531e8672da6417eb6a3dfddc">GetBitBlockSize</a>();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#ad439e13bab66ff6123908e2c66719016">SaveIncrementalFiles</a>(<span class="keywordtype">bool</span> b=<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#ae65f3e9ba1c1dabd836eefa3dfc19256">Sqrt</a>(<span class="keywordtype">size_t</span> x);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#acacfaa6c7273053befa2adbc6819186e">FindPrimes</a>(<span class="keywordtype">int</span> numberOfBLocks);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#acacfaa6c7273053befa2adbc6819186e">FindPrimes</a>(<span class="keywordtype">size_t</span> numberOfBlocks=1);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#aaf3cdeb13b463d52685f22df28cf7750">LoadFromFile</a>(std::string baseName);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#a6f21b754c36c0f0fe4b0770e1f3a5b73">GetMaxValue</a>();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#ad912923a08d52175063d482389599e16">GetMaxPrime</a>();</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#abe3aa31f88049119da202de139ff9199">GetMaxCount</a>();</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#ac6545ae3603abcd8d255e04925e41921">DeleteExistingPrimeFiles</a>(std::string baseName);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classPrime.html#a56cceb6c89abba6e8252fc5de95f7f9f">SaveToFile</a>(std::string baseName);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    std::vector&lt;size_t&gt; <a class="code" href="classPrime.html#a592cae91bd34b9a588b67e7f4d9347b2">GetPrimesAsVector</a>(<span class="keywordtype">size_t</span> lowVal, <span class="keywordtype">size_t</span> highVal);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classPrime.html#ab2069bb5ff266090b4f3460afbceee3f">CountPrimes</a>(<span class="keywordtype">size_t</span> lowVal, <span class="keywordtype">size_t</span> highVal);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#a4bd5d749cb25d87c9d3378f736da7b9a">Compress</a>();</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#a8345c4a79b3d1179b915d6b905b08fd1">Uncompress</a>();</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classPrime.html#a8689241b1e5be058a38b8e5ea2cc0032">SetVerbose</a>(<span class="keywordtype">bool</span> val);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classPrime.html#a1fdbf9cb4ef922e2a1e304ff88677e9b">  123</a></span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classPrime.html#a1fdbf9cb4ef922e2a1e304ff88677e9b">GetThreadCount</a>()</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    {</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordflow">return</span> threadCount;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="comment">//Should a thread be waiting for data from another thread, have it wait this amount of time in miliseconds before checking if the other thread is done yet.</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> threadSleep = 500; <span class="comment">//Magic number of 0.5 seconds to pause if data not yet calculated (multi-thread only)</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> threadCount = 0; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">size_t</span> bitBlockSize=0;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <a class="code" href="classDataCacheManager.html">DataCacheManager</a> *blockManager=<span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="comment">//BitBlock* *arrayOfBlocks;</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordtype">size_t</span> contiguousBlocks=0;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keywordtype">bool</span> saveIcrementalFiles = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordtype">bool</span> verbose = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="preprocessor">#pragma warning( push )   </span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">#pragma warning( disable : 4251)</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    std::string baseFileName=<span class="stringliteral">&quot;primes&quot;</span>;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordtype">void</span> findFirstBlockOFPrimes();</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="keywordtype">void</span> updateContiguousBlocks();</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keywordtype">size_t</span> NextPrime(boost::dynamic_bitset&lt;&gt;* bSet, <span class="keywordtype">size_t</span> index);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    std::shared_ptr&lt;BitBlock&gt;  primeSieve(<span class="keywordtype">size_t</span> block);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="comment">//OpenOMP variables</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keywordtype">size_t</span> nextFreeBlockIndex;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keywordtype">size_t</span> maxValue;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;};</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassPrime_html_abe3aa31f88049119da202de139ff9199"><div class="ttname"><a href="classPrime.html#abe3aa31f88049119da202de139ff9199">Prime::GetMaxCount</a></div><div class="ttdeci">size_t GetMaxCount()</div></div>
 <div class="ttc" id="aclassPrime_html_ad439e13bab66ff6123908e2c66719016"><div class="ttname"><a href="classPrime.html#ad439e13bab66ff6123908e2c66719016">Prime::SaveIncrementalFiles</a></div><div class="ttdeci">void SaveIncrementalFiles(bool b=true)</div></div>
-<div class="ttc" id="aclassPrime_html_af844aeb8495bd17b17cef8b96212881e"><div class="ttname"><a href="classPrime.html#af844aeb8495bd17b17cef8b96212881e">Prime::ContinousRun</a></div><div class="ttdeci">int ContinousRun(std::string baseName)</div></div>
-<div class="ttc" id="aclassPrime_html"><div class="ttname"><a href="classPrime.html">Prime</a></div><div class="ttdef"><b>Definition:</b> Prime.h:29</div></div>
+<div class="ttc" id="aclassDataCacheManager_html"><div class="ttname"><a href="classDataCacheManager.html">DataCacheManager</a></div><div class="ttdoc">This is a low level class for managing large numbers of blocks of primes. It will pull them in and ou...</div><div class="ttdef"><b>Definition:</b> DataCacheManager.h:7</div></div>
+<div class="ttc" id="aclassPrime_html"><div class="ttname"><a href="classPrime.html">Prime</a></div><div class="ttdoc">This is the main C++ high level class if you want to generate and operate on prime numbers.</div><div class="ttdef"><b>Definition:</b> Prime.h:40</div></div>
+<div class="ttc" id="aclassPrime_html_a8689241b1e5be058a38b8e5ea2cc0032"><div class="ttname"><a href="classPrime.html#a8689241b1e5be058a38b8e5ea2cc0032">Prime::SetVerbose</a></div><div class="ttdeci">void SetVerbose(bool val)</div></div>
 <div class="ttc" id="aclassPrime_html_ac6545ae3603abcd8d255e04925e41921"><div class="ttname"><a href="classPrime.html#ac6545ae3603abcd8d255e04925e41921">Prime::DeleteExistingPrimeFiles</a></div><div class="ttdeci">void DeleteExistingPrimeFiles(std::string baseName)</div></div>
 <div class="ttc" id="aclassPrime_html_a65f756fa64961033ddf1075c17aaa8de"><div class="ttname"><a href="classPrime.html#a65f756fa64961033ddf1075c17aaa8de">Prime::~Prime</a></div><div class="ttdeci">~Prime()</div></div>
 <div class="ttc" id="aclassPrime_html_a6bc658a0531e8672da6417eb6a3dfddc"><div class="ttname"><a href="classPrime.html#a6bc658a0531e8672da6417eb6a3dfddc">Prime::GetBitBlockSize</a></div><div class="ttdeci">size_t GetBitBlockSize()</div></div>
-<div class="ttc" id="aclassPrime_html_aa4ce487e0ba45ead90644f454af40237"><div class="ttname"><a href="classPrime.html#aa4ce487e0ba45ead90644f454af40237">Prime::Prime</a></div><div class="ttdeci">Prime(size_t bitsetSize=0xFFFFFFF0)</div></div>
+<div class="ttc" id="aclassPrime_html_ac22a38b8817dd8d36cb7f6575a9b0ffd"><div class="ttname"><a href="classPrime.html#ac22a38b8817dd8d36cb7f6575a9b0ffd">Prime::Prime</a></div><div class="ttdeci">Prime(size_t bitsetSize=0xFFFFFFF0, unsigned int numberOfThreads=0, unsigned int numberOfBlocksToKeepInMemory=10)</div></div>
 <div class="ttc" id="aclassPrime_html_ae65f3e9ba1c1dabd836eefa3dfc19256"><div class="ttname"><a href="classPrime.html#ae65f3e9ba1c1dabd836eefa3dfc19256">Prime::Sqrt</a></div><div class="ttdeci">size_t Sqrt(size_t x)</div></div>
+<div class="ttc" id="aclassPrime_html_aadf8f8ea4876755a9ed523a93e50e0c4"><div class="ttname"><a href="classPrime.html#aadf8f8ea4876755a9ed523a93e50e0c4">Prime::SetBaseName</a></div><div class="ttdeci">void SetBaseName(std::string basename)</div></div>
+<div class="ttc" id="aclassPrime_html_a8345c4a79b3d1179b915d6b905b08fd1"><div class="ttname"><a href="classPrime.html#a8345c4a79b3d1179b915d6b905b08fd1">Prime::Uncompress</a></div><div class="ttdeci">void Uncompress()</div></div>
 <div class="ttc" id="aclassPrime_html_a592cae91bd34b9a588b67e7f4d9347b2"><div class="ttname"><a href="classPrime.html#a592cae91bd34b9a588b67e7f4d9347b2">Prime::GetPrimesAsVector</a></div><div class="ttdeci">std::vector&lt; size_t &gt; GetPrimesAsVector(size_t lowVal, size_t highVal)</div></div>
 <div class="ttc" id="aclassPrime_html_ab2069bb5ff266090b4f3460afbceee3f"><div class="ttname"><a href="classPrime.html#ab2069bb5ff266090b4f3460afbceee3f">Prime::CountPrimes</a></div><div class="ttdeci">size_t CountPrimes(size_t lowVal, size_t highVal)</div></div>
 <div class="ttc" id="aclassPrime_html_a56cceb6c89abba6e8252fc5de95f7f9f"><div class="ttname"><a href="classPrime.html#a56cceb6c89abba6e8252fc5de95f7f9f">Prime::SaveToFile</a></div><div class="ttdeci">int SaveToFile(std::string baseName)</div></div>
+<div class="ttc" id="aclassPrime_html_a1fdbf9cb4ef922e2a1e304ff88677e9b"><div class="ttname"><a href="classPrime.html#a1fdbf9cb4ef922e2a1e304ff88677e9b">Prime::GetThreadCount</a></div><div class="ttdeci">unsigned int GetThreadCount()</div><div class="ttdef"><b>Definition:</b> Prime.h:123</div></div>
 <div class="ttc" id="aclassPrime_html_aaf3cdeb13b463d52685f22df28cf7750"><div class="ttname"><a href="classPrime.html#aaf3cdeb13b463d52685f22df28cf7750">Prime::LoadFromFile</a></div><div class="ttdeci">void LoadFromFile(std::string baseName)</div></div>
+<div class="ttc" id="aclassPrime_html_a4bd5d749cb25d87c9d3378f736da7b9a"><div class="ttname"><a href="classPrime.html#a4bd5d749cb25d87c9d3378f736da7b9a">Prime::Compress</a></div><div class="ttdeci">void Compress()</div></div>
 <div class="ttc" id="aclassPrime_html_acacfaa6c7273053befa2adbc6819186e"><div class="ttname"><a href="classPrime.html#acacfaa6c7273053befa2adbc6819186e">Prime::FindPrimes</a></div><div class="ttdeci">void FindPrimes(int numberOfBLocks)</div></div>
 <div class="ttc" id="aclassPrime_html_ad912923a08d52175063d482389599e16"><div class="ttname"><a href="classPrime.html#ad912923a08d52175063d482389599e16">Prime::GetMaxPrime</a></div><div class="ttdeci">size_t GetMaxPrime()</div></div>
 <div class="ttc" id="aclassPrime_html_a6f21b754c36c0f0fe4b0770e1f3a5b73"><div class="ttname"><a href="classPrime.html#a6f21b754c36c0f0fe4b0770e1f3a5b73">Prime::GetMaxValue</a></div><div class="ttdeci">size_t GetMaxValue()</div></div>
