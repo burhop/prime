@@ -18,8 +18,8 @@ Some useful links:
 
 **Some next steps are:**
  1. Optimization of the C++.  There are a number of ways to make if faster. If you see one, let me know or submit a change.
- 2. More efficient storage of the numbers (ping me if you have ideas)
- 3. Tools for metadata, extraction of interesting information
+ 2. More efficient storage of the numbers (ping me if you have ideas).
+ 3. Tools for metadata, extraction of interesting information.
 
 
 While C++ is efficient, Python is more fun for trying out clever ideas. Some next "fun" steps are:
@@ -50,6 +50,6 @@ For version 0.2, the following changes were made:
 1. Use of [Boost bitset](https://www.boost.org/doc/libs/1_36_0/libs/dynamic_bitset/dynamic_bitset.html) so that the size of the bitset does not require recompile of the DLL/so
 2. Addition of [C++ Catch](https://github.com/catchorg/Catch2).  Creation of new test case project and a number of test cases.
 3. A new project called "go" that just keeps running and running looking for new primes. You can stop it and restarted it and it will remember any blocks of primes it already completed.
-3. Python files for reading in the prime files and creating some prime bases images.  THis is still rough and in development but I inlcude it here in case anyone wants a parcer for the files.
+3. Python files for reading in the prime files and creating some prime bases images.  This is still rough and in development but I inlcude it here in case anyone wants a parcer for the files.
 
 ![Spiral](https://burhop.github.io/prime/images/primeSpiral.png)
