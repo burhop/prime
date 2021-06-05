@@ -1,3 +1,5 @@
+"""@package docstring Experimental Python
+"""
 # Useful code for Image Creation
 from PIL import Image
 # Useful code for creating SVG files
@@ -6,7 +8,9 @@ import sys
 import struct
 # Something to measure speed of code.
 import time
+## Experimental Python class  for image creation, parcing .prm files, etc.
 class Prime:
+    """Experimental Python class for image creation, parcing .prm files, etc."""
     #Initializer / Instance Attributes
     def __init__(self): 
         #initalize the list with 2,3,5  
