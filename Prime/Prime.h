@@ -1,10 +1,14 @@
 #pragma once
+/** \file Prime.h
+	\brief The hearder needed to generate and operate on prime numbers
+*/
 #include <string>
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
 #include <thread>
 //#include <bitblock.h>
 #include <DataCacheManager.h>
+/// This is the main C++ high level class if you want to generate and operate on prime numbers
 /**
 	This class is for calculating and storing prime numbers. It uses the Sieve of Eratosthenes to mark
 	bits in a block of memory. As there are an infinite number of prime numbers, this class can apply the Sieve

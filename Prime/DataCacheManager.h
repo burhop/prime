@@ -3,6 +3,7 @@
 #include <memory>
 #include "bitblock.h"
 
+/// This is a low level class for managing large numbers of blocks of primes. It will pull them in and out of memory as needed.
 class DataCacheManager
 {
 public:
@@ -39,7 +40,7 @@ private:
 	friend class DataCacheManagerLock;
 
 };
-
+///Just a simple lock class for OpenMP so losing scope will unlock
 /** just a simple lock class for OpenMP so losing scope will unlock */
 class DataCacheManagerLock
 {

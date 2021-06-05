@@ -5,6 +5,7 @@
 #include <omp.h>
 #include <iostream>
 
+/// This is a low level class for managing a block of prime numbers. It wraps a set of bit flags.
 class __declspec(dllexport) BitBlock
 {
 public:
@@ -84,6 +85,7 @@ private:
 	friend class BitBlockLock;
 };
 
+///Just a simple lock class for OpenMP so losing scope will unlock
 /** just a simple lock class for OpenMP so losing scope will unlock */
 class BitBlockLock
 {
