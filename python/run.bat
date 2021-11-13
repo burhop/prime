@@ -1,0 +1,2 @@
+cd flaskserver
+flask run
